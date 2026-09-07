@@ -1,0 +1,1 @@
+Get-Service | Select-Object Name,DisplayName,Status,StartType | Sort-Object DisplayName

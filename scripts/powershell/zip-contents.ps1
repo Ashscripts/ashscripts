@@ -1,0 +1,1 @@
+compress-archive -path "C:\Users\dongadm\Desktop\Plantronics" -DestinationPath "C:\Users\dongadm\Desktop\New folder\Plantronics.zip"

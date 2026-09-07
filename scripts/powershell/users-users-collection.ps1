@@ -1,0 +1,1 @@
+"company\eitzjen","company\silvjes","company\espioli","company\xuyan1","company\WONGHIM" | % { Add-CMUserCollectionDirectMembershipRule -CollectionName "OEMX_AlreadyApprovedUsers" -ResourceID (Get-CMUser -Name $_).ResourceID }

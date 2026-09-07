@@ -1,0 +1,1 @@
+get-childitem "$envProgramFilesX86\Ahlborn\ALMEMO_Control-6-3" -ErrorAction SilentlyContinue | unblock-file -ErrorAction SilentlyContinue

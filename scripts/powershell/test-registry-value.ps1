@@ -1,0 +1,1 @@
+Get-ItemProperty -Path "HKLM:\Software\Vendor\Application" -Name "Version" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version

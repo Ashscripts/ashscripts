@@ -1,0 +1,2 @@
+Set-ADTRegistryKey -Key 'HKEY_LOCAL_MACHINE\SOFTWARE' -Name 'Application' -Type 'DWord' -Value '1' -ErrorAction SilentlyContinue
+#possible types 'Binary','DWord','ExpandString','MultiString','None','QWord','String','Unknown'

@@ -1,0 +1,1 @@
+Wait-Process -Name "setup" -ErrorAction SilentlyContinue

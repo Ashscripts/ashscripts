@@ -1,0 +1,1 @@
+Get-ItemProperty @("HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*","HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*") -ErrorAction SilentlyContinue | Where-Object DisplayName -like "*Application Name*" | Select-Object DisplayName,DisplayVersion,UninstallString

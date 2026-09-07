@@ -1,0 +1,1 @@
+Get-FileHash -Path "C:\Source\setup.exe" -Algorithm SHA256

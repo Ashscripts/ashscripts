@@ -1,0 +1,1241 @@
+[
+  {
+    "n": 1,
+    "title": "Search Reg every 1 sec, del as found",
+    "language": "VBScript",
+    "body": "ON ERROR RESUME NEXT\t\t\t\n\t\t\t\nSet WshShell = WScript.CreateObject(\"WScript.Shell\")\t\t\t\nRegKey = \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\"\t\t\t\nRegValue = \"PendingFileRenameOperations\"\t\t\t\n\t\t\t\nDo\t\t\t\n    ' Check if the registry value exists\t\t\t\n    If WshShell.RegRead(RegKey & \"\\\" & RegValue) <> \"\" Then\t\t\t\n        ' Delete the registry value\t\t\t\n        WshShell.RegDelete RegKey & \"\\\" & RegValue\t\t\t\n        WScript.Echo \"Deleted \" & RegKey & \"\\\" & RegValue\t\t\t\n    End If\t\t\t\n    WScript.Sleep 1000 ' Sleep for 1 second\t\t\t\nLoop\t\t\t\nSet WshShell = Nothing",
+    "slug": "search-reg-every-1-sec-del-found",
+    "category": "Registry",
+    "description": "Search Reg every 1 sec, del as found",
+    "source": "scripts/vbscript/search-reg-every-1-sec-del-found.vbs"
+  },
+  {
+    "n": 2,
+    "title": "Check if registry does not exists",
+    "language": "PowerShell",
+    "body": "If (!(Test-Path \"HKLM:\\SOFTWARE\\WOW6432Node\\company\\Packages\\HSTToolsBundle_PK1_2.0_Platform_ENG_002\") -and (!(HKLM:\\SOFTWARE\\company\\Packages\\HSTToolsBundle_PK1_2.0_Platform_ENG_002\")))\n{\n\t# <cmd-lets>\n}",
+    "slug": "registry-does-not-exists",
+    "category": "Registry",
+    "description": "Check if registry does not exists",
+    "source": "scripts/powershell/registry-does-not-exists.ps1"
+  },
+  {
+    "n": 3,
+    "title": "Allow RDP with Reg",
+    "language": "PowerShell",
+    "body": "reg add \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\" /v \"fDenyTSConnections\" /t \"REG_DWORD\" /d \"0\" /f",
+    "slug": "allow-rdp-reg",
+    "category": "Windows / Utilities",
+    "description": "Allow RDP with Reg",
+    "source": "scripts/powershell/allow-rdp-reg.ps1"
+  },
+  {
+    "n": 4,
+    "title": "Winget app creation reference for Intune/SCCM",
+    "language": "PowerShell",
+    "body": "#installation command to be included into install.ps1\n\nWinget Install GitHub.Copilot --silent --accept-source-agreements --accept-package-agreements\n\n#uninstallation command to be included into uninstall.ps1\n\nwinget uninstall --id Microsoft.VCLibs.Desktop.14 -e --silent --all-versions\nexit 0\n\n#detection custom powershell script\n\n$InstallCheck = winget list --id GitHub.Copilot --exact --accept-source-agreements\n    if ($InstallCheck -like \"*GitHub.Copilot*\") {\nWrite-output \"Installed\"  \n          Exit 0\n    }\nClear-Host  \n  Exit 0\n\n\n#install command line reference for intune / sccm\n\npowershell.exe -ExecutionPolicy Bypass -NonInteractive -WindowStyle Hidden -File install.ps1/uninstall.ps1",
+    "slug": "winget-creation-intune",
+    "category": "MECM / SCCM",
+    "description": "Winget app creation reference for Intune/SCCM",
+    "source": "scripts/powershell/winget-creation-intune.ps1"
+  },
+  {
+    "n": 5,
+    "title": "Importing registry to all existing users profile without requiring logoff/login",
+    "language": "PowerShell",
+    "body": "function Set-RegistryValueForAllUsers {\t\t\n    <#\t\t\n    .SYNOPSIS\t\t\n        This function uses Active Setup to create a \"seeder\" key which creates or modifies a user-based registry value\t\t\n        for all users on a computer. If the key path doesn't exist to the value, it will automatically create the key and add the value.\t\t\n    .EXAMPLE\t\t\n        PS> Set-RegistryValueForAllUsers -RegistryInstance @{'Name' = 'Setting'; 'Type' = 'String'; 'Value' = 'someval'; 'Path' = 'SOFTWARE\\Microsoft\\Windows\\Something'}\t\t\n        This example would modify the string registry value 'Type' in the path 'SOFTWARE\\Microsoft\\Windows\\Something' to 'someval'\t\t\n        for every user registry hive.\t\t\n    .PARAMETER RegistryInstance\t\t\n         A hash table containing key names of 'Name' designating the registry value name, 'Type' to designate the type\t\t\n        of registry value which can be 'String,Binary,Dword,ExpandString or MultiString', 'Value' which is the value itself of the\t\t\n        registry value and 'Path' designating the parent registry key the registry value is in.\t\t\n    #>\t\t\n    [CmdletBinding()]\t\t\n    param (\t\t\n        [Parameter(Mandatory = $true)]\t\t\n        [hashtable[]]$RegistryInstance\t\t\n    )\t\t\n    try {\t\t\n        New-PSDrive -Name HKU -PSProvider Registry -Root Registry::HKEY_USERS | Out-Null -ErrorAction SilentlyContinue\t\t\n\t\t\n        ## Change the registry values for the currently logged on user. Each logged on user SID is under HKEY_USERS\t\t\n        $LoggedOnSids = $(Get-ChildItem HKU: | Where-Object { $_.Name -match 'S-\\d-\\d+-(\\d+-){1,14}\\d+$' } | foreach-object { $_.Name })\t\t\n       \t\t\n        foreach ($sid in $LoggedOnSids) {\t\t\n       \t\t\n            foreach ($instance in $RegistryInstance) {\t\t\n                ## Create the key path if it doesn't exist\t\t\n                if (!(Test-Path \"HKU:\\$sid\\$($instance.Path)\")) {\t\t\n                    New-Item -Path \"HKU:\\$sid\\$($instance.Path | Split-Path -Parent)\" -Name ($instance.Path | Split-Path -Leaf) -Force | Out-Null -ErrorAction SilentlyContinue\t\t\n                }\t\t\n                ## Create (or modify) the value specified in the param\t\t\n                Set-ItemProperty -Path \"HKU:\\$sid\\$($instance.Path)\" -Name $instance.Name -Value $instance.Value -Type $instance.Type -Force -ErrorAction SilentlyContinue\t\t\n            }\t\t\n        }\t\t\n\t\t\n        \t\t\n        foreach ($instance in $RegistryInstance) {\t\t\n            ## Generate a unique value (usually a GUID) to use for Active Setup\t\t\n            $Guid = [guid]::NewGuid().Guid\t\t\n            $ActiveSetupRegParentPath = 'HKLM:\\Software\\Microsoft\\Active Setup\\Installed Components'\t\t\n            ## Create the GUID registry key under the Active Setup key\t\t\n            New-Item -Path $ActiveSetupRegParentPath -Name $Guid -Force | Out-Null -ErrorAction SilentlyContinue\t\t\n            $ActiveSetupRegPath = \"HKLM:\\Software\\Microsoft\\Active Setup\\Installed Components\\$Guid\"\t\t\n            \t\t\n            switch ($instance.Type) {\t\t\n                'String' {\t\t\n                    $RegValueType = 'REG_SZ'\t\t\n                }\t\t\n                'Dword' {\t\t\n                    $RegValueType = 'REG_DWORD'\t\t\n                }\t\t\n                'Binary' {\t\t\n                    $RegValueType = 'REG_BINARY'\t\t\n                }\t\t\n                'ExpandString' {\t\t\n                    $RegValueType = 'REG_EXPAND_SZ'\t\t\n                }\t\t\n                'MultiString' {\t\t\n                    $RegValueType = 'REG_MULTI_SZ'\t\t\n                }\t\t\n                default {\t\t\n                    #throw \"Registry type '$($instance.Type)' not recognized\"\t\t\n                }\t\t\n            }\t\t\n\t\t\n            ## Build the registry value to use for Active Setup which is the command to create the registry value in all user hives\t\t\n            $ActiveSetupValue = \"reg add `\"{0}`\" /v {1} /t {2} /d {3} /f\" -f \"HKCU\\$($instance.Path)\", $instance.Name, $RegValueType, $instance.Value\t\t\n           \t\t\n            ## Create the necessary Active Setup registry values\t\t\n            Set-ItemProperty -Path $ActiveSetupRegPath -Name '(Default)' -Value 'Active Setup Test' -Force -ErrorAction SilentlyContinue\t\t\n            Set-ItemProperty -Path $ActiveSetupRegPath -Name 'Version' -Value '1' -Force -ErrorAction SilentlyContinue\t\t\n            Set-ItemProperty -Path $ActiveSetupRegPath -Name 'StubPath' -Value $ActiveSetupValue -Force -ErrorAction SilentlyContinue\t\t\n        }\t\t\n    }\t\t\n    catch {\t\t\n        \t\t\n    }\t\t\n}\t\t\n\t\t\n\t\t\n\t\t\nSet-RegistryValueForAllUsers -RegistryInstance @{'Name' = 'LandscapeFileOnServer'; 'Type' = 'ExpandString'; 'Value' = '\\\\Sulshares.company-ext.com\\SAPUILandscape.xml'; 'Path' = 'SOFTWARE\\SAP\\SAPLogon\\Options'} -ErrorAction SilentlyContinue",
+    "slug": "importing-registry-existing-users-profile-without-requiring-logoff",
+    "category": "Registry",
+    "description": "Importing registry to all existing users profile without requiring logoff/login",
+    "source": "scripts/powershell/importing-registry-existing-users-profile-without-requiring-logoff.ps1"
+  },
+  {
+    "n": 6,
+    "title": "PSADT 4.17+ - ActiveSetup implementation reference",
+    "language": "PowerShell",
+    "body": "Copy-ADTFile -Path \"$($adtSession.DirFiles)\\plugins\" -Destination \"$envProgramFiles\\Bambu Studio\\Appdata\\\" -Recurse -ErrorAction SilentlyContinue\n        Copy-ADTFile -Path \"$($adtSession.DirFiles)\\copyplugin.ps1\" -Destination \"$envProgramFiles\\Bambu Studio\\copyplugin.ps1\" -ErrorAction SilentlyContinue\n\n        $sact = \"`\"$envWinDir\\System32\\WindowsPowerShell\\v1.0\\powershell.exe`\" \" + \"-ExecutionPolicy Bypass -NoProfile -NonInteractive -WindowStyle Hidden -File `\"$envProgramFiles\\Bambu Studio\\copyplugin.ps1`\"\"\n\n        Set-ADTRegistryKey -LiteralPath 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Active Setup\\Installed Components\\BambuStudio_02.03.01.51_x64_ENG_001' -Name 'StubPath'  -Type String -Value $sact\n        Set-ADTRegistryKey -LiteralPath 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Active Setup\\Installed Components\\BambuStudio_02.03.01.51_x64_ENG_001' -Name 'Version'  -Type String -Value '1,0'",
+    "slug": "4-17-activesetup-implementation",
+    "category": "Application Packaging",
+    "description": "PSADT 4.17+ - ActiveSetup implementation reference",
+    "source": "scripts/powershell/4-17-activesetup-implementation.ps1"
+  },
+  {
+    "n": 7,
+    "title": "checking pending reboot on the machine:",
+    "language": "PowerShell",
+    "body": "$pend = $false\n if (Get-ChildItem \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending\" -EA SilentlyContinue) { $pend = $true }\n     if (Get-Item \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired\" -EA SilentlyContinue) { $pend = $true }\n\nIf ($pend -eq $true)\n{\n\t$UserResponse1 = Show-InstallationPrompt -Title 'Pending Restart' -Message 'Package has detected a pending restart. Please reboot the system and rerun the installation.' -ButtonRight 'Restart Now' -ButtonLeft 'Restart Later'       \n\t    If($UserResponse1 -eq 'Restart Now'){Execute-Process -Path \"$dirSupportFiles\\Restart.exe\" -WindowStyle Hidden -NoWait}\n\t            Exit-Script -ExitCode 1603\n}",
+    "slug": "pending-reboot-machine",
+    "category": "Windows / Troubleshooting",
+    "description": "checking pending reboot on the machine:",
+    "source": "scripts/powershell/pending-reboot-machine.ps1"
+  },
+  {
+    "n": 8,
+    "title": "suppressing soft reboots:",
+    "language": "PowerShell",
+    "body": "Remove-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager' -Name 'PendingFileRenameOperations' -Force -ErrorAction SilentlyContinue",
+    "slug": "suppressing-soft-reboots",
+    "category": "Windows / Troubleshooting",
+    "description": "suppressing soft reboots:",
+    "source": "scripts/powershell/suppressing-soft-reboots.ps1"
+  },
+  {
+    "n": 9,
+    "title": "checking pending reboot with PSADT 4.17+",
+    "language": "PowerShell",
+    "body": "if ((Get-ADTPendingReboot).IsSystemRebootPending)\n     {\n         Show-ADTInstallationPrompt -Message 'You have a pending reboot on your machine, please restart the machine and restart the installation!' -ButtonLeftText 'OK' -Icon Error -NoWait\n     }",
+    "slug": "pending-reboot-4-17",
+    "category": "Application Packaging",
+    "description": "checking pending reboot with PSADT 4.17+",
+    "source": "scripts/powershell/pending-reboot-4-17.ps1"
+  },
+  {
+    "n": 10,
+    "title": "Delete Registry keys and subkeys",
+    "language": "PowerShell",
+    "body": "Remove-Item \"HKLM:\\Software\\Test\\HSTToolsBundle_PK1_2.0_Platform_ENG_001\" -Force -Recurse -ErrorAction SilentlyContinue",
+    "slug": "registry-keys-subkeys",
+    "category": "Registry",
+    "description": "Delete Registry keys and subkeys",
+    "source": "scripts/powershell/registry-keys-subkeys.ps1"
+  },
+  {
+    "n": 11,
+    "title": "Delete registry values",
+    "language": "PowerShell",
+    "body": "Remove-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment' -Name 'Simatic_OAM' -Force -ErrorAction SilentlyContinue",
+    "slug": "registry-values",
+    "category": "Registry",
+    "description": "Delete registry values",
+    "source": "scripts/powershell/registry-values.ps1"
+  },
+  {
+    "n": 12,
+    "title": "Delete registry value with Batch script",
+    "language": "PowerShell",
+    "body": "reg delete \"HKCR\\Installer\\Products\\025805D706D88504B9227DC2ACE74431\\SourceList\\Net\" /v \"2\" /f",
+    "slug": "registry-value-batch",
+    "category": "Registry",
+    "description": "Delete registry value with Batch script",
+    "source": "scripts/powershell/registry-value-batch.ps1"
+  },
+  {
+    "n": 13,
+    "title": "Delete registry value with psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Remove-ADTRegistryKey -Key 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' -Name 'RunAppInstall' -ErrorAction SilentlyContinue",
+    "slug": "registry-value-4-17",
+    "category": "Registry",
+    "description": "Delete registry value with psadt 4.17+",
+    "source": "scripts/powershell/registry-value-4-17.ps1"
+  },
+  {
+    "n": 14,
+    "title": "Delete registry keys and subkeys with psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Remove-ADTRegistryKey -Key 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' -Recurse -ErrorAction SilentlyContinue",
+    "slug": "registry-keys-subkeys-4-17",
+    "category": "Registry",
+    "description": "Delete registry keys and subkeys with psadt 4.17+",
+    "source": "scripts/powershell/registry-keys-subkeys-4-17.ps1"
+  },
+  {
+    "n": 15,
+    "title": "Deleting registry keys matching the string (multiple string search):",
+    "language": "PowerShell",
+    "body": "$regparent3  = \"HKLM:\\Software\\company\\Packages\"\n$regparent_3 = \"HKLM\\Software\\company\\Packages\"\n\n# Regex pattern covers multiple prefixes\n$pattern = \"^(ABSC|DEFA|DECA)\"\n\nGet-ChildItem -Path $regparent3 -ErrorAction SilentlyContinue |\n    Where-Object { $_.PSChildName -match $pattern } |\n    ForEach-Object {\n        $regtodel = \"$regparent_3\\$($_.PSChildName)\"\n        Start-Process \"reg.exe\" -ArgumentList \"delete `\"$regtodel`\" /f\" `\n                      -Wait -PassThru -WindowStyle Hidden -ErrorAction SilentlyContinue\n    }",
+    "slug": "registry-keys-matching-string-multiple-string-search",
+    "category": "Registry",
+    "description": "Deleting registry keys matching the string (multiple string search):",
+    "source": "scripts/powershell/registry-keys-matching-string-multiple-string-search.ps1"
+  },
+  {
+    "n": 16,
+    "title": "Check display version of the app using uninstall hive registry",
+    "language": "PowerShell",
+    "body": "$regPath = \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{A3B2FFEE-2245-47AB-967C-DB473C4DE3D1}\"\n$display_Version = Get-ItemProperty -Path $regPath -Name \"DisplayVersion\" -ErrorAction SilentlyContinue\n\nIf ($display_Version.DisplayVersion -eq \"24.06.8300.00006\")\n{\n\t#perform operation\n}",
+    "slug": "display-version-uninstall-hive-registry",
+    "category": "Registry",
+    "description": "Check display version of the app using uninstall hive registry",
+    "source": "scripts/powershell/display-version-uninstall-hive-registry.ps1"
+  },
+  {
+    "n": 17,
+    "title": "export multiple registry keys into a single .reg file",
+    "language": "PowerShell",
+    "body": "# Output reg file\n$OutputFile = \"C:\\Temp\\SuwellReader_AllKeys.reg\"\n# List of registry keys to export\n$RegKeys = @(\n    \"HKLM\\SOFTWARE\\Classes\\Applications\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\Classes\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\Classes\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\Classes\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\CLSID\\{C7F277DC-6C47-AB2C-FB6A-070DC8BE7533}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\",\n    \"HKLM\\SOFTWARE\\Classes\\.ofd\",\n    \"HKLM\\SOFTWARE\\Classes\\OFD Document\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellofd\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellreaderax.OFDReaderActiveX\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellreaderax.OFDReaderActiveX.1\",\n    \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\MozillaPlugins\\@suwell.cn/npSuwellReader\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{C7F277DC-6C47-AB2C-FB6A-070DC8BE7533}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\"\n)\n# Create temp folder\n$TempFolder = \"C:\\Temp\\RegExportTemp\"\nif (!(Test-Path $TempFolder)) { New-Item -ItemType Directory -Path $TempFolder | Out-Null }\n# Create/Reset final output file with .reg header\n\"Windows Registry Editor Version 5.00`r`n\" | Out-File -FilePath $OutputFile -Encoding Unicode\n# Export each key\nforeach ($Key in $RegKeys) {\n    $SafeKeyName = ($Key -replace \"[\\\\:\\{\\}\\/]\", \"_\")\n    $TempFile = \"$TempFolder\\$SafeKeyName.reg\"\n    Write-Host \"Exporting $Key ...\"\n    # Export registry key\n    reg export \"$Key\" \"$TempFile\" /y 2>$null\n    # Check if export succeeded\n    if (Test-Path $TempFile) {\n        # Append content to final reg file (skip header)\n        (Get-Content $TempFile | Select-Object -Skip 1) |\n            Out-File -FilePath $OutputFile -Append -Encoding Unicode\n    } else {\n        Write-Host \"❗ Failed to export: $Key\"\n    }\n}\nWrite-Host \"`n All keys exported to: $OutputFile\"\n# Cleanup temporary files\nRemove-Item $TempFolder -Recurse -Force",
+    "slug": "export-multiple-registry-keys-single-reg",
+    "category": "Registry",
+    "description": "export multiple registry keys into a single .reg file",
+    "source": "scripts/powershell/export-multiple-registry-keys-single-reg.ps1"
+  },
+  {
+    "n": 18,
+    "title": "Creating or setting the registry",
+    "language": "PowerShell",
+    "body": "$regpath32 = \"HKLM:\\Software\\Wow6432Node\\company\\Packages\"\nnew-item -path $regpath32 -force -ErrorAction SilentlyContinue\nSet-ItemProperty -force -path $regpath32 -name \"Vendor\" -value $adtSession.AppVendor -ErrorAction SilentlyContinue",
+    "slug": "setting-registry",
+    "category": "Registry",
+    "description": "Creating or setting the registry",
+    "source": "scripts/powershell/setting-registry.ps1"
+  },
+  {
+    "n": 19,
+    "title": "importing the reg file",
+    "language": "PowerShell",
+    "body": "Start-Process \"reg.exe\" -ArgumentList \"import `\"$($adtSession.DirFiles)\\uporthide.reg`\"\" -Wait -PassThru -ErrorAction SilentlyContinue",
+    "slug": "importing-reg",
+    "category": "Registry",
+    "description": "importing the reg file",
+    "source": "scripts/powershell/importing-reg.ps1"
+  },
+  {
+    "n": 20,
+    "title": "creating the registry using psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Set-ADTRegistryKey -Key 'HKEY_LOCAL_MACHINE\\SOFTWARE' -Name 'Application' -Type 'DWord' -Value '1' -ErrorAction SilentlyContinue\n#possible types 'Binary','DWord','ExpandString','MultiString','None','QWord','String','Unknown'",
+    "slug": "registry-4-17",
+    "category": "Registry",
+    "description": "creating the registry using psadt 4.17+",
+    "source": "scripts/powershell/registry-4-17.ps1"
+  },
+  {
+    "n": 21,
+    "title": "check if multiple either of the registry key is present",
+    "language": "PowerShell",
+    "body": "If ((Test-Path \"HKLM:\\SOFTWARE\\WOW6432Node\\company\\Packages\\HSTToolsBundle_PK1_2.0_Platform_ENG_002\") -OR (Test-Path \"HKLM:\\SOFTWARE\\company\\Packages\\HSTToolsBundle_PK1_2.0_Platform_ENG_002\")) \n{\n       # <cmd-lets>\n}",
+    "slug": "multiple-either-registry-key-present",
+    "category": "Registry",
+    "description": "check if multiple either of the registry key is present",
+    "source": "scripts/powershell/multiple-either-registry-key-present.ps1"
+  },
+  {
+    "n": 22,
+    "title": "retrieving current folder with powershell and batch file",
+    "language": "PowerShell",
+    "body": "#powershell\n$PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition\n\n#batch\n%~dp0",
+    "slug": "retrieving-batch",
+    "category": "Files & Folders",
+    "description": "retrieving current folder with powershell and batch file",
+    "source": "scripts/powershell/retrieving-batch.ps1"
+  },
+  {
+    "n": 23,
+    "title": "psadt 4.17+ folder variables",
+    "language": "PowerShell",
+    "body": "$adtSession.UAN\n$($adtSession.DirFiles)\n$($adtSession.DirSupportFiles)",
+    "slug": "4-17-variables",
+    "category": "Application Packaging",
+    "description": "psadt 4.17+ folder variables",
+    "source": "scripts/powershell/4-17-variables.ps1"
+  },
+  {
+    "n": 24,
+    "title": "create the registry key if not exist",
+    "language": "PowerShell",
+    "body": "if(!(Test-Path -Path \"$envProgramdata\\Microsoft\\Windows\\Start Menu\\Programs\\HST TOOLS\"))\n{\n\tNew-Item -path \"$envProgramdata\\Microsoft\\Windows\\Start Menu\\Programs\\HST TOOLS\" -ItemType directory -Force -ErrorAction SilentlyContinue\n}",
+    "slug": "registry-key-not-exist",
+    "category": "Registry",
+    "description": "create the registry key if not exist",
+    "source": "scripts/powershell/registry-key-not-exist.ps1"
+  },
+  {
+    "n": 25,
+    "title": "deleting the folder and subfolders forcefully",
+    "language": "PowerShell",
+    "body": "Remove-Item \"$envProgramFilesX86\\Moxa\\DSU\" -Force -Recurse -ErrorAction SilentlyContinue",
+    "slug": "subfolders-forcefully",
+    "category": "Files & Folders",
+    "description": "deleting the folder and subfolders forcefully",
+    "source": "scripts/powershell/subfolders-forcefully.ps1"
+  },
+  {
+    "n": 26,
+    "title": "copying file with psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Copy-ADTFile -Path 'C:\\Path\\file.txt' -Destination 'D:\\Destination\\file.txt' -ErrorAction SilentlyContinue\n\nCopy-ADTFile -Path \"$($adtSession.DirFiles)\\CefLibZip\\*\" -Destination \"$envlocalappdata\\Programs\\Tagetik Excel .NET Client\" -Recurse",
+    "slug": "copying-4-17",
+    "category": "Application Packaging",
+    "description": "copying file with psadt 4.17+",
+    "source": "scripts/powershell/copying-4-17.ps1"
+  },
+  {
+    "n": 27,
+    "title": "copying with xcopy:",
+    "language": "PowerShell",
+    "body": "#Folder xcopy:\nStart-Process \"xcopy.exe\" -ArgumentList \"`\"$($adtSession.DirFiles)\\client_specific`\" `\"$envprogramfiles\\Siemens\\tc24\\portal\\plugins\\client_specific`\" /E /H /Y /I\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue\n\n#File xcopy:\nStart-Process \"xcopy.exe\" -ArgumentList \"`\"$($adtSession.DirFiles)\\client_specific.properties`\" `\"$envprogramfiles\\Siemens\\tc24\\portal\\plugins\\configuration\\`\" /Y\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue",
+    "slug": "copying-xcopy",
+    "category": "Files & Folders",
+    "description": "copying with xcopy:",
+    "source": "scripts/powershell/copying-xcopy.ps1"
+  },
+  {
+    "n": 28,
+    "title": "copying folder and contents",
+    "language": "PowerShell",
+    "body": "Copy-Item \"$PSScriptRoot\\Files\\Teamcenter 12\" -Destination \"$envAllUsersProfile\\Microsoft\\Windows\\Start Menu\\Programs\\Teamcenter 12\" -Force -recurse -ErrorAction SilentlyContinue",
+    "slug": "copying-contents",
+    "category": "Files & Folders",
+    "description": "copying folder and contents",
+    "source": "scripts/powershell/copying-contents.ps1"
+  },
+  {
+    "n": 29,
+    "title": "copying file with powershell",
+    "language": "PowerShell",
+    "body": "Copy-Item \"$PSScriptRoot\\Files\\Teamcenter 12\\tc.lnk\" -Destination \"$envAllUsersProfile\\Microsoft\\Windows\\Start Menu\\Programs\\Teamcenter 12\\tc.lnk\" -Force -ErrorAction SilentlyContinue",
+    "slug": "copying",
+    "category": "Files & Folders",
+    "description": "copying file with powershell",
+    "source": "scripts/powershell/copying.ps1"
+  },
+  {
+    "n": 30,
+    "title": "psadt 4.17+ to copy file or files to all existing users profile",
+    "language": "PowerShell",
+    "body": "Copy-ADTFileToUserProfiles -Path \"$($adtSession.DirSupportFiles)\\config.txt\" -Destination \"AppData\\Roaming\\MyApp\" -ErrorAction SilentlyContinue\n#multiple files: Copy-ADTFileToUserProfiles -Path \"$($adtSession.DirSupportFiles)\\config.txt\",\"$($adtSession.DirSupportFiles)\\config2.txt\" -Destination \"AppData\\Roaming\\MyApp\" -ErrorAction SilentlyContinue",
+    "slug": "4-17-copy-existing-users-profile",
+    "category": "Application Packaging",
+    "description": "psadt 4.17+ to copy file or files to all existing users profile",
+    "source": "scripts/powershell/4-17-copy-existing-users-profile.ps1"
+  },
+  {
+    "n": 31,
+    "title": "powershell to loop and wait until the folder is created or found",
+    "language": "PowerShell",
+    "body": "$folderPath = \"C:\\temp\\New folder\\a\"  # Replace with the actual folder path\n\nwhile (!(Test-Path $folderPath)) {\n    Start-Sleep -Seconds 5  # Check for the folder every 5 seconds\n}\n#operation",
+    "slug": "loop-wait-until-created-found",
+    "category": "Files & Folders",
+    "description": "powershell to loop and wait until the folder is created or found",
+    "source": "scripts/powershell/loop-wait-until-created-found.ps1"
+  },
+  {
+    "n": 32,
+    "title": "vbscript to loop and wait until the folder is created or found",
+    "language": "VBScript",
+    "body": "ON ERROR RESUME NEXT\t\t\n\t\t\nSet fso = CreateObject(\"Scripting.FileSystemObject\")\t\t\n\t\t\n' Specify the folder to monitor and the filename to search for\t\t\nfolder = \"C:\\temp\\New folder\" ' Replace with the actual folder path\t\t\nsearchFile = \"file.txt\" ' Replace with the actual filename\t\t\n\t\t\nDo While True\t\t\n    ' Check if the file exists\t\t\n    If fso.FileExists(folder & \"\\\" & searchFile) Then\t\t\n        ' File found! Perform actions here\t\t\n        MsgBox \"File found: \" & folder & \"\\\" & searchFile\t\t\n        Exit Do ' Exit the loop\t\t\n    End If\t\t\n\t\t\n    ' File not found, wait for a specified interval\t\t\n    WScript.Sleep 5000 ' Wait for 5 seconds (adjust as needed)\t\t\nLoop",
+    "slug": "vbscript-loop-wait-until-created-found",
+    "category": "Files & Folders",
+    "description": "vbscript to loop and wait until the folder is created or found",
+    "source": "scripts/vbscript/vbscript-loop-wait-until-created-found.vbs"
+  },
+  {
+    "n": 33,
+    "title": "replace string in a text file",
+    "language": "PowerShell",
+    "body": "$settingsFile = \"$env:AppData\\Docker\\settings.json\"\n$settingsFile2 = \"$env:AppData\\Docker\\settings-store.json\"\n\nif (!(Test-Path \"$env:AppData\\Docker\"))\n{\n    New-Item -path \"$env:AppData\\Docker\" -ItemType directory -Force -ErrorAction SilentlyContinue\n}\n\nCopy-Item \"$env:ProgramFiles\\WSL\\ACT\\settings-store.json\" -Destination \"$env:AppData\\Docker\\\" -Force -ErrorAction SilentlyContinue\nCopy-Item \"$env:ProgramFiles\\WSL\\ACT\\settings.json\" -Destination \"$env:AppData\\Docker\\\" -Force -ErrorAction SilentlyContinue\n\nif (Test-Path $settingsFile)\n{\n    $content = Get-Content $settingsFile -Raw -ErrorAction SilentlyContinue\n    $updatedContent = $content -replace '\"WslUpdateRequired\"\\s*:\\s*true', '\"WslUpdateRequired\": false'\n    Set-Content $settingsFile -Value $updatedContent -Encoding utf8NoBOM -Force -ErrorAction SilentlyContinue\n}\nif (Test-Path $settingsFile2)\n{\n    $content2 = Get-Content $settingsFile2 -Raw -ErrorAction SilentlyContinue\n    $updatedContent2 = $content2 -replace '\"WslUpdateRequired\"\\s*:\\s*true', '\"WslUpdateRequired\": false'\n    Set-Content $settingsFile2 -Value $updatedContent2 -Encoding utf8NoBOM -Force -ErrorAction SilentlyContinue\n}\n\n#used in docker desktop and working",
+    "slug": "replace-string-text",
+    "category": "Files & Folders",
+    "description": "replace string in a text file",
+    "source": "scripts/powershell/replace-string-text.ps1"
+  },
+  {
+    "n": 34,
+    "title": "Replace string in xml file",
+    "language": "PowerShell",
+    "body": "$xmlFile = \"C:\\path\\to\\file.xml\"\t\n$searchString = \"[USERNAME_C]\"\t\n$replaceString = \"new string\"\t\n\t\n[xml]$xml = Get-Content $xmlFile\t\n$xml.SelectNodes(\"//*[text()='$searchString']\") | \t\n    ForEach-Object { $_.InnerXml = $replaceString }\t\n$xml.Save($xmlFile)",
+    "slug": "replace-string-xml",
+    "category": "Files & Folders",
+    "description": "Replace string in xml file",
+    "source": "scripts/powershell/replace-string-xml.ps1"
+  },
+  {
+    "n": 35,
+    "title": "powershell script to check folder size",
+    "language": "PowerShell",
+    "body": "$dir=\"C:\\windows\\ccmcache\\\"\t\t\n$exclude=@(\"skpswi.dat\")\t\t\n$Foldercount=0\t\t\n$Filecount=0\t\t\n$size=\"{0:N2} GB\" -f ((Get-ChildItem $dir -Recurse -force | where-object { $_.FullName -inotmatch  $exclude }|  Measure-Object -Property Length -Sum ).Sum / 1Gb) \t\t\nWrite-host $size\t\t\n$Foldercount=Get-ChildItem $dir -force| where {  $_.PSIsContainer -and $_.FullName -inotmatch  $exclude}|  Measure-Object | %{$_.Count}\t\t\nWrite-host $Foldercount\t\t\n$Filecount=Get-ChildItem $dir -Force -Recurse| where { ! $_.PSIsContainer -and $_.FullName -inotmatch  $exclude}|  Measure-Object | %{$_.Count}\t\t\nWrite-host $Filecount",
+    "slug": "size",
+    "category": "Files & Folders",
+    "description": "powershell script to check folder size",
+    "source": "scripts/powershell/size.ps1"
+  },
+  {
+    "n": 36,
+    "title": "checking file version",
+    "language": "PowerShell",
+    "body": "$versioncheck = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(\"C:\\Program Files\\Smart Storage Administrator\\ssa\\bin\\ssaclient.exe\").FileVersion\nIf ($versioncheck -eq \"3.25.4.0\") { cmdlets to execute once version is found }",
+    "slug": "version",
+    "category": "Files & Folders",
+    "description": "checking file version",
+    "source": "scripts/powershell/version.ps1"
+  },
+  {
+    "n": 37,
+    "title": "loop until specific text is found under a text file",
+    "language": "PowerShell",
+    "body": "$SEL = Select-String -Path \"C:\\Users\\A\\Desktop\\filetoread.txt\" -Pattern \"<version> 12.0.4 1</version>\"\nwhile ($SEL -eq $null) { Start-Sleep 10 }\n#operation when found",
+    "slug": "loop-until-specific-text-found-under-text",
+    "category": "Files & Folders",
+    "description": "loop until specific text is found under a text file",
+    "source": "scripts/powershell/loop-until-specific-text-found-under-text.ps1"
+  },
+  {
+    "n": 38,
+    "title": "if folder is empty delete",
+    "language": "PowerShell",
+    "body": "$SearchRoot1 = Get-ChildItem -Path \"$envProgramFilesX86\\Moxa\" -ErrorAction SilentlyContinue\nIf ($SearchRoot1 -eq $null) \t\n{ \t\n\tRemove-Item -Path \"$envProgramFilesX86\\Moxa\" -Force -ErrorAction SilentlyContinue\t\n}",
+    "slug": "empty",
+    "category": "Files & Folders",
+    "description": "if folder is empty delete",
+    "source": "scripts/powershell/empty.ps1"
+  },
+  {
+    "n": 39,
+    "title": "delete folder from all existing users profile",
+    "language": "PowerShell",
+    "body": "$users = Get-ChildItem C:\\Users -ErrorAction silentlycontinue\nforeach ($user in $users){\n$folder = \"$($user.fullname)\\FCCCache\"\n   If (Test-Path $folder) {\n     Remove-Item $folder -Recurse -Force -ErrorAction silentlycontinue\n   }\n}",
+    "slug": "existing-users-profile",
+    "category": "Files & Folders",
+    "description": "delete folder from all existing users profile",
+    "source": "scripts/powershell/existing-users-profile.ps1"
+  },
+  {
+    "n": 40,
+    "title": "delete registries from existing users profile",
+    "language": "PowerShell",
+    "body": "# Enumerate all HKEY_USERS subkeys and delete the specified Active Setup entries\n\n$hkuBasePath = 'Registry::HKEY_USERS'\n$componentName = 'IBMiAccessClientSolutions_1.1.7.2_x64_POR_001'\n\n# Get all user hives under HKEY_USERS\n$users = Get-ChildItem -Path $hkuBasePath -ErrorAction SilentlyContinue\n\nforeach ($user in $users) {\n    $sidPath = $user.PSChildName   # e.g. S-1-5-21-...\n\n    # Paths to delete\n    $regPath1 = Join-Path -Path \"$hkuBasePath\\$sidPath\\Software\\Microsoft\\Active Setup\\Installed Components\" -ChildPath $componentName -ErrorAction SilentlyContinue\n    $regPath2 = Join-Path -Path \"$hkuBasePath\\$sidPath\\Software\\WOW6432Node\\Microsoft\\Active Setup\\Installed Components\" -ChildPath $componentName -ErrorAction SilentlyContinue\n\n    foreach ($path in @($regPath1, $regPath2)) {\n        if (Test-Path -Path $path) {\n            try {\n                Remove-Item -Path $path -Recurse -Force -ErrorAction SilentlyContinue\n                \n            }\n            catch {\n               \n            }\n        }\n        else {\n            \n        }\n    }\n}",
+    "slug": "registries-existing-users-profile",
+    "category": "Registry",
+    "description": "delete registries from existing users profile",
+    "source": "scripts/powershell/registries-existing-users-profile.ps1"
+  },
+  {
+    "n": 41,
+    "title": "executing exe or setup file using psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Start-ADTProcess -FilePath 'setup.exe' -ArgumentList '/S' -IgnoreExitCodes 1,2\t\n#Start-ADTProcess -FilePath \"$($adtSession.DirFiles)\\Bin\\setup.exe\" -ArgumentList '/S' -WindowStyle 'Hidden'\t\n#Start-ADTProcess -FilePath 'uninstall_flash_player_64bit.exe' -ArgumentList '/uninstall' -WindowStyle 'Hidden'\t\n#Start-ADTProcess -FilePath 'setup.exe' -ArgumentList \"-s -f2`\"$((Get-ADTConfig).Toolkit.LogPath)\\$($adtSession.InstallName).log`\"\"\t\n#Start-ADTProcess -FilePath 'setup.exe' -ArgumentList \"/s /v`\"ALLUSERS=1 /qn /L* `\"$((Get-ADTConfig).Toolkit.LogPath)\\$($adtSession.InstallName).log`\"`\"\"\t\n#-ErrorAction SilentlyContinue, Stop",
+    "slug": "executing-exe-setup-4-17",
+    "category": "Application Packaging",
+    "description": "executing exe or setup file using psadt 4.17+",
+    "source": "scripts/powershell/executing-exe-setup-4-17.ps1"
+  },
+  {
+    "n": 42,
+    "title": "executing exe or setup file in user context using psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Start-ADTProcessAsUser -FilePath \"$($adtSession.DirFiles)\\setup.exe\" -ArgumentList '/S' -SuccessExitCodes 0, 500",
+    "slug": "executing-exe-setup-user-context-4-17",
+    "category": "Application Packaging",
+    "description": "executing exe or setup file in user context using psadt 4.17+",
+    "source": "scripts/powershell/executing-exe-setup-user-context-4-17.ps1"
+  },
+  {
+    "n": 43,
+    "title": "start-process command usage",
+    "language": "PowerShell",
+    "body": "Start-Process \"msiexec.exe\" -ArgumentList \"/i `\"$PSScriptRoot\\Files\\test.msi`\" MSIRESTARTMANAGERCONTROL=Disable MSIRMSHUTDOWN=2 REBOOT=ReallySuppress MSIDISABLERMRESTART=1 REBOOTPROMPT=S /qn\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue",
+    "slug": "start-process",
+    "category": "Windows / Troubleshooting",
+    "description": "start-process command usage",
+    "source": "scripts/powershell/start-process.ps1"
+  },
+  {
+    "n": 44,
+    "title": "executing msi installer file in user context using psadt 4.17+",
+    "language": "PowerShell",
+    "body": "Start-ADTMsiProcess -Action 'Install' -FilePath 'OnsightConnectEnterprise.msi' -Transforms 'LibrestreamOnsighConnect_11.4.18.55050_x86_ENG_001.mst' -ArgumentList 'SKIP_LICENSING=Y OE_CONFIG_PATH=C:\\WINDOWS\\TEMP\\OeConfig.xml /QN'\n#Start-ADTMsiProcess -Action 'Install' -FilePath 'Adobe_FlashPlayer_11.2.202.233_x64_EN.msi'\n#Start-ADTMsiProcess -Action 'Patch' -FilePath 'Adobe_Reader_11.0.3_EN.msp'\n#Start-ADTMsiProcess -Action 'Uninstall' -ProductCode '{8AF832CF-9D85-4B2E-AA2B-5667F9974909}' -ArgumentList 'MSIRESTARTMANAGERCONTROL=Disable MSIRMSHUTDOWN=2 REBOOT=ReallySuppress MSIDISABLERMRESTART=1 REBOOTPROMPT=S /QN'\n#Start-ADTMsiProcess -Action 'Uninstall' -ProductCode '{F205B7B8-8C19-4D18-8302-EE4B3682EDAE}' -ArgumentList '/QN'\n#MSIRESTARTMANAGERCONTROL=Disable MSIRMSHUTDOWN=2 REBOOT=ReallySuppress MSIDISABLERMRESTART=1 REBOOTPROMPT=S /qn",
+    "slug": "executing-msi-installer-user-context-4-17",
+    "category": "Application Packaging",
+    "description": "executing msi installer file in user context using psadt 4.17+",
+    "source": "scripts/powershell/executing-msi-installer-user-context-4-17.ps1"
+  },
+  {
+    "n": 45,
+    "title": "list add and remove programs (ARP) entries",
+    "language": "PowerShell",
+    "body": "$uninstallPaths = @(\n    \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\",\n    \"HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\"\n)\n\nforeach ($path in $uninstallPaths) {\n    Get-ItemProperty $path | Where-Object {\n        $_.DisplayName -like \"*Aspen*\" -and $_.PSObject.Properties.Name -contains \"UninstallString\"\n    } | ForEach-Object {\n        $productName = $_.DisplayName\n        $uninstallString = $_.UninstallString\n\n        # Extract product code if uninstall string contains it\n        if ($uninstallString -match \"\\{[0-9A-Fa-f\\-]{36}\\}\") {\n            $productCode = $Matches[0]\n            Write-Output \"msiexec /x $productCode #$productName\"\n        }\n    }\n}",
+    "slug": "programs-arp-entries",
+    "category": "Windows / Utilities",
+    "description": "list add and remove programs (ARP) entries",
+    "source": "scripts/powershell/programs-arp-entries.ps1"
+  },
+  {
+    "n": 46,
+    "title": "uninstalling specific apps from add and remove programs that has specific string in display name",
+    "language": "PowerShell",
+    "body": "$paths = @(\n    \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\",\n    \"HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\"\n)\n\nforeach ($path in $paths) {\n    Get-ItemProperty $path -ErrorAction SilentlyContinue | Where-Object {\n        #$_.DisplayName -like \"*Aspen*\" -and $_.UninstallString -match \"msiexec\"\n        $_.Publisher -like \"*Aspen*\" -and $_.UninstallString -match \"msiexec\"\n    } | ForEach-Object {\n        $name = $_.DisplayName\n        $code = $_.PSChildName\n        if ($code -match \"^\\{.*\\}$\") {\n            $shortName = ($name -replace '\\s', '').Substring(0, [Math]::Min(16, ($name -replace '\\s', '').Length))\n            #Write-Output \"Start-ADTMsiProcess -Action 'Uninstall' -ProductCode '$code' -ArgumentList 'MSIRESTARTMANAGERCONTROL=Disable MSIRMSHUTDOWN=2 REBOOT=ReallySuppress MSIDISABLERMRESTART=1 REBOOTPROMPT=S /qn' #$shortName\"\n            #Write-Output \"msiexec /x $code MSIRESTARTMANAGERCONTROL=Disable MSIRMSHUTDOWN=2 REBOOT=ReallySuppress MSIDISABLERMRESTART=1 REBOOTPROMPT=S /qn #$shortName\"\n            #Write-Output \"msiexec /x $code MSIRESTARTMANAGERCONTROL=Disable MSIRMSHUTDOWN=2 REBOOT=ReallySuppress MSIDISABLERMRESTART=1 REBOOTPROMPT=S /qn\"\n        }\n    }\n}",
+    "slug": "uninstalling-specific-apps-programs-that-has-specific-string",
+    "category": "Application Packaging",
+    "description": "uninstalling specific apps from add and remove programs that has specific string in display name",
+    "source": "scripts/powershell/uninstalling-specific-apps-programs-that-has-specific-string.ps1"
+  },
+  {
+    "n": 47,
+    "title": "stop and delete services:",
+    "language": "PowerShell",
+    "body": "Start-Process -FilePath \"sc.exe\" -ArgumentList \"stop `\"S7TraceServiceX`\"\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue\nStart-Process -FilePath \"sc.exe\" -ArgumentList \"delete `\"S7TraceServiceX`\"\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue",
+    "slug": "stop-services",
+    "category": "Windows / Troubleshooting",
+    "description": "stop and delete services:",
+    "source": "scripts/powershell/stop-services.ps1"
+  },
+  {
+    "n": 48,
+    "title": "how to have new line in psadt 4.17+ prompts - example",
+    "language": "PowerShell",
+    "body": "$str += \"`n\"\t\n$line1 = \"1. Go to \" + \"`\"help`\"\" + \"and \" + \"`\"register`\"\" + \" with Mono.\" + $str + $str\t\n$line2 = \"2. Click on \" + \"`\"Request Activation`\"\" + $str + $str\t\n$line3 = \"3. You will receive the activation code by email in 1-3 days.\"  + $str + $str\t\n$line4 = \"So then please make sure you have the \" + \"`\"companyized version`\"\" + \", if not you will not see company prices.\"\t\n$msg = $line1 + $line2 + $line3 + $line4",
+    "slug": "have-new-line-4-17-prompts-example",
+    "category": "Application Packaging",
+    "description": "how to have new line in psadt 4.17+ prompts - example",
+    "source": "scripts/powershell/have-new-line-4-17-prompts-example.ps1"
+  },
+  {
+    "n": 49,
+    "title": "check for disk space",
+    "language": "PowerShell",
+    "body": "if ((Get-WMIObject Win32_Logicaldisk -filter \"deviceid='C:'\").FreeSpace -lt 25GB)\t\n{\n\t#if disk space is less that 25 gb then do this\t\n}",
+    "slug": "disk-space",
+    "category": "Files & Folders",
+    "description": "check for disk space",
+    "source": "scripts/powershell/disk-space.ps1"
+  },
+  {
+    "n": 50,
+    "title": "check disk space of C:\\ drive",
+    "language": "PowerShell",
+    "body": "$Space = Get-FreeDiskSpace -Drive 'C:'\n\nIf ($Space -le '5000')\n{\n\t#if less than 5GB execute\n}",
+    "slug": "disk-space-c-drive",
+    "category": "Files & Folders",
+    "description": "check disk space of C:\\ drive",
+    "source": "scripts/powershell/disk-space-c-drive.ps1"
+  },
+  {
+    "n": 51,
+    "title": "check disk space oneliner",
+    "language": "PowerShell",
+    "body": "Get-PSDrive C | Select-Object Name, @{Name=\"FreeGB\";Expression={[math]::Round($_.Free/1GB,2)}}, @{Name=\"TotalGB\";Expression={[math]::Round($_.Used/1GB + $_.Free/1GB,2)}}",
+    "slug": "disk-space-oneliner",
+    "category": "Files & Folders",
+    "description": "check disk space oneliner",
+    "source": "scripts/powershell/disk-space-oneliner.ps1"
+  },
+  {
+    "n": 52,
+    "title": "unpin shortcut from taskbar",
+    "language": "PowerShell",
+    "body": "$ShortcutSource1 = \"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Dassault Systemes\\DraftSight 2019 x64.lnk\"\n    $ShortcutName1   = \"DraftSight 2019 x64.lnk\"\n\n    # Get all user profiles except system ones\n    $UserProfiles1 = Get-ChildItem \"C:\\Users\" -ErrorAction SilentlyContinue | Where-Object {\n        $_.PSIsContainer -and\n        $_.Name -notin @(\"Default\", \"Default User\", \"Public\", \"All Users\", \"defaultuser0\")\n    }\n\n    foreach ($Profile1 in $UserProfiles1) \n    {\n        $TaskbarPath1 = Join-Path $Profile1.FullName \"AppData\\Roaming\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\"\n        $PinnedShortcut1 = Join-Path $TaskbarPath1 $ShortcutName1\n        if (Test-Path $PinnedShortcut1) \n        {\n            Remove-Item $PinnedShortcut1 -Force -ErrorAction SilentlyContinue            \n        }\n    }",
+    "slug": "unpin-shortcut-taskbar",
+    "category": "Windows / Troubleshooting",
+    "description": "unpin shortcut from taskbar",
+    "source": "scripts/powershell/unpin-shortcut-taskbar.ps1"
+  },
+  {
+    "n": 53,
+    "title": "sccm client removal and clean up",
+    "language": "PowerShell",
+    "body": "# Attempt to run the SCCM uninstaller\nfunction uninstallSCCM() {\n    if (Test-Path -Path \"$Env:SystemDrive\\Windows\\ccmsetup\\ccmsetup.exe\") {\n        # Stop SCCM services\n        Get-Service -Name CcmExec -ErrorAction SilentlyContinue | Stop-Service -Force -Verbose\n        Get-Service -Name ccmsetup -ErrorAction SilentlyContinue | Stop-Service -Force -Verbose\n\n        # Run the SCCM uninstaller\n        Start-Process -FilePath \"$Env:SystemDrive\\Windows\\ccmsetup\\ccmsetup.exe\" -ArgumentList '/uninstall'\n\n        # Wait for the uninstaller to finish\n        do {\n            Start-Sleep -Milliseconds 1000\n            $Process = (Get-Process ccmsetup -ErrorAction SilentlyContinue)\n        } until ($null -eq $Process)\n\n        Write-Host \"SCCM uninstallation completed\"\n    }\n}\n\n# Forcefully remove all traces of SCCM from the computer\nfunction removeSCCM() {\n    # Stop SCCM services\n    Get-Service -Name CcmExec -ErrorAction SilentlyContinue | Stop-Service -Force -Verbose\n    Get-Service -Name ccmsetup -ErrorAction SilentlyContinue | Stop-Service -Force -Verbose\n\n    # Take ownership of/delete SCCM's client folder and files\n    $null = takeown /F \"$($Env:WinDir)\\CCM\" /R /A /D Y 2>&1\n    Remove-Item -Path \"$($Env:WinDir)\\CCM\" -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n    \n    # Take ownership of/delete SCCM's setup folder and files\n    $null = takeown /F \"$($Env:WinDir)\\CCMSetup\" /R /A /D Y 2>&1\n    Remove-Item -Path \"$($Env:WinDir)\\CCMSetup\" -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n    \n    # Take ownership of/delete SCCM cache of downloaded packages and applications\n    $null = takeown /F \"$($Env:WinDir)\\CCMCache\" /R /A /D Y 2>&1\n    Remove-Item -Path \"$($Env:WinDir)\\CCMCache\" -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n\n    # Remove SCCM's smscfg file (contains GUID of previous installation)\n    Remove-Item -Path \"$($Env:WinDir)\\smscfg.ini\" -Force -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n\n    # Remove SCCM certificates\n    Remove-Item -Path 'HKLM:\\Software\\Microsoft\\SystemCertificates\\SMS\\Certificates\\*' -Force -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n\n    # Remove CCM registry keys\n    Remove-Item -Path 'HKLM:\\SOFTWARE\\Microsoft\\CCM' -Force -Recurse -Verbose -ErrorAction SilentlyContinue\n    Remove-Item -Path 'HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM' -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n\n    # Remove SMS registry keys\n    Remove-Item -Path 'HKLM:\\SOFTWARE\\Microsoft\\SMS' -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n    Remove-Item -Path 'HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS' -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n\n    # Remove CCMSetup registry keys\n    Remove-Item -Path 'HKLM:\\Software\\Microsoft\\CCMSetup' -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n    Remove-Item -Path 'HKLM:\\Software\\Wow6432Node\\Microsoft\\CCMSetup' -Force -Confirm:$false -Recurse -Verbose -ErrorAction SilentlyContinue\n\n    # Remove CcmExec and ccmsetup services\n    Remove-Item -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\CcmExec' -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n    Remove-Item -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Services\\ccmsetup' -Force -Recurse -Confirm:$false -Verbose -ErrorAction SilentlyContinue\n\n    # Remove SCCM namespaces from WMI repository\n    Get-CimInstance -Query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" -ErrorAction SilentlyContinue | Remove-CimInstance -Verbose -Confirm:$false -ErrorAction SilentlyContinue\n    Get-CimInstance -Query \"Select * From __Namespace Where Name='CCMVDI'\" -Namespace \"root\" -ErrorAction SilentlyContinue | Remove-CimInstance -Verbose -Confirm:$false -ErrorAction SilentlyContinue\n    Get-CimInstance -Query \"Select * From __Namespace Where Name='SmsDm'\" -Namespace \"root\" -ErrorAction SilentlyContinue | Remove-CimInstance -Verbose -Confirm:$false -ErrorAction SilentlyContinue\n    Get-CimInstance -Query \"Select * From __Namespace Where Name='sms'\" -Namespace \"root\\cimv2\" -ErrorAction SilentlyContinue | Remove-CimInstance -Verbose -Confirm:$false -ErrorAction SilentlyContinue\n\n    # Completed\n    Write-Host \"All traces of SCCM have been removed\"\n}\n\nuninstallSCCM\nremoveSCCM",
+    "slug": "client-removal-clean-up",
+    "category": "MECM / SCCM",
+    "description": "sccm client removal and clean up",
+    "source": "scripts/powershell/client-removal-clean-up.ps1"
+  },
+  {
+    "n": 54,
+    "title": "sccm client repair",
+    "language": "PowerShell",
+    "body": "<# LOG FILE LOCATION \"c:\\Temp\\ClientCleanup.log\"\n#>\n\n$ErrorActionPreference = 'SilentlyContinue'\n\nNew-Item -ItemType Directory -Force -Path \"C:\\Temp\"\nNew-Item -ItemType \"file\" -Path \"c:\\Temp\\ClientCleanup.log\"\n\n#TIMESTAMP FUNCTION FOR LOGGING\nfunction Get-TimeStamp {\n    \n    return \"[{0:MM/dd/yy} {0:hh:mm}]\" -f (Get-Date)\n    \n}\n#TIMESTAMP FUNCTION ENDS HERE......\n\n#SMSAGENT HOST CLEANUP\nStart-Sleep -s 10\nStop-Service ccmexec -Force\nStop-Service ccmsetup -Force\n$service = Get-WmiObject -Class Win32_Service -Filter \"Name='ccmexec'\"\nStart-Sleep -s 5\n$service.delete()\n$arrService_1 = Get-Service -Name \"ccmexec\"\nif ($arrService_1.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) \n::::::::::::::::::::::::::::::::::::::::::::STARTING THE SCRIPT EXECUTION::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SMS Agent Host was Deleted Successfully.\"\n}\n\n#SMSAGENT HOST IS IN KILLED........\n\n#REMOVING MIF AND SMSCFG FILES\nStart-Sleep -s 10\nRemove-Item –path \"C:\\Windows\\SMSCFG.INI\"\nGet-ChildItem -path \"C:\\Windows\\*.mif\" | Remove-Item -Force\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) .MIF and SMSCFG.ini removed\"\n#REMOVED MIF AND SMSCFG FILES............\n\n#TASK SCHEDULE KILLER\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Health Evaluation\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Health Evaluation\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Health Evaluation\" -Confirm:$False\n}\n\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Idle Detection\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Idle Detection\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Idle Detection\" -Confirm:$False\n}\n\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Passport for Work Certificate Enrollment Task\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Passport for Work Certificate Enrollment Task\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Passport for Work Certificate Enrollment Task\" -Confirm:$False\n}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) ConfigMgr Task Schedules Un-Registered.\"\n#TASK SCHEDULE KILLED SUCCESSFULLY..........\n\n#GARBAGE REGISTRY CLEANER\n$regkeypath1= \"hklm:\\SOFTWARE\\ConfigMgrStartup\"\n$regkeypath2= \"hklm:\\SOFTWARE\\Microsoft\\CCM\"\n$regkeypath3= \"hklm:\\SOFTWARE\\Microsoft\\CCMSetup\"\n$regkeypath4= \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\CCM\"\n$regkeypath5= \"hklm:\\SOFTWARE\\Microsoft\\SMS\"\n$regkeypath6= \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\SMS\"\n$value1 = (Get-ItemProperty $regkeypath).test -eq $null\n$value2 = (Get-ItemProperty $regkeypath).test -eq $null\n$value3 = (Get-ItemProperty $regkeypath).test -eq $null\n$value4 = (Get-ItemProperty $regkeypath).test -eq $null\n$value5 = (Get-ItemProperty $regkeypath).test -eq $null\n$value6 = (Get-ItemProperty $regkeypath).test -eq $null\nIf ($value1 -eq $False) {Remove-ItemProperty -path $regkeypath1 -Force}\nIf ($value2 -eq $False) {Remove-ItemProperty -path $regkeypath2 -Force}\nIf ($value3 -eq $False) {Remove-ItemProperty - path $regkeypath3 -Force}\nIf ($value4 -eq $False) {Remove-ItemProperty -path $regkeypath4 -Force}\nIf ($value5 -eq $False) {Remove-ItemProperty -path $regkeypath5 -Force}\nIf ($value6 -eq $False) {Remove-ItemProperty -path $regkeypath6 -Force}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SCCM Client related Garbage Registries cleaned up.\"\n#GARBAGE REGISTRY CLEANED..........\n\n#GARBAGE FOLDER REMOVER\nRemove-Item \"C:\\Windows\\CCM\" -Force -Recurse\nRemove-Item \"C:\\Windows\\ccmcache\" -Force -Recurse\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) CCM and ccmcache folder deletion initiated.\"\n#GARBAGE FOLDER REMOVED..........\n\n#CLEANING UP CLIENT RELATED CERTIFICATES\n$smscert = \"hklm:\\SOFTWARE\\Microsoft\\SystemCertificates\\SMS\"\n$smscert64 = \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\SystemCertificates\\SMS\"\n$smsval = (Get-ItemProperty $smscert).test -eq $null\n$smsvall = (Get-ItemProperty $smscert64).test -eq $null\nIf ($smsval -eq $False) {Remove-ItemProperty -path $smscert -Force}\nIf ($smsvall -eq $False) {Remove-ItemProperty -path $smscert64 -Force}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SCCM Client Certificated Deleted.\"\n#CLIENT RELATED CERTIFICATES REMOVED..........\n\n#CLIENT WMI CLEANUP\nStart-Sleep -s 5\n$wmi_check = 'winmgmt'\n$arrService = Get-Service -Name $wmi_check\nif ($arrService.Status -eq 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) WMI Service is in good state, initiating CCM and SMS Namespace deletion.\"\n$computer_name = $env:computername\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" | Remove-WmiObject}\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='SMS'\" -Namespace \"root\\cimv2\" | Remove-WmiObject}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) CCM and SMS Namespace Deleted Successfully.\"\n}\nif ($arrService.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) WMI Service is not active, Starting the service.\"\nStart-Service winmgmt -Force\n$computer_name = $env:computername\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" | Remove-WmiObject}\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='SMS'\" -Namespace \"root\\cimv2\" | Remove-WmiObject}\n}\n#WMI CLEANUP DONE..........\n\n#LOGGING THE STATUS\nStart-Sleep -s 7\nif ($arrService.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The winmgmt service cannot be started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Either access denied. or some other application is blocking/preventing it to get started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Script will be Aborted.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Finished with Error!\"\nexit\n}\nelse\n{\nif (Test-Path \"${env:systemdrive}\\Windows\\ccmsetup\\ccmsetup.exe\")\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Client has the ccmsetup sources, will use the same for installation.\"\nStart-Process \"${env:systemdrive}\\Windows\\ccmsetup\\ccmsetup.exe\" -ArgumentList \"/mp:SEPCSCM008.company.com SMSSITECODE=S01\" -Wait -PassThru\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The installation of sccm client was initiated.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Please check in C:\\Windows\\ccmsetup.log to check the installation progress.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If success code is 7, the SCCM Client has been installed but reboot is required.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If success code is 0, the Client has been installed, reboot is not required.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If still the installation issue occurs, WMI needs to be repaired or Firewall Confliction.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) For Windows 10, Firewall Service (in services.msc) needs to be started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The Log Completed Here....\"\nexit\n}\nelse\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Client does not have the ccmsetup sources.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Please copy it from compliant machine under C:\\Windows\\ folder and re-run the script.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) At the moment, Script Aborts Here and Installation Skipped....\"\n}\n}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) ::::::::::::::::::::::::::::::::::::::::::::SCRIPT COMPLETED::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\"\n#SCRIPT ENDS HERE........",
+    "slug": "client-repair",
+    "category": "MECM / SCCM",
+    "description": "sccm client repair",
+    "source": "scripts/powershell/client-repair.ps1"
+  },
+  {
+    "n": 55,
+    "title": "implementing folder permission",
+    "language": "PowerShell",
+    "body": "Start-Process \"cmd.exe\" -ArgumentList \"/C cacls `\"$envprogramfiles\\KiCad\\10.0`\" /t /c /e /p Users:F\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue\n\n#cmd.exe /C cacls $envProgramFilesX86\\SuoYuan /t /c /e /p Users:F",
+    "slug": "implementing-permission",
+    "category": "Files & Folders",
+    "description": "implementing folder permission",
+    "source": "scripts/powershell/implementing-permission.ps1"
+  },
+  {
+    "n": 56,
+    "title": "unblock application object in sccm console",
+    "language": "PowerShell",
+    "body": "Unlock-CMObject -InputObject $(Get-CMApplication -Name 'ApplicationName') -Force",
+    "slug": "unblock-object-console",
+    "category": "MECM / SCCM",
+    "description": "unblock application object in sccm console",
+    "source": "scripts/powershell/unblock-object-console.ps1"
+  },
+  {
+    "n": 57,
+    "title": "dpinst command reference",
+    "language": "PowerShell",
+    "body": "#install\n<driverfolder where inf is present>\\dpinst.exe /A /Q /SA /SE\nStart-Process \"$PSScriptRoot\\Files\\driversinternal\\dpinst.exe\" -ArgumentList \"/A /Q /SA /SE\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue #driver files should be in same folder\n\n#uninstall\nStart-Process \"$PSScriptRoot\\Files\\driversinternal\\dpinst.exe\" -ArgumentList \"/Q /D /U `\"C:\\Windows\\System32\\DriverStore\\FileRepository\\vuh.inf_amd64_eea746b107e00bff\\vuh.inf`\"\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue",
+    "slug": "dpinst",
+    "category": "Application Packaging",
+    "description": "dpinst command reference",
+    "source": "scripts/powershell/dpinst.ps1"
+  },
+  {
+    "n": 58,
+    "title": "search the dll files and de-register them or register them",
+    "language": "PowerShell",
+    "body": "$ErrorActionPreference = 'SilentlyContinue'\t\t\n\t\t\n$folders = @(\t\t\n    \"C:\\Program Files\\Siemens\\Automation\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\TelemetryConnector\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\AlmPanelPlugin\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\Automation\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\CommunicationSettings\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\ETWEventCollector\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\HmiRTmDriver64\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\S7wnsmsx\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\SimNetCom\",\t\t\n    \"C:\\Program Files\\Common Files\\Siemens\\sws\",\t\t\n    \"C:\\Program Files (x86)\\Siemens\\PLCSIM\",\t\t\n    \"C:\\Program Files (x86)\\Siemens\\Automation\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\SimNetCom\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\sws\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\Automation\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\Bin\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\Compatibility\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\CoRtHmiRTmSim\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\HmiRTmDriver32\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\HmiRTmSim\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\InteropS7cl\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\OPC\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\PTProSave\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\PTSymLib\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\PTTouchInput\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\s7wmedb\",\t\t\n    \"C:\\Program Files (x86)\\Common Files\\Siemens\\SeCon\",\t\t\n    \"C:\\ProgramData\\Siemens\\CoRtHmiRTm\",\t\t\n    \"C:\\ProgramData\\Siemens\\UserManagement\",\t\t\n    \"C:\\ProgramData\\Siemens\\Automation\",\t\t\n    \"C:\\ProgramData\\Siemens\\ETWEventCollector\",\t\t\n    \"C:\\ProgramData\\Siemens\\S7-PCT\"\t\t\n)\t\t\n\t\t\n\t\t\nforeach ($folder in $folders) {\t\t\n    $dllFiles = Get-ChildItem -Path $folder -Recurse -Filter \"*.dll\"\t\t\n\t\t\n    foreach ($dllFile in $dllFiles) {\t\t\n        $dllPath = $dllFile.FullName\t\t\n       # Write-Host \"Deregistering $dllPath\"\t\t\n        Start-Process -FilePath \"regsvr32.exe\" -ArgumentList \"/u /s `\"$dllPath`\"\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue\t\t\n    }\t\t\n}",
+    "slug": "search-dll-de-register-them-register-them",
+    "category": "Registry",
+    "description": "search the dll files and de-register them or register them",
+    "source": "scripts/powershell/search-dll-de-register-them-register-them.ps1"
+  },
+  {
+    "n": 59,
+    "title": "sample vbscript code",
+    "language": "VBScript",
+    "body": "ON ERROR RESUME NEXT\t\t\t\n\t\t\t\nConst ForReading = 1\t\t\t\nConst ForWriting = 2\t\t\t\n\t\t\t\nSet objFSO = CreateObject(\"Scripting.FileSystemObject\")\t\t\t\nSet WshShell = CreateObject(\"Wscript.Shell\")\t\t\t\nusr1 = WshShell.ExpandEnvironmentStrings(\"%username%\")\t\t\t\nuserprof = WshShell.ExpandEnvironmentStrings(\"%userprofile%\")\t\t\t\nprogx861 = WshShell.ExpandEnvironmentStrings(\"%programfiles(x86)%\")\t\t\t\nroam1 = WshShell.ExpandEnvironmentStrings(\"%appdata%\")\t\t\t\nscriptdir = CreateObject(\"Scripting.FileSystemObject\").GetParentFolderName(WScript.ScriptFullName)\t\t\t\n\t\t\t\nWshShell.Run \"reg delete \" & chr(34) & \"HKEY_CURRENT_USER\\SOFTWARE\\WOW6432Node\\Microsoft\\Active Setup\\Installed Components\\PhraseExpress_Uninst\" & chr(34) & \" /f\", 0, True\t\t\t\nWshShell.Run \"reg delete \" & chr(34) & \"HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Active Setup\\Installed Components\\PhraseExpress_Uninst\" & chr(34) & \" /f\", 0, True\t\t\t\n\t\t\t\nIf Not objFSO.FolderExists(userprof & \"\\Documents\\PhraseExpress\") Then\t\t\t\nobjFSO.CreateFolder (userprof & \"\\Documents\\PhraseExpress\")\t\t\t\nEnd If\t\t\t\n\t\t\t\nobjFSO.CopyFile progx861 & \"\\PhraseExpress\\ActiveSetup\\phrases.pxp\", userprof & \"\\Documents\\PhraseExpress\\phrases.pxp\", True\t\t\t\nobjFSO.CopyFile progx861 & \"\\PhraseExpress\\ActiveSetup\\words.pal\", userprof & \"\\Documents\\PhraseExpress\\words.pal\", True\t\t\t\n\t\t\t\nIf Not objFSO.FolderExists(roam1 & \"\\PhraseExpress\") Then\t\t\t\nobjFSO.CreateFolder (roam1 & \"\\PhraseExpress\")\t\t\t\nEnd If\t\t\t\n\t\t\t\nobjFSO.CopyFile progx861 & \"\\PhraseExpress\\ActiveSetup\\config.xml\", roam1 & \"\\PhraseExpress\\config.xml\", True\t\t\t\n\t\t\t\nobjFSO.CopyFile progx861 & \"\\PhraseExpress\\ActiveSetup\\phraseexpress.lnk\", roam1 & \"\\Microsoft\\Windows\\Start Menu\\Programs\\phraseexpress.lnk\", True\t\t\t\n\t\t\t\nSet objFile = objFSO.OpenTextFile(roam1 & \"\\PhraseExpress\\config.xml\", ForReading)\t\t\t\nstrText = objFile.ReadAll\t\t\t\nobjFile.Close\t\t\t\n\t\t\t\nstrNewText = Replace(strText, \"[username1]\", usr1)\t\t\t\nSet objFile = objFSO.OpenTextFile(roam1 & \"\\PhraseExpress\\config.xml\", ForWriting)\t\t\t\nobjFile.WriteLine strNewText\t\t\t\nobjFile.Close\t\t\t\n\t\t\t\nset WshShell = Nothing\t\t\t\nSet objFSO = Nothing",
+    "slug": "vbscript-code",
+    "category": "Windows / Utilities",
+    "description": "sample vbscript code",
+    "source": "scripts/vbscript/vbscript-code.vbs"
+  },
+  {
+    "n": 60,
+    "title": "powershell path on windows device and installation command of ps1 file",
+    "language": "PowerShell",
+    "body": "\"$envwindir\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\"\n\n#installation command: powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -WindowStyle Hidden -File <.ps1 file name>",
+    "slug": "path-windows-device-installation-ps1",
+    "category": "Application Packaging",
+    "description": "powershell path on windows device and installation command of ps1 file",
+    "source": "scripts/powershell/path-windows-device-installation-ps1.ps1"
+  },
+  {
+    "n": 61,
+    "title": "hta window sample code",
+    "language": "HTA/VBScript",
+    "body": "<html>\n<head>\n<title>Installation Notice:</title>\n<hta:application\n  applicationname=\"Popup\"\n  border=\"thick\"\n  borderstyle=\"sunken\"\n  caption=\"no\"\n  contextmenu=\"no\"\n  innerborder=\"yes\"\n  maximizebutton=\"no\"\n  minimizebutton=\"no\"\n  navigable=\"no\"\n  scroll=\"no\"\n  selection=\"no\"\n  showintaskbar=\"no\"\n  singleinstance=\"yes\"\n  sysmenu=\"no\"\n  windowstate=\"maximize\"  windowstyle=\"0x800000\"  />\n<style>\n  body {\n    width: 300px;  height: 350px; background-color: #2b3faf;\n    font-family: Times New Roman, sans-serif;\n    text-align: center;\ncolor: white;\nfont-size: 18px;\npadding: 20px;\n  }\n</style>\n<script language=\"VBScript\">\n  Sub Window_OnLoad\n    window.resizeTo 600, 400  End Sub\n</script>\n</head>\n<body>\n  <h2><u>CarboniteDoubletakeTARGET Installation Notice!</u></h2><br>\nDuring the installation process, you will see the installation interface. <br><br>\n<u>\"PLEASE DO NOT CLICK OR INTERACT WITH THE MACHINE\" </u> until the application installation is completed. <br><br>\nRequest you to wait until the installation finishes!<br><br>\nThank You!<br>\n  </body>\n</html>",
+    "slug": "hta-window-code",
+    "category": "Windows / Utilities",
+    "description": "hta window sample code",
+    "source": "scripts/hta-vbscript/hta-window-code.hta"
+  },
+  {
+    "n": 62,
+    "title": "loop until process is completed",
+    "language": "PowerShell",
+    "body": "Wait-Process -Name setup -ErrorAction SilentlyContinue",
+    "slug": "loop-until-process-completed",
+    "category": "Windows / Troubleshooting",
+    "description": "loop until process is completed",
+    "source": "scripts/powershell/loop-until-process-completed.ps1"
+  },
+  {
+    "n": 63,
+    "title": "Unblock File: Windows Defender Smart Screen prevented an unrecognized app - Fixed",
+    "language": "PowerShell",
+    "body": "get-childitem \"$envProgramFilesX86\\Ahlborn\\ALMEMO_Control-6-3\" -ErrorAction SilentlyContinue | unblock-file -ErrorAction SilentlyContinue",
+    "slug": "unblock-windows-defender-smart-screen-prevented-unrecognized-fixed",
+    "category": "Files & Folders",
+    "description": "Unblock File: Windows Defender Smart Screen prevented an unrecognized app - Fixed",
+    "source": "scripts/powershell/unblock-windows-defender-smart-screen-prevented-unrecognized-fixed.ps1"
+  },
+  {
+    "n": 64,
+    "title": "wmic reference",
+    "language": "PowerShell",
+    "body": "Get-CimInstance -Classname WIn32_Product | Where-Object Name -Like '*kofax*' | Invoke-CimMethod -MethodName UnInstall -ErrorAction SilentlyContinue",
+    "slug": "wmic",
+    "category": "Windows / Troubleshooting",
+    "description": "wmic reference",
+    "source": "scripts/powershell/wmic.ps1"
+  },
+  {
+    "n": 65,
+    "title": "loop until exe is found, and when found kill",
+    "language": "PowerShell",
+    "body": "DO\t\n{\t\n} Until (Get-Process BabtecCAQ)\t\nStop-process -Name BabtecCAQ -force",
+    "slug": "loop-until-exe-found-when-found-kill",
+    "category": "Windows / Utilities",
+    "description": "loop until exe is found, and when found kill",
+    "source": "scripts/powershell/loop-until-exe-found-when-found-kill.ps1"
+  },
+  {
+    "n": 66,
+    "title": "check / enable / installation Microsoft .Net Framework 3.5 (optionalfeatures)",
+    "language": "PowerShell",
+    "body": "#Install: DISM /Online /Get-FeatureInfo /FeatureName:NetFx3\n#uninstall: dism.exe /online /disable-feature /featurename:NetFx3 /quiet /norestart",
+    "slug": "enable-installation-microsoft-net-framework-3-5-optionalfeatures",
+    "category": "Application Packaging",
+    "description": "check / enable / installation Microsoft .Net Framework 3.5 (optionalfeatures)",
+    "source": "scripts/powershell/enable-installation-microsoft-net-framework-3-5-optionalfeatures.ps1"
+  },
+  {
+    "n": 67,
+    "title": "check appx package is installed or not",
+    "language": "PowerShell",
+    "body": "$pkg = Get-AppxProvisionedPackage -Online | Where-Object {\n    $_.DisplayName -like \"*LenovoSettingsforEnterprise*\" -and $_.Version -eq \"20.2511.24.0\"\n}\n\nif ($pkg) \n{",
+    "slug": "appx-package-installed-not",
+    "category": "Application Packaging",
+    "description": "check appx package is installed or not",
+    "source": "scripts/powershell/appx-package-installed-not.ps1"
+  },
+  {
+    "n": 68,
+    "title": "msi source resiliency fix - vbscript",
+    "language": "VBScript",
+    "body": "ON ERROR RESUME NEXT\nSet wiInstaller = CreateObject(\"WindowsInstaller.Installer\")\nwiInstaller.AddSource \"{448FDA57-C414-429F-8B6E-FCF4E09DAFEB}\", \"\", \"C:\\Windows\\Temp\\SetupHydraulicDLLfix\"\nwiInstaller.AddSource \"{448FDA57-C414-429F-8B6E-FCF4E09DAFEB}\", \"\", \"C:\\Windows\\Temp\\SetupHydraulicDLLfix\"\nwiInstaller.ForceSourceListResolution \"{448FDA57-C414-429F-8B6E-FCF4E09DAFEB}\", \"\"",
+    "slug": "msi-source-resiliency-fix-vbscript",
+    "category": "Registry",
+    "description": "msi source resiliency fix - vbscript",
+    "source": "scripts/vbscript/msi-source-resiliency-fix-vbscript.vbs"
+  },
+  {
+    "n": 69,
+    "title": "Batch file reference to remove all users specific data",
+    "language": "Batch",
+    "body": "REM for /d %%A in (C:\\Users\\*) do (\t\t\t\nREM RMDIR /s /q \"%%A\\AppData\\Local\\Dassault Systemes\\DraftSight\")\t\t\t\n\t\t\t\nREM for /d %%A in (C:\\Users\\*) do (\t\t\t\nREM RMDIR /s /q \"%%A\\AppData\\Roaming\\Microsoft\\Templates\\Normal.dotm\")\t\t\t\n\t\t\t\nREM for /d %%A in (C:\\Users\\*) do IF EXIST %%A\\%ULocal%AppData\\Roaming\\DfSapAddin\\dfs_sap.key (\t\t\t\nREM RMDIR /s /q \"%%A\\AppData\\Roaming\\DfSapAddin\")\t\t\t\n\t\t\t\nfor /f \"delims=\" %%a in ('REG QUERY \"HKEY_USERS\"') do (\t\t\t\nREG DELETE \"%%a\\Software\\Microsoft\\Active Setup\\Installed Components\\DLLforDraftsight_PK1_1.0.0_x64_ENG_001\" /f)",
+    "slug": "batch-users-specific-data",
+    "category": "Files & Folders",
+    "description": "Batch file reference to remove all users specific data",
+    "source": "scripts/batch/batch-users-specific-data.bat"
+  },
+  {
+    "n": 70,
+    "title": "powershell script to fetch application related eventviewer log",
+    "language": "PowerShell",
+    "body": "Get-WinEvent -FilterHashtable @{\n    LogName = 'Application'\n    Id      = 1000\n} -MaxEvents 10 |\nSelect-Object `\n    TimeCreated,\n    @{Name='Application';Expression={\n        if ($_.Message -match 'Faulting application name:\\s*([^,]+)') {$matches[1]}\n    }},\n    @{Name='FaultModule';Expression={\n        if ($_.Message -match 'Faulting module name:\\s*([^,]+)') {$matches[1]}\n    }}",
+    "slug": "fetch-related-eventviewer-log",
+    "category": "Windows / Troubleshooting",
+    "description": "powershell script to fetch application related eventviewer log",
+    "source": "scripts/powershell/fetch-related-eventviewer-log.ps1"
+  },
+  {
+    "n": 71,
+    "title": "powershell script to fetch application related eventviewer log in detail",
+    "language": "PowerShell",
+    "body": "Get-WinEvent -FilterHashtable @{\n    LogName = 'Application'\n    Id = 1000\n} -MaxEvents 20 |\nSelect-Object TimeCreated, ProviderName, Id, Message |\nFormat-List",
+    "slug": "fetch-related-eventviewer-log-detail",
+    "category": "Windows / Troubleshooting",
+    "description": "powershell script to fetch application related eventviewer log in detail",
+    "source": "scripts/powershell/fetch-related-eventviewer-log-detail.ps1"
+  },
+  {
+    "n": 72,
+    "title": "powershell script to fetch application related eventviewer log in detail for specific ids",
+    "language": "PowerShell",
+    "body": "Get-WinEvent -LogName Application -MaxEvents 200 |\nWhere-Object {$_.Id -in 1000,1001,1026} |\nSelect-Object TimeCreated,Id,ProviderName,Message |\nFormat-List",
+    "slug": "fetch-related-eventviewer-log-detail-specific-ids",
+    "category": "Windows / Troubleshooting",
+    "description": "powershell script to fetch application related eventviewer log in detail for specific ids",
+    "source": "scripts/powershell/fetch-related-eventviewer-log-detail-specific-ids.ps1"
+  },
+  {
+    "n": 73,
+    "title": "update distribution points",
+    "language": "PowerShell",
+    "body": "Update-CMDistributionPoint -ApplicationName \"SolidWorks2023SP5_31.150.52.0_x64_ENG_001\" -DeploymentTypeName \"SolidWorks2023SP5_31.150.52.0_x64_ENG_001\"",
+    "slug": "update-distribution-points",
+    "category": "MECM / SCCM",
+    "description": "update distribution points",
+    "source": "scripts/powershell/update-distribution-points.ps1"
+  },
+  {
+    "n": 74,
+    "title": "autoit vbscript reference",
+    "language": "VBScript",
+    "body": "ON ERROR RESUME NEXT\t\n\t\nSet fso = CreateObject(\"Scripting.FileSystemObject\")\t\nSet objShell = WScript.CreateObject(\"WScript.Shell\")\t\n\t\nobjShell.MinimizeAll\t\nwscript.sleep 2000\t\n\t\nIf (fso.FolderExists(\"C:\\ProgramData\\replication_finish\")) Then\t\n      fso.DeleteFolder(\"C:\\ProgramData\\replication_finish\"), True\t\nEnd if\t\n\t\nobjShell.Run \"C:\\Temp\\Repli_src\\notice.hta\",1, false\t\nobjShell.Run \"msiexec /i \" & chr(34) & \"C:\\Temp\\Repli_src\\Double-Take.msi\" & chr(34) & \" TRANSFORMS=\" & chr (34) & \"C:\\Temp\\Repli_src\\1033.MST\" & chr(34) & \" /L*v \" & chr(34) & \"C:\\WINDOWS\\Maintenance\\Logs\\Applications\\CarboniteDoubletakeSOURCE_8.5.3.98_x64_ENG_001.log\" & chr(34), True\t\n\t\ntargetWindowTitle = \"Carbonite Replication - InstallShield Wizard\"\t\n\t\nwindowFound = False\t\n\t\nDo\t\n    WScript.Sleep 1000 ' Wait for 1 second before checking again\t\n\t\n    ' Check if the window with the specific title exists\t\n    If objShell.AppActivate(targetWindowTitle) Then\t\n        windowFound = True\t\n    End If\t\nLoop Until windowFound\t\n\t\n' Once the window is found, send the Enter key\t\nobjShell.AppActivate targetWindowTitle\t\nWScript.Sleep 500 ' Delay to ensure the window is in focus\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 4000\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\n'objShell.SendKeys \"{ENTER}\"\t\n'wscript.sleep 2000\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{TAB}\"\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{ENTER}\"\t\nwscript.sleep 2000\t\nobjShell.SendKeys \"{ENTER}\"\t\n\t\nfolderPath_1 = \"C:\\ProgramData\\replication_finish\" ' Replace with your desired folder path\t\n\t\nDo Until FolderExists(folderPath_1)\t\n    WScript.Sleep 1000 ' Sleep for 1 second before checking again\t\nLoop\t\n\t\ntargetWindowTitle1 = \"Carbonite Replication - InstallShield Wizard\"\t\n\t\nwindowFound1 = False\t\n\t\nDo\t\n    WScript.Sleep 1000 ' Wait for 1 second before checking again\t\n\t\n    ' Check if the window with the specific title exists\t\n    If objShell.AppActivate(targetWindowTitle1) Then\t\n        windowFound1 = True\t\n    End If\t\nLoop Until windowFound1\t\n\t\n' Once the window is found, send the Enter key\t\nobjShell.AppActivate targetWindowTitle1\t\nWScript.Sleep 500 ' Delay to ensure the window is in focus\t\nobjShell.SendKeys \"{ENTER}\"\t\n\t\nFunction FolderExists(folderPath_1)\t\n    Set objFSO = CreateObject(\"Scripting.FileSystemObject\")\t\n    FolderExists = objFSO.FolderExists(folderPath_1)\t\n    Set objFSO = Nothing\t\nEnd Function\t\n\t\nSet fso = Nothing\t\nSet objShell = Nothing",
+    "slug": "autoit-vbscript",
+    "category": "Windows / Utilities",
+    "description": "autoit vbscript reference",
+    "source": "scripts/vbscript/autoit-vbscript.vbs"
+  },
+  {
+    "n": 75,
+    "title": "company portal enrollment issues - fix",
+    "language": "PowerShell",
+    "body": "In such cases the issue is mostly due to broken authentication of the device.\nKindly check the below:\n\nIn command prompt execute:\n\ndsregcmd /status\n\ncheck the status of AzureAdPrt, if it is yes\n\ndelete the subkeys of HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Enrollments\\\nNot the Enrollments key, but all the subkeys (some would still stay, ignore those)\n\nif AzureAdPrt, value is no, you need to request the PRT with below:\ndsregcmd /refreshprt\n\nRestart the machine (mandatory) and wait for some time.\nThe company portal should be fixed by itself.\n\nIn case if the issue still persist, with admin rights execute below commands:\ndsregcmd /leave\nthen\nreboot\n\nafter restart\n\ndsregcmd /join",
+    "slug": "company-portal-enrollment-issues-fix",
+    "category": "Intune",
+    "description": "company portal enrollment issues - fix",
+    "source": "scripts/powershell/company-portal-enrollment-issues-fix.ps1"
+  },
+  {
+    "n": 76,
+    "title": "sccm download stuck at 0% - fix",
+    "language": "PowerShell",
+    "body": "Net stop ccmexec\nDEL C:\\Windows\\CCM\\CcmStore.sdf\nNet start ccmexec",
+    "slug": "download-stuck-at-0-fix",
+    "category": "MECM / SCCM",
+    "description": "sccm download stuck at 0% - fix",
+    "source": "scripts/powershell/download-stuck-at-0-fix.ps1"
+  },
+  {
+    "n": 77,
+    "title": "copy file to all available users folder",
+    "language": "PowerShell",
+    "body": "#attemting to disable update check\n                $SourceFile = \"$($adtSession.DirFiles)\\Preferences.sublime-settings\"\n                $OverwriteExisting = $true\n                $UserProfileRoot = \"C:\\Users\"\n                $ExcludedProfiles = @(\n                    \"Default\",\n                    \"Default User\",\n                    \"Public\",\n                    \"All Users\",\n                    \"defaultuser0\"    \n                )\n\n                $profiles = Get-ChildItem -Path $UserProfileRoot -Directory -ErrorAction SilentlyContinue\n\n                foreach ($profile in $profiles) {\n                if ($ExcludedProfiles -contains $profile.Name) {        \n                        continue\n                    }\n                    $userProfilePath = $profile.FullName\n\n                    $targetDir = Join-Path -Path $userProfilePath -ChildPath \"AppData\\Roaming\\Sublime Text\\Packages\\User\" -ErrorAction SilentlyContinue\n                    $targetFile = Join-Path -Path $targetDir -ChildPath \"Preferences.sublime-settings\" -ErrorAction SilentlyContinue\n\n                    if (-not (Test-Path -Path $targetDir -PathType Container)) {\n                            New-Item -Path $targetDir -ItemType Directory -Force -ErrorAction SilentlyContinues\n                        }\n                        \n                        if ((-not (Test-Path -Path $targetFile -PathType Leaf)) -or $OverwriteExisting) {            \n                            Copy-Item -Path $SourceFile -Destination $targetFile -Force -ErrorAction SilentlyContinue\n                        }\n                     }",
+    "slug": "copy-available-users",
+    "category": "Files & Folders",
+    "description": "copy file to all available users folder",
+    "source": "scripts/powershell/copy-available-users.ps1"
+  },
+  {
+    "n": 78,
+    "title": "zip the contents",
+    "language": "PowerShell",
+    "body": "compress-archive -path \"C:\\Users\\dongadm\\Desktop\\Plantronics\" -DestinationPath \"C:\\Users\\dongadm\\Desktop\\New folder\\Plantronics.zip\"",
+    "slug": "zip-contents",
+    "category": "Files & Folders",
+    "description": "zip the contents",
+    "source": "scripts/powershell/zip-contents.ps1"
+  },
+  {
+    "n": 79,
+    "title": "unzip the contents",
+    "language": "PowerShell",
+    "body": "Expand-Archive -path \"C:\\Users\\shaiash\\Desktop\\VS2026Layout.zip\" -Destinationpath \"C:\\Windows\\Temp\\\" -Force",
+    "slug": "unzip-contents",
+    "category": "Files & Folders",
+    "description": "unzip the contents",
+    "source": "scripts/powershell/unzip-contents.ps1"
+  },
+  {
+    "n": 80,
+    "title": "unzip the contents with 7-zip",
+    "language": "PowerShell",
+    "body": "$strFileName = \"$envProgramFiles\\7-Zip\\7z.exe\"\t\t\n$Arg = \"x \" + '\"' + \"$dirFiles\\Tc12.0.0.0_wntx64.zip\" + '\"' + \" -o\" + '\"' + \"$envsystemdrive\\temp\\Teamcenter_12.4\\\" + '\"' + \" -y\"\t\t\n$Arg1 = \"x \" + '\"' + \"$dirFiles\\Tc12.4.0.0_wntx64.zip\" + '\"' + \" -o\" + '\"' + \"$envsystemdrive\\temp\\Teamcenter_12.4\\\" + '\"' + \" -y\"\t\t\n\t\t\nStart-Process -FilePath $strFileName -ArgumentList $Arg -Wait -WindowStyle Hidden\t\t\nWait-Process -Name 7z\t\t\nStart-Process -FilePath $strFileName -ArgumentList $Arg1 -Wait -WindowStyle Hidden\t\t\nWait-Process -Name 7z",
+    "slug": "unzip-contents-7-zip",
+    "category": "Files & Folders",
+    "description": "unzip the contents with 7-zip",
+    "source": "scripts/powershell/unzip-contents-7-zip.ps1"
+  },
+  {
+    "n": 81,
+    "title": "delete group of registries, find and delete if uninstall hive entries of that particular publisher exists",
+    "language": "PowerShell",
+    "body": "$registryKeys = @(\n        \"HKLM:\\SOFTWARE\\Classes\\.py\",\n        \"HKLM:\\SOFTWARE\\Classes\\.pyc\",\n        \"HKLM:\\SOFTWARE\\Classes\\.pyd\",\n        \"HKLM:\\SOFTWARE\\Classes\\.pyo\",\n        \"HKLM:\\SOFTWARE\\Classes\\.pyw\",\n        \"HKLM:\\SOFTWARE\\Classes\\.pyz\",\n        \"HKLM:\\SOFTWARE\\Classes\\.pyzw\",\n        \"HKLM:\\SOFTWARE\\Classes\\Python.ArchiveFile\",\n        \"HKLM:\\SOFTWARE\\Classes\\Python.CompiledFile\",\n        \"HKLM:\\SOFTWARE\\Classes\\Python.Extension\",\n        \"HKLM:\\SOFTWARE\\Classes\\Python.File\",\n        \"HKLM:\\SOFTWARE\\Classes\\Python.NoConArchiveFile\",\n        \"HKLM:\\SOFTWARE\\Classes\\Python.NoConFile\",    \n        \"HKLM:\\SOFTWARE\\WOW6432Node\\Python\",\n        \"HKLM:\\SOFTWARE\\Python\"\n        )\n\n        foreach ($key in $registryKeys) {\n            if (Test-Path $key) {\n                Remove-Item -Path $key -Recurse -Force -ErrorAction SilentlyContinue\n            }\n        }\n\n\n                $RegistryPaths = @(\n            \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\",\n            \"HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\"\n        )\n\n        foreach ($Path in $RegistryPaths) {\n\n            if (Test-Path $Path) {\n\n               $Apps = Get-ChildItem -Path $Path -ErrorAction SilentlyContinue\n\n                foreach ($App in $Apps) {\n\n                    $Props = Get-ItemProperty -Path $App.PSPath -ErrorAction SilentlyContinue\n\n                    # Check for Publisher string match\n                    if ($Props.Publisher -like \"*Python*\") {\n\n                        $KeyName = $App.PSChildName\n                        $FullPath = Join-Path -Path $Path -ChildPath $KeyName -ErrorAction SilentlyContinue\n                        Remove-Item -Path $FullPath -Recurse -Force -ErrorAction SilentlyContinue\n                    }\n                }\n            }\n        }",
+    "slug": "group-registries-find-uninstall-hive-entries-that-particular",
+    "category": "Registry",
+    "description": "delete group of registries, find and delete if uninstall hive entries of that particular publisher exists",
+    "source": "scripts/powershell/group-registries-find-uninstall-hive-entries-that-particular.ps1"
+  },
+  {
+    "n": 82,
+    "title": "ACT, SHIMS reference",
+    "language": "PowerShell",
+    "body": "#Installation:\nStart-Process \"sdbinst.exe\" -ArgumentList \"-q `\"$PSScriptRoot\\Files\\Anysys_ACT.sdb`\"\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue\n\n#Uninstallation:\nStart-Process \"sdbinst.exe\" -ArgumentList \"-u `\"$PSScriptRoot\\Files\\Anysys_ACT.sdb`\"\" -Wait -PassThru -WindowStyle hidden -ErrorAction SilentlyContinue",
+    "slug": "act-shims",
+    "category": "Windows / Utilities",
+    "description": "ACT, SHIMS reference",
+    "source": "scripts/powershell/act-shims.ps1"
+  },
+  {
+    "n": 83,
+    "title": "powershell script to list the running tasks with command line",
+    "language": "PowerShell",
+    "body": "Get-CimInstance Win32_Process |\nWhere-Object { $_.CommandLine } |\nSort-Object Name |\nFormat-Table Name, CommandLine -AutoSize -Wrap\n\n#Select-Object Name, CommandLine | Export-Csv \"C:\\Temp\\RunningProcesses.csv\" -NoTypeInformation",
+    "slug": "running-tasks-line",
+    "category": "Windows / Utilities",
+    "description": "powershell script to list the running tasks with command line",
+    "source": "scripts/powershell/running-tasks-line.ps1"
+  },
+  {
+    "n": 84,
+    "title": "powershell script to list the running tasks consuming more than 100 MB",
+    "language": "PowerShell",
+    "body": "Get-CimInstance Win32_Process |\nWhere-Object {\n    $_.CommandLine -and\n    $_.WorkingSetSize -gt 100MB\n} |\nSort-Object Name |\nSelect-Object Name, CommandLine,\n    @{Name='MemoryMB';Expression={[math]::Round($_.WorkingSetSize / 1MB, 2)}}",
+    "slug": "running-tasks-consuming-more-than-100-mb",
+    "category": "Windows / Utilities",
+    "description": "powershell script to list the running tasks consuming more than 100 MB",
+    "source": "scripts/powershell/running-tasks-consuming-more-than-100-mb.ps1"
+  },
+  {
+    "n": 85,
+    "title": "powershell script to list the running tasks top 20 memory-consuming processes",
+    "language": "PowerShell",
+    "body": "Get-CimInstance Win32_Process |\nWhere-Object { $_.CommandLine } |\nSort-Object @{Expression={[int64]$_.WorkingSetSize}; Descending=$true} |\nSelect-Object -First 20 `\n    Name,\n    @{Name='MemoryMB';Expression={[math]::Round($_.WorkingSetSize / 1MB, 2)}},\n    CommandLine",
+    "slug": "running-tasks-top-20-memory-consuming-processes",
+    "category": "Windows / Troubleshooting",
+    "description": "powershell script to list the running tasks top 20 memory-consuming processes",
+    "source": "scripts/powershell/running-tasks-top-20-memory-consuming-processes.ps1"
+  },
+  {
+    "n": 86,
+    "title": "Firewall rule creation",
+    "language": "PowerShell",
+    "body": "Start-Process \"cmd.exe\" -ArgumentList \"/C netsh advfirewall firewall add rule name=`\"SpaixAwv4`\" dir=in program=`\"$envProgramFilesx86\\company\\ABSEL V2 Pump Selection Program\\SpaixAw.exe`\" remoteip=localsubnet action=allow profile=domain protocol=any\" -Wait -PassThru -ErrorAction SilentlyContinue\n\n\nFirewall rule deletion\nStart-Process \"cmd.exe\" -ArgumentList \"/C netsh advfirewall firewall delete rule name=`\"ansyscl_str_2025`\"\" -Wait -PassThru -ErrorAction SilentlyContinue",
+    "slug": "firewall-rule-creation",
+    "category": "Windows / Troubleshooting",
+    "description": "Firewall rule creation",
+    "source": "scripts/powershell/firewall-rule-creation.ps1"
+  },
+  {
+    "n": 87,
+    "title": "MONITOR BACKGROUND RUNNING PROCESS THAT’S DIFFICULT TO CATCH",
+    "language": "PowerShell",
+    "body": "# Duration to monitor (in minutes)\n$DurationMinutes = 15\n$EndTime = (Get-Date).AddMinutes($DurationMinutes)\nWrite-Host \"Taking snapshot of currently running processes...\"\n# Get baseline (ignore list)\n$baseline = @{}\nGet-CimInstance Win32_Process | ForEach-Object {\n    $baseline[$_.ProcessId] = $true\n}\nWrite-Host \"Baseline captured. Monitoring for $DurationMinutes minutes...\"\nWrite-Host \"------------------------------------------\"\n# Store already reported processes\n$reported = @{}\nwhile ((Get-Date) -lt $EndTime) {\n    $currentProcesses = Get-CimInstance Win32_Process\n    foreach ($proc in $currentProcesses) {\n        $procId = $proc.ProcessId   #  renamed variable\n        # Skip if already in baseline or already reported\n        if ($baseline.ContainsKey($procId) -or $reported.ContainsKey($procId)) {\n            continue\n        }\n        # Mark as reported\n        $reported[$procId] = $true\n        # Output process details\n        [PSCustomObject]@{\n            Time        = Get-Date -Format \"HH:mm:ss\"\n            ProcessName = $proc.Name\n            PID         = $procId\n            CommandLine = $proc.CommandLine\n        } | Format-List\n    }\n    Start-Sleep -Seconds 2\n}\nWrite-Host \"------------------------------------------\"\nWrite-Host \"Monitoring complete.\"",
+    "slug": "monitor-background-running-process-that-s-difficult-catch",
+    "category": "Windows / Troubleshooting",
+    "description": "MONITOR BACKGROUND RUNNING PROCESS THAT’S DIFFICULT TO CATCH",
+    "source": "scripts/powershell/monitor-background-running-process-that-s-difficult-catch.ps1"
+  },
+  {
+    "n": 88,
+    "title": "Get sccm applications deployment id",
+    "language": "PowerShell",
+    "body": "Get-CMDeploymentType -ApplicationName \"DWGTrueView_2023_x64_ENG_001\" | Select LocalizedDisplayName, CI_UniqueID",
+    "slug": "applications-deployment-id",
+    "category": "MECM / SCCM",
+    "description": "Get sccm applications deployment id",
+    "source": "scripts/powershell/applications-deployment-id.ps1"
+  },
+  {
+    "n": 89,
+    "title": "Adding list of devices to sccm collection using a text file",
+    "language": "PowerShell",
+    "body": "# Import the ConfigMgr module\nImport-Module \"E:\\Program files\\Microsoft Configuration Manager\\AdminConsole\\bin\\ConfigurationManager\\ConfigurationManager.psd1\"\n\n# Set your site code and connect\n$SiteCode = \"S01\"   # <-- Replace with your SCCM Site Code\nSet-Location \"$SiteCode`:\"\n\n# Provide the collection name\n$CollectionName = \"Aspenv15_Installed_Devices\"   # <-- Replace with your collection name\n\n# Path to the text file containing device names\n$DeviceList = \"C:\\Users\\shaiadm\\Desktop\\dev.txt\"\n\n# Read devices\n$Devices = Get-Content -Path $DeviceList\n\nforeach ($Device in $Devices) {\n    Write-Host \"Processing device: $Device\" -ForegroundColor Cyan\n\n    # Get device info from SCCM\n    $CMDevice = Get-CMDevice -Name $Device\n\n    if ($CMDevice) {\n        # Add device to the collection\n        Add-CMDeviceCollectionDirectMembershipRule `\n            -CollectionName $CollectionName `\n            -ResourceId $CMDevice.ResourceID\n\n        Write-Host \"Added: $Device\" -ForegroundColor Green\n    }\n    else {\n        Write-Host \"Device not found in SCCM: $Device\" -ForegroundColor Yellow\n    }\n}\n\nWrite-Host \"---- Completed ----\" -ForegroundColor Magenta",
+    "slug": "devices-collection-text",
+    "category": "MECM / SCCM",
+    "description": "Adding list of devices to sccm collection using a text file",
+    "source": "scripts/powershell/devices-collection-text.ps1"
+  },
+  {
+    "n": 90,
+    "title": "check to which collections the sccm app is deployed to",
+    "language": "PowerShell",
+    "body": "<#\n.SYNOPSIS\n    Generates a report showing SCCM application deployments to \"All Users\",\n    other collections, or no deployment at all.\n\n.COMPATIBILITY\n    PowerShell 5.1\n    SCCM Current Branch\n#>\n\n#region Configuration\n\n$SiteCode        = \"S01\"  # 🔧 CHANGE to your site code\n$ProviderMachine = \"SEPCSCM008.company.com\"  # 🔧 CHANGE if required\n$AppListPath     = \"C:\\Users\\shaiadm\\Desktop\\dev.txt\"\n$ReportPath      = \"C:\\Users\\shaiadm\\Desktop\\dev.csv\"\n\n#endregion Configuration\n\n#region Load SCCM Module\n\ntry {\n    Import-Module \"E:\\Program files\\Microsoft Configuration Manager\\AdminConsole\\bin\\ConfigurationManager\\ConfigurationManager.psd1\"\n    Set-Location \"$SiteCode`:\"\n}\ncatch {\n    throw \"Failed to load Configuration Manager module. Verify SCCM console install.\"\n}\n\n#endregion Load SCCM Module\n\n#region Validation\n\nif (-not (Test-Path $AppListPath)) {\n    throw \"Application list file not found: $AppListPath\"\n}\n\n#endregion Validation\n\n#region Processing\n\n$Results = foreach ($AppName in Get-Content $AppListPath) {\n\n    $AppName = $AppName.Trim()\n    if ([string]::IsNullOrWhiteSpace($AppName)) { continue }\n\n    try {\n        $App = Get-CMApplication -Name $AppName -ErrorAction SilentlyContinue\n\n        if (-not $App) {\n            [PSCustomObject]@{\n                ApplicationName     = $AppName\n                DeployedToAllUsers  = \"Not Found\"\n                OtherCollections    = \"\"\n                NoDeployment        = \"N/A\"\n            }\n            continue\n        }\n\n        $Deployments = Get-CMApplicationDeployment -ApplicationName $AppName\n\n        # No deployments\n        if (-not $Deployments) {\n            [PSCustomObject]@{\n                ApplicationName     = $AppName\n                DeployedToAllUsers  = \"No\"\n                OtherCollections    = \"\"\n                NoDeployment        = \"Yes\"\n            }\n            continue\n        }\n\n        $AllUsersDeployment = $Deployments |\n            Where-Object { $_.CollectionName -eq \"All Users\" }\n\n        $OtherCollections = $Deployments |\n            Where-Object { $_.CollectionName -ne \"All Users\" } |\n            Select-Object -ExpandProperty CollectionName -Unique\n\n        [PSCustomObject]@{\n            ApplicationName     = $AppName\n            DeployedToAllUsers  = if ($AllUsersDeployment) { \"Yes\" } else { \"No\" }\n            OtherCollections    = if ($OtherCollections) { $OtherCollections -join \"; \" } else { \"\" }\n            NoDeployment        = \"No\"\n        }\n    }\n    catch {\n        [PSCustomObject]@{\n            ApplicationName     = $AppName\n            DeployedToAllUsers  = \"Error\"\n            OtherCollections    = \"\"\n            NoDeployment        = \"Error\"\n        }\n    }\n}\n\n#endregion Processing\n\n#region Export\n\n$Results | Export-Csv -Path $ReportPath -NoTypeInformation -Encoding UTF8\nWrite-Host \"SCCM deployment report generated:\" -ForegroundColor Green\nWrite-Host $ReportPath\n\n#endregion Export",
+    "slug": "which-collections-deployed",
+    "category": "MECM / SCCM",
+    "description": "check to which collections the sccm app is deployed to",
+    "source": "scripts/powershell/which-collections-deployed.ps1"
+  },
+  {
+    "n": 91,
+    "title": "check sccm dependent apps",
+    "language": "PowerShell",
+    "body": "Import-Module \"E:\\Program files\\Microsoft Configuration Manager\\AdminConsole\\bin\\ConfigurationManager\\ConfigurationManager.psd1\"\n\nSet-Location \"S01:\"  # Replace XYZ with your site code (e.g., 'ABC:')\nGet-CMApplication | ForEach-Object {\n    $app = $_\n    $deps = (Get-CMDeploymentType -ApplicationName $app.LocalizedDisplayName | \n             Select-Object -ExpandProperty Dependencies -ErrorAction SilentlyContinue)\n    if ($deps.DisplayName -contains \"SAPGUI_8.00SP6.1_x86_ENG_001\") {\n        Write-Output \"$($app.LocalizedDisplayName) depends on Test01\"\n    }\n}",
+    "slug": "dependent-apps",
+    "category": "MECM / SCCM",
+    "description": "check sccm dependent apps",
+    "source": "scripts/powershell/dependent-apps.ps1"
+  },
+  {
+    "n": 92,
+    "title": "add users to users collection",
+    "language": "PowerShell",
+    "body": "\"company\\eitzjen\",\"company\\silvjes\",\"company\\espioli\",\"company\\xuyan1\",\"company\\WONGHIM\" | % { Add-CMUserCollectionDirectMembershipRule -CollectionName \"OEMX_AlreadyApprovedUsers\" -ResourceID (Get-CMUser -Name $_).ResourceID }",
+    "slug": "users-users-collection",
+    "category": "MECM / SCCM",
+    "description": "add users to users collection",
+    "source": "scripts/powershell/users-users-collection.ps1"
+  },
+  {
+    "n": 93,
+    "title": "add users to users collection using a text file",
+    "language": "PowerShell",
+    "body": "# Import SCCM module\nImport-Module \"E:\\Program files\\Microsoft Configuration Manager\\AdminConsole\\bin\\ConfigurationManager\\ConfigurationManager.psd1\"\n\n# Set Site Code\n$SiteCode = \"S01\"   # <-- Change this\nSet-Location ($SiteCode + \":\")\n\n# Collection Name\n$CollectionName = \"ALL_CLN_ACCOUNT\"   # <-- Change this\n\n# TXT file path (one user per line)\n$TxtFilePath = \"C:\\Users\\shaiadm\\Desktop\\USR.TXT\"   # <-- Change this\n\n# Read users from TXT file\n$UserList = Get-Content $TxtFilePath\n\n# Get existing members to avoid duplicates\n$ExistingMembers = Get-CMUserCollectionMember -CollectionName $CollectionName\n\nforeach ($UserName in $UserList) {\n\n    try {\n        # Get SCCM User\n        $CMUser = Get-CMUser -Name $UserName\n\n        if ($CMUser) {\n\n            if ($ExistingMembers.ResourceId -contains $CMUser.ResourceId) {\n                Write-Host \"$UserName already exists in collection\" -ForegroundColor Yellow\n            }\n            else {\n                # Add user to collection\n                Add-CMUserCollectionDirectMembershipRule `\n                    -CollectionName $CollectionName `\n                    -ResourceId $CMUser.ResourceId\n\n                Write-Host \"Added: $UserName\" -ForegroundColor Green\n            }\n        }\n        else {\n            Write-Host \"User not found in SCCM: $UserName\" -ForegroundColor Magenta\n        }\n    }\n    catch {\n        Write-Host \"Error processing $UserName : $_\" -ForegroundColor Red\n    }\n}\n\nWrite-Host \"User import completed.\" -ForegroundColor Cyan",
+    "slug": "users-users-collection-text",
+    "category": "MECM / SCCM",
+    "description": "add users to users collection using a text file",
+    "source": "scripts/powershell/users-users-collection-text.ps1"
+  },
+  {
+    "n": 94,
+    "title": "Script to get displayname, version, manufacturer, owner details and software center description of sccm application",
+    "language": "PowerShell",
+    "body": "# Site configuration\n$SiteCode = \"S01\" # Site code \n$ProviderMachineName = \"sepcscm008.company.com\" # SMS Provider machine name\n\n# Customizations\n$initParams = @{}\n#$initParams.Add(\"Verbose\", $true) # Uncomment this line to enable verbose logging\n#$initParams.Add(\"ErrorAction\", \"Stop\") # Uncomment this line to stop the script on any errors\n\n# Do not change anything below this line\n\n# Import the ConfigurationManager.psd1 module \nif((Get-Module ConfigurationManager) -eq $null) {\n    Import-Module \"$($ENV:SMS_ADMIN_UI_PATH)\\..\\ConfigurationManager.psd1\" @initParams \n}\n\n# Connect to the site's drive if it is not already present\nif((Get-PSDrive -Name $SiteCode -PSProvider CMSite -ErrorAction SilentlyContinue) -eq $null) {\n    New-PSDrive -Name $SiteCode -PSProvider CMSite -Root $ProviderMachineName @initParams\n}\n\n# Set the current location to be the site code.\nSet-Location \"$($SiteCode):\\\" @initParams\n\n\n#Import-Module \"$($ENV:SMS_ADMIN_UI_PATH)\\..\\ConfigurationManager.psd1\"\n\n# Connect to site\n#Set-Location \"ABC:\"   # Replace ABC with your Site Code\n\n# Get application and display localized name\n<#$app = Get-CMApplication -Name \"DosBox_PK1_0.74.0_x86_ENG_001\"\n\n[xml]$xml = $app.SDMPackageXML\n\n$xml.AppMgmtDigest.Application.DisplayInfo.Info.Title\n$Xml.AppMgmtDigest.Application.DisplayInfo.Info.Publisher\n$Xml.AppMgmtDigest.Application.DisplayInfo.Info.Version\n$Xml.AppMgmtDigest.Application.Owners.User\n#>\n\n\n$AppList = @(\n\"DosBox_PK1_0.74.0_x86_ENG_001\",\n\"ArpselinDosBox_PK1_1.0.0_x86_ENG_001\",\n\"HandBrake_PK1_1.1.2_x64_ENG_001\")\n\n$Results = foreach ($AppName in $AppList) {\n\n    $App = Get-CMApplication -Name $AppName\n\n    if ($App) {\n        [xml]$Xml = $App.SDMPackageXML\n\n        [PSCustomObject]@{\n            Application_Name = $App.LocalizedDisplayName\n            DisplayName      = $Xml.AppMgmtDigest.Application.DisplayInfo.Info.Title\n            Version          = $Xml.AppMgmtDigest.Application.DisplayInfo.Info.Version\n            Manufacturer     = $Xml.AppMgmtDigest.Application.DisplayInfo.Info.Publisher\n            Owner            = $Xml.AppMgmtDigest.Application.Owners.User.ID\n            Description      = $Xml.AppMgmtDigest.Application.DisplayInfo.Info.Description\n        }\n    }\n}\n\n$Results | Export-Csv \"C:\\Users\\shaiadm\\Desktop\\appdetail_final.csv\" -NoTypeInformation",
+    "slug": "displayname-version-manufacturer-owner-details-software-center-description",
+    "category": "MECM / SCCM",
+    "description": "Script to get displayname, version, manufacturer, owner details and software center description of sccm application",
+    "source": "scripts/powershell/displayname-version-manufacturer-owner-details-software-center-description.ps1"
+  },
+  {
+    "n": 95,
+    "title": "launch software center specific app through commandline",
+    "language": "PowerShell",
+    "body": "softwarecenter:SoftwareID=ScopeId_5A028A9F-BBAB-42F3-BF3E-C4DCD2A93C73/Application_0509e68a-1623-4313-aae3-865b0ca6864f",
+    "slug": "launch-software-center-specific-through-commandline",
+    "category": "MECM / SCCM",
+    "description": "launch software center specific app through commandline",
+    "source": "scripts/powershell/launch-software-center-specific-through-commandline.ps1"
+  },
+  {
+    "n": 96,
+    "title": "sccm query collection to fetch devices using product code",
+    "language": "PowerShell",
+    "body": "select SMS_R_SYSTEM.ResourceID,SMS_R_SYSTEM.ResourceType,SMS_R_SYSTEM.Name,SMS_R_SYSTEM.SMSUniqueIdentifier,SMS_R_SYSTEM.ResourceDomainORWorkgroup,SMS_R_SYSTEM.Client from SMS_R_System inner join SMS_G_System_ADD_REMOVE_PROGRAMS on SMS_G_System_ADD_REMOVE_PROGRAMS.ResourceId = SMS_R_System.ResourceId inner join SMS_G_System_ADD_REMOVE_PROGRAMS_64 on SMS_G_System_ADD_REMOVE_PROGRAMS_64.ResourceId = SMS_R_System.ResourceId where SMS_G_System_ADD_REMOVE_PROGRAMS.ProdID = \"{723EC18E-E679-4126-9A71-7F6A7C5070DB}\" or SMS_G_System_ADD_REMOVE_PROGRAMS_64.ProdID = \"{723EC18E-E679-4126-9A71-7F6A7C5070DB}\"",
+    "slug": "query-collection-fetch-devices-product-code",
+    "category": "MECM / SCCM",
+    "description": "sccm query collection to fetch devices using product code",
+    "source": "scripts/powershell/query-collection-fetch-devices-product-code.ps1"
+  },
+  {
+    "n": 97,
+    "title": "Get File Version",
+    "language": "PowerShell",
+    "body": "Get-Item \"C:\\Program Files\\App\\app.exe\" | Select-Object -ExpandProperty VersionInfo | Select-Object FileVersion",
+    "category": "Application Packaging",
+    "description": "Quickly retrieve an executable or DLL file version for packaging validation or detection.",
+    "slug": "version-2",
+    "source": "scripts/powershell/version-2.ps1"
+  },
+  {
+    "n": 98,
+    "title": "Get File Hash",
+    "language": "PowerShell",
+    "body": "Get-FileHash -Path \"C:\\Source\\setup.exe\" -Algorithm SHA256",
+    "category": "Application Packaging",
+    "description": "Generate a SHA256 hash to validate package source integrity.",
+    "slug": "hash",
+    "source": "scripts/powershell/hash.ps1"
+  },
+  {
+    "n": 99,
+    "title": "Test Registry Value",
+    "language": "PowerShell",
+    "body": "Get-ItemProperty -Path \"HKLM:\\Software\\Vendor\\Application\" -Name \"Version\" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version",
+    "category": "Detection",
+    "description": "Read a registry value safely while troubleshooting detection logic.",
+    "slug": "test-registry-value",
+    "source": "scripts/powershell/test-registry-value.ps1"
+  },
+  {
+    "n": 100,
+    "title": "Find Uninstall Entry",
+    "language": "PowerShell",
+    "body": "Get-ItemProperty @(\"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\",\"HKLM:\\Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\") -ErrorAction SilentlyContinue | Where-Object DisplayName -like \"*Application Name*\" | Select-Object DisplayName,DisplayVersion,UninstallString",
+    "category": "Detection",
+    "description": "Locate ARP entries and uninstall strings while building or troubleshooting detection and uninstall commands.",
+    "slug": "find-uninstall-entry",
+    "source": "scripts/powershell/find-uninstall-entry.ps1"
+  },
+  {
+    "n": 101,
+    "title": "Get Pending Reboot State",
+    "language": "PowerShell",
+    "body": "[bool](Get-ItemProperty \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending\" -ErrorAction SilentlyContinue) -or [bool](Get-ItemProperty \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired\" -ErrorAction SilentlyContinue)",
+    "category": "Troubleshooting",
+    "description": "Quickly check common registry indicators for a pending reboot.",
+    "slug": "pending-reboot-state",
+    "source": "scripts/powershell/pending-reboot-state.ps1"
+  },
+  {
+    "n": 102,
+    "title": "Test Running Process",
+    "language": "PowerShell",
+    "body": "Get-Process -Name \"ProcessName\" -ErrorAction SilentlyContinue | Select-Object Name,Id,Path",
+    "category": "Troubleshooting",
+    "description": "Confirm whether a process is running before or after an installation.",
+    "slug": "test-running-process",
+    "source": "scripts/powershell/test-running-process.ps1"
+  },
+  {
+    "n": 103,
+    "title": "Stop Process Safely",
+    "language": "PowerShell",
+    "body": "Stop-Process -Name \"ProcessName\" -Force -ErrorAction SilentlyContinue",
+    "category": "Application Packaging",
+    "description": "Use when an installer requires an application to be closed before package execution.",
+    "slug": "stop-process-safely",
+    "source": "scripts/powershell/stop-process-safely.ps1"
+  },
+  {
+    "n": 104,
+    "title": "Wait for Folder",
+    "language": "PowerShell",
+    "body": "$folderPath = \"C:\\Temp\\Target\"\nwhile (!(Test-Path $folderPath)) { Start-Sleep -Seconds 5 }",
+    "category": "Application Packaging",
+    "description": "Wait for a folder to appear before continuing a package operation.",
+    "slug": "wait",
+    "source": "scripts/powershell/wait.ps1"
+  },
+  {
+    "n": 105,
+    "title": "Wait for Process",
+    "language": "PowerShell",
+    "body": "Wait-Process -Name \"setup\" -ErrorAction SilentlyContinue",
+    "category": "Application Packaging",
+    "description": "Wait for a known process to finish before the package continues.",
+    "slug": "wait-process",
+    "source": "scripts/powershell/wait-process.ps1"
+  },
+  {
+    "n": 106,
+    "title": "Get Windows Services",
+    "language": "PowerShell",
+    "body": "Get-Service | Select-Object Name,DisplayName,Status,StartType | Sort-Object DisplayName",
+    "category": "Troubleshooting",
+    "description": "Review Windows service state during application troubleshooting.",
+    "slug": "windows-services",
+    "source": "scripts/powershell/windows-services.ps1"
+  },
+  {
+    "n": 107,
+    "title": "Get Free Disk Space",
+    "language": "PowerShell",
+    "body": "Get-PSDrive C | Select-Object Name,@{Name=\"FreeGB\";Expression={[math]::Round($_.Free/1GB,2)}},@{Name=\"TotalGB\";Expression={[math]::Round(($_.Used+$_.Free)/1GB,2)}}",
+    "category": "Troubleshooting",
+    "description": "Check free disk space before deployment or troubleshooting a failed installation.",
+    "slug": "free-disk-space",
+    "source": "scripts/powershell/free-disk-space.ps1"
+  },
+  {
+    "n": 108,
+    "title": "Copy Files with Robocopy",
+    "language": "Batch",
+    "body": "robocopy \"C:\\Source\" \"C:\\Destination\" /E /R:2 /W:2 /NFL /NDL",
+    "category": "Application Packaging",
+    "description": "A practical file-copy pattern for package content where robust copy behavior is required.",
+    "slug": "copy-robocopy",
+    "source": "scripts/batch/copy-robocopy.bat"
+  },
+  {
+    "n": 109,
+    "title": "Run MSI Silently",
+    "language": "Batch",
+    "body": "msiexec.exe /i \"setup.msi\" /qn /norestart",
+    "category": "Application Packaging",
+    "description": "Basic silent MSI installation reference for packaging command lines.",
+    "slug": "run-msi-silently",
+    "source": "scripts/batch/run-msi-silently.bat"
+  },
+  {
+    "n": 110,
+    "title": "Run EXE Silently",
+    "language": "PowerShell",
+    "body": "Start-Process -FilePath \".\\setup.exe\" -ArgumentList \"/S\" -Wait -PassThru",
+    "category": "Application Packaging",
+    "description": "Basic silent EXE execution reference. Replace the vendor switch with the correct installer syntax.",
+    "slug": "run-exe-silently",
+    "source": "scripts/powershell/run-exe-silently.ps1"
+  },
+  {
+    "n": 111,
+    "title": "Check Admin Privileges",
+    "language": "PowerShell",
+    "body": "$principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())\n$principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)",
+    "category": "Troubleshooting",
+    "description": "Check whether the current PowerShell session is elevated.",
+    "slug": "admin-privileges",
+    "source": "scripts/powershell/admin-privileges.ps1"
+  },
+  {
+    "title": "Get File Version",
+    "language": "PowerShell",
+    "category": "Application Packaging",
+    "description": "Get the file version of an executable or DLL.",
+    "tags": [
+      "file",
+      "version",
+      "exe",
+      "dll",
+      "packaging",
+      "detection"
+    ],
+    "body": "$File = \"C:\\Program Files\\App\\app.exe\"\n\n(Get-Item $File).VersionInfo.FileVersion",
+    "slug": "get-file-version",
+    "source": "scripts/powershell/get-file-version.ps1"
+  },
+  {
+    "title": "Get File Hash (SHA256)",
+    "language": "PowerShell",
+    "category": "Files & Folders",
+    "description": "Generate a SHA256 hash for a file.",
+    "tags": [
+      "hash",
+      "sha256",
+      "file",
+      "integrity",
+      "packaging"
+    ],
+    "body": "Get-FileHash -Path \"C:\\Source\\setup.exe\" -Algorithm SHA256",
+    "slug": "get-file-hash-sha256",
+    "source": "scripts/powershell/get-file-hash-sha256.ps1"
+  },
+  {
+    "title": "Get Installed Application Version",
+    "language": "PowerShell",
+    "category": "Detection",
+    "description": "Read an installed application version from the uninstall registry.",
+    "tags": [
+      "detection",
+      "version",
+      "uninstall",
+      "registry",
+      "application"
+    ],
+    "body": "$AppName = \"Example Application\"\n\n$Paths = @(\n    \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\",\n    \"HKLM:\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\*\"\n)\n\nGet-ItemProperty $Paths -ErrorAction SilentlyContinue |\n    Where-Object { $_.DisplayName -like \"*$AppName*\" } |\n    Select-Object DisplayName, DisplayVersion, Publisher",
+    "slug": "get-installed-application-version",
+    "source": "scripts/powershell/get-installed-application-version.ps1"
+  },
+  {
+    "title": "Check Pending Reboot",
+    "language": "PowerShell",
+    "category": "Windows / Troubleshooting",
+    "description": "Check common Windows registry locations for a pending reboot.",
+    "tags": [
+      "reboot",
+      "pending reboot",
+      "troubleshooting",
+      "windows",
+      "packaging"
+    ],
+    "body": "$PendingReboot = $false\n\nif (Test-Path \"HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending\") { $PendingReboot = $true }\nif (Test-Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired\") { $PendingReboot = $true }\n\n$PendingReboot",
+    "slug": "check-pending-reboot",
+    "source": "scripts/powershell/check-pending-reboot.ps1"
+  },
+  {
+    "title": "Wait Until Process Finishes",
+    "language": "PowerShell",
+    "category": "Application Packaging",
+    "description": "Wait until a setup process has completed before continuing.",
+    "tags": [
+      "process",
+      "wait",
+      "installer",
+      "packaging",
+      "deployment"
+    ],
+    "body": "Wait-Process -Name setup -ErrorAction SilentlyContinue",
+    "slug": "wait-until-process-finishes",
+    "source": "scripts/powershell/wait-until-process-finishes.ps1"
+  },
+  {
+    "title": "Test Administrator Privileges",
+    "language": "PowerShell",
+    "category": "Windows / Utilities",
+    "description": "Check whether the current PowerShell session is running with administrator rights.",
+    "tags": [
+      "admin",
+      "privilege",
+      "elevation",
+      "packaging",
+      "windows"
+    ],
+    "body": "$Identity = [Security.Principal.WindowsIdentity]::GetCurrent()\n$Principal = New-Object Security.Principal.WindowsPrincipal($Identity)\n$Principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)",
+    "slug": "test-administrator-privileges",
+    "source": "scripts/powershell/test-administrator-privileges.ps1"
+  },
+  {
+    "title": "Get Free Disk Space",
+    "language": "PowerShell",
+    "category": "Windows / Troubleshooting",
+    "description": "Check free space on the system drive before running an installation.",
+    "tags": [
+      "disk",
+      "space",
+      "installer",
+      "prerequisite",
+      "packaging"
+    ],
+    "body": "$Drive = Get-PSDrive -Name C\n\n[PSCustomObject]@{\n    FreeGB  = [math]::Round($Drive.Free / 1GB, 2)\n    TotalGB = [math]::Round(($Drive.Used + $Drive.Free) / 1GB, 2)\n}",
+    "slug": "get-free-disk-space",
+    "source": "scripts/powershell/get-free-disk-space.ps1"
+  },
+  {
+    "title": "Get Intune Management Extension Logs",
+    "language": "PowerShell",
+    "category": "Intune",
+    "description": "List recent Intune Management Extension log files for Win32 app troubleshooting.",
+    "tags": [
+      "intune",
+      "ime",
+      "win32",
+      "logs",
+      "troubleshooting"
+    ],
+    "body": "$Path = \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\"\n\nGet-ChildItem $Path -ErrorAction SilentlyContinue |\n    Sort-Object LastWriteTime -Descending |\n    Select-Object Name, LastWriteTime, FullName",
+    "slug": "get-intune-management-extension-logs",
+    "source": "scripts/powershell/get-intune-management-extension-logs.ps1"
+  }
+]

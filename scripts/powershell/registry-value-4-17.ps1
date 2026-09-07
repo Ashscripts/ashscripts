@@ -1,0 +1,1 @@
+Remove-ADTRegistryKey -Key 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'RunAppInstall' -ErrorAction SilentlyContinue

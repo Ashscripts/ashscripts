@@ -1,0 +1,1 @@
+Copy-Item "$PSScriptRoot\Files\Teamcenter 12\tc.lnk" -Destination "$envAllUsersProfile\Microsoft\Windows\Start Menu\Programs\Teamcenter 12\tc.lnk" -Force -ErrorAction SilentlyContinue

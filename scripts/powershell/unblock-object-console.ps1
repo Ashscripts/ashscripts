@@ -1,0 +1,1 @@
+Unlock-CMObject -InputObject $(Get-CMApplication -Name 'ApplicationName') -Force

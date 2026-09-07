@@ -1,0 +1,2 @@
+Copy-ADTFileToUserProfiles -Path "$($adtSession.DirSupportFiles)\config.txt" -Destination "AppData\Roaming\MyApp" -ErrorAction SilentlyContinue
+#multiple files: Copy-ADTFileToUserProfiles -Path "$($adtSession.DirSupportFiles)\config.txt","$($adtSession.DirSupportFiles)\config2.txt" -Destination "AppData\Roaming\MyApp" -ErrorAction SilentlyContinue

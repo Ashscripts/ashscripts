@@ -1,0 +1,2 @@
+$versioncheck = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("C:\Program Files\Smart Storage Administrator\ssa\bin\ssaclient.exe").FileVersion
+If ($versioncheck -eq "3.25.4.0") { cmdlets to execute once version is found }

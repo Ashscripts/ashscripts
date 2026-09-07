@@ -1,0 +1,1 @@
+Remove-Item "$envProgramFilesX86\Moxa\DSU" -Force -Recurse -ErrorAction SilentlyContinue

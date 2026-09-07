@@ -1,0 +1,1 @@
+Get-CimInstance -Classname WIn32_Product | Where-Object Name -Like '*kofax*' | Invoke-CimMethod -MethodName UnInstall -ErrorAction SilentlyContinue

@@ -1,0 +1,1 @@
+Get-PSDrive C | Select-Object Name,@{Name="FreeGB";Expression={[math]::Round($_.Free/1GB,2)}},@{Name="TotalGB";Expression={[math]::Round(($_.Used+$_.Free)/1GB,2)}}

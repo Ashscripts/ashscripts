@@ -1,0 +1,1 @@
+Get-Item "C:\Program Files\App\app.exe" | Select-Object -ExpandProperty VersionInfo | Select-Object FileVersion

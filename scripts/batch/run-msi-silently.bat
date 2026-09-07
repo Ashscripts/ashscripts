@@ -1,0 +1,1 @@
+msiexec.exe /i "setup.msi" /qn /norestart

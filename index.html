@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Useful Scripts — ashscript application packaging, endpoint automation, Windows, VBScript, Batch, HTA and PowerShell library.">
+<meta name="theme-color" content="#030503">
+<title>Useful Scripts · ashscript</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html" aria-label="ashscript home">
+      <span class="brand-mark"></span>
+      <span>
+        ashscript<span style="color:var(--lime)">.</span>
+        <small>Application Packaging &amp; Endpoint Automation</small>
+      </span>
+    </a>
+    <nav class="nav-links" data-nav>
+      <a href="index.html">Scripts</a>
+      <a href="who-am-i.html">Who Am I</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> / Scripts
+    </div>
+    <span class="tag">Script Library</span>
+    <h1>Useful Scripts</h1>
+    <p>A searchable collection of practical PowerShell, VBScript, Batch and HTA snippets for application packaging, endpoint automation and Windows troubleshooting.</p>
+  </div>
+</section>
+
+
+<section class="section" style="padding-top:30px">
+
+  <div class="container">
+
+    <div class="section-head">
+      <div>
+        <div class="kicker">Script Library</div>
+        <h2>Practical scripts for real work.</h2>
+      </div>
+      <p>
+        Searchable PowerShell, VBScript, Batch and HTA references for application packaging, endpoint management, automation and troubleshooting.
+      </p>
+    </div>
+
+    <div class="script-search-wrap">
+      <div class="script-search">
+        <input
+          id="scriptSearch"
+          type="search"
+          placeholder="Search scripts, commands, tags, languages..."
+          aria-label="Search useful scripts"
+          autocomplete="off"
+        >
+      </div>
+      <div class="script-count" id="scriptCount"></div>
+    </div>
+
+    <div class="filter-row" id="scriptFilters">
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="PowerShell">PowerShell</button>
+      <button class="filter-btn" data-filter="VBScript">VBScript</button>
+      <button class="filter-btn" data-filter="Batch">Batch</button>
+      <button class="filter-btn" data-filter="HTA/VBScript">HTA</button>
+      <button class="filter-btn" data-filter="Application Packaging">Packaging</button>
+      <button class="filter-btn" data-filter="Registry">Registry</button>
+      <button class="filter-btn" data-filter="MECM / SCCM">MECM / SCCM</button>
+      <button class="filter-btn" data-filter="Intune">Intune</button>
+      <button class="filter-btn" data-filter="Windows / Troubleshooting">Troubleshooting</button>
+    </div>
+
+    <div class="script-grid" id="scriptGrid"></div>
+
+    <div class="band" style="margin-top:28px">
+      <div class="band-grid">
+        <div>
+          <div class="kicker">ashscript</div>
+          <h3>Scripts for packaging, deployment and endpoint automation.</h3>
+          <p>
+            The library is driven by <code>assets/data/scripts.json</code>. Add a script to the catalog and it becomes searchable, filterable and available through its own detail page.
+          </p>
+        </div>
+        <a class="btn btn-primary" href="who-am-i.html">Who Am I →</a>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <small>© <span data-year></span> ashscript. Static GitHub Pages site.</small>
+    <div>
+      <a href="index.html">Scripts</a>
+      <a href="who-am-i.html">Who Am I</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js" defer></script>
+<script src="assets/js/useful-scripts.js?v=62" defer></script>
+</body>
+</html>

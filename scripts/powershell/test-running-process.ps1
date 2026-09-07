@@ -1,0 +1,1 @@
+Get-Process -Name "ProcessName" -ErrorAction SilentlyContinue | Select-Object Name,Id,Path

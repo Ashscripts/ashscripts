@@ -1,0 +1,1 @@
+Update-CMDistributionPoint -ApplicationName "SolidWorks2023SP5_31.150.52.0_x64_ENG_001" -DeploymentTypeName "SolidWorks2023SP5_31.150.52.0_x64_ENG_001"

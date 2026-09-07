@@ -1,0 +1,1 @@
+Start-ADTProcessAsUser -FilePath "$($adtSession.DirFiles)\setup.exe" -ArgumentList '/S' -SuccessExitCodes 0, 500

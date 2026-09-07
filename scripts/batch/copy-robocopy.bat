@@ -1,0 +1,1 @@
+robocopy "C:\Source" "C:\Destination" /E /R:2 /W:2 /NFL /NDL

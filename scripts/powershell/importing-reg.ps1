@@ -1,0 +1,1 @@
+Start-Process "reg.exe" -ArgumentList "import `"$($adtSession.DirFiles)\uporthide.reg`"" -Wait -PassThru -ErrorAction SilentlyContinue
