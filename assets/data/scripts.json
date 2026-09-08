@@ -1237,5 +1237,39 @@
     "body": "$Path = \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\"\n\nGet-ChildItem $Path -ErrorAction SilentlyContinue |\n    Sort-Object LastWriteTime -Descending |\n    Select-Object Name, LastWriteTime, FullName",
     "slug": "get-intune-management-extension-logs",
     "source": "scripts/powershell/get-intune-management-extension-logs.ps1"
-  }
+  },
+  {
+    "title": "Get Intune Management Extension Logs",
+    "language": "PowerShell",
+    "category": "Intune",
+    "description": "List recent Intune Management Extension log files for Win32 app troubleshooting.",
+    "tags": [
+      "intune",
+      "ime",
+      "win32",
+      "logs",
+      "troubleshooting"
+    ],
+    "body": "$Path = \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\"\n\nGet-ChildItem $Path -ErrorAction SilentlyContinue |\n    Sort-Object LastWriteTime -Descending |\n    Select-Object Name, LastWriteTime, FullName",
+    "slug": "get-intune-management-extension-logs",
+    "source": "scripts/powershell/get-intune-management-extension-logs.ps1"
+  },
+  {
+  "title": "Create a Folder If It Does Not Exist",
+  "language": "PowerShell",
+  "category": "Files & Folders",
+  "description": "Create a directory only when the target folder path does not already exist.",
+  "tags": [
+    "folder",
+    "directory",
+    "create",
+    "test-path",
+    "powershell",
+    "filesystem"
+  ],
+  "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
+  "slug": "create-folder-if-not-exists",
+  "source": "scripts/powershell/create-folder-if-not-exists.ps1"
+} 
+  
 ]
