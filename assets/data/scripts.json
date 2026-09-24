@@ -1284,8 +1284,8 @@
     "powershell",
     "filesystem"
   ],
-  "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
-  "slug": "create-folder-if-not-exists",
-  "source": "scripts/powershell/create-folder-if-not-exists2.ps1"
+  "body": "Get-CimInstance Win32_Process | Where-Object {$_.Name -eq \"powershell.exe\"} | Select-Object ProcessId, CommandLine",
+  "slug": "check-tskmgr-cmd",
+  "source": "scripts/powershell/check-tskmgr-cmd.ps1"
   }
 ]
