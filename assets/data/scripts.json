@@ -1270,5 +1270,22 @@
   "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
   "slug": "create-folder-if-not-exists",
   "source": "scripts/powershell/create-folder-if-not-exists.ps1"
-  }  
+  },
+   {
+  "title": "Create a Folder If It Does Not Exist2",
+  "language": "PowerShell",
+  "category": "Files & Folders",
+  "description": "Create a directory only when the target folder path does not already exist.",
+  "tags": [
+    "folder",
+    "directory",
+    "create",
+    "test-path",
+    "powershell",
+    "filesystem"
+  ],
+  "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
+  "slug": "create-folder-if-not-exists",
+  "source": "scripts/powershell/create-folder-if-not-exists2.ps1"
+  }
 ]
