@@ -1270,18 +1270,5 @@
   "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
   "slug": "create-folder-if-not-exists",
   "source": "scripts/powershell/create-folder-if-not-exists.ps1"
-  },
-  {
-  "title": "Check Running Process Command Line with PowerShell",
-  "language": "PowerShell",
-  "category": "Windows / Troubleshooting",
-  "description": "Use PowerShell to view the command-line arguments of running processes, similar to the Command Line column in Windows Task Manager.",
-  "tags": [
-    "process",
-	"running-process"	
-  ],
-  "body": "Get-CimInstance Win32_Process | Where-Object { $_.Name -eq \"powershell.exe\" } | Select-Object ProcessId, CommandLine"
-  "slug": "Check_process_command",
-  "source": "scripts/powershell/Check_process_command.ps1"
-}  
+  }  
 ]
