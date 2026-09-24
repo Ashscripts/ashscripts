@@ -1278,17 +1278,7 @@
   "description": "Use PowerShell to view the command-line arguments of running processes, similar to the Command Line column in Windows Task Manager.",
   "tags": [
     "process",
-	"running-process",
-	"command-line",
-	"task-manager",
-	"powershell",
-	"win32-process",
-	"troubleshooting",
-	"process-monitoring",
-	"windows",
-	"diagnostics",
-	"application-packaging",
-	"process-investigation"
+	"running-process"	
   ],
   "body": "Get-CimInstance Win32_Process | Where-Object { $_.Name -eq \"powershell.exe\" } | Select-Object ProcessId, CommandLine"
   "slug": "Check_process_command",
