@@ -1272,18 +1272,24 @@
   "source": "scripts/powershell/create-folder-if-not-exists.ps1"
   },
    {
-  "title": "Create a Folder If It Does Not Exist2",
+  "title": "Check Running Process Command Line with PowerShell",
   "language": "PowerShell",
   "category": "Files & Folders",
-  "description": "Create a directory only when the target folder path does not already exist.",
+  "description": "Use PowerShell to view the command-line arguments of running processes, helping identify how an application was started and troubleshoot process-related issues.",
   "tags": [
-    "folder",
-    "directory",
-    "create",
-    "test-path",
-    "powershell",
-    "filesystem"
-  ],
+  "process",
+  "running-process",
+  "command-line",
+  "task-manager",
+  "powershell",
+  "win32-process",
+  "troubleshooting",
+  "process-monitoring",
+  "windows",
+  "diagnostics",
+  "application-packaging",
+  "process-investigation"
+],
   "body": "Get-CimInstance Win32_Process | Where-Object {$_.Name -eq \"powershell.exe\"} | Select-Object ProcessId, CommandLine",
   "slug": "check-tskmgr-cmd",
   "source": "scripts/powershell/check-tskmgr-cmd.ps1"
