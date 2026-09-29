@@ -1,118 +1,112 @@
-<!doctype html>
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Useful Scripts — ashscript application packaging, endpoint automation, Windows, VBScript, Batch, HTA and PowerShell library.">
-<meta name="theme-color" content="#030503">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Useful Scripts; ashscript application packaging, endpoint automation, Windows, VBScript, Batch, HTA and PowerShell library." name="description"/>
+<meta content="#030503" name="theme-color"/>
+<link href="assets/images/ashscript-favicon.png?v=2" rel="icon" sizes="64x64" type="image/png"/>
+<link href="assets/images/ashscript-favicon.ico?v=2" rel="shortcut icon"/>
+<link href="assets/images/ashscript-favicon.png?v=2" rel="apple-touch-icon"/>
 <title>Useful Scripts · ashscript</title>
-<link rel="stylesheet" href="assets/css/styles.css">
+<link href="assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
 </head>
 <body>
-
 <header class="site-header">
-  <div class="container nav">
-    <a class="brand" href="index.html" aria-label="ashscript home">
-      <span class="brand-mark"></span>
-      <span>
+<div class="container nav">
+<a aria-label="ashscript home" class="brand" href="./">
+<span class="brand-mark"></span>
+<span>
         ashscript<span style="color:var(--lime)">.</span>
-        <small>Application Packaging &amp; Endpoint Automation</small>
-      </span>
-    </a>
-    <nav class="nav-links" data-nav>
-      <a href="index.html">Scripts</a>
-      <a href="who-am-i.html">Who Am I</a>
-    </nav>
-  </div>
+<small>Application Packaging &amp; Endpoint Automation</small>
+</span>
+</a>
+<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
+<nav aria-label="Primary navigation" class="nav-links" data-nav="">
+<a href="./">Scripts</a>
+<details class="nav-dropdown" data-nav-dropdown="">
+<summary>Intune <span aria-hidden="true" class="nav-caret">⌄</span></summary>
+<div class="nav-submenu">
+<a href="intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a>
+</div>
+</details>
+<a href="who-am-i/">Who Am I</a>
+</nav>
+</div>
 </header>
-
 <main>
-
 <section class="page-hero">
-  <div class="container">
-    <div class="breadcrumb">
-      <a href="index.html">Home</a> / Scripts
+<div class="container">
+<div class="breadcrumb">
+<a href="./">Home</a> / Scripts
     </div>
-    <span class="tag">Script Library</span>
-    <h1>Useful Scripts</h1>
-    <p>A searchable collection of practical PowerShell, VBScript, Batch and HTA snippets for application packaging, endpoint automation and Windows troubleshooting.</p>
-  </div>
+<span class="tag">Script Library</span>
+<h1>Useful Scripts</h1>
+<p>A searchable collection of practical PowerShell, VBScript, Batch and HTA snippets for application packaging, endpoint automation and Windows troubleshooting.</p>
+</div>
 </section>
-
-
 <section class="section" style="padding-top:30px">
-
-  <div class="container">
-
-    <div class="section-head">
-      <div>
-        <div class="kicker">Script Library</div>
-        <h2>Practical scripts for real work.</h2>
-      </div>
-      <p>
+<div class="container">
+<div class="section-head">
+<div>
+<div class="kicker">Script Library</div>
+<h2>Practical scripts for real work.</h2>
+</div>
+<p>
         Searchable PowerShell, VBScript, Batch and HTA references for application packaging, endpoint management, automation and troubleshooting.
       </p>
-    </div>
-
-    <div class="script-search-wrap">
-      <div class="script-search">
-        <input
-          id="scriptSearch"
-          type="search"
-          placeholder="Search scripts, commands, tags, languages..."
-          aria-label="Search useful scripts"
-          autocomplete="off"
-        >
-      </div>
-      <div class="script-count" id="scriptCount"></div>
-    </div>
-
-    <div class="filter-row" id="scriptFilters">
-      <button class="filter-btn active" data-filter="All">All</button>
-      <button class="filter-btn" data-filter="PowerShell">PowerShell</button>
-      <button class="filter-btn" data-filter="VBScript">VBScript</button>
-      <button class="filter-btn" data-filter="Batch">Batch</button>
-      <button class="filter-btn" data-filter="HTA/VBScript">HTA</button>
-      <button class="filter-btn" data-filter="Application Packaging">Packaging</button>
-      <button class="filter-btn" data-filter="Registry">Registry</button>
-      <button class="filter-btn" data-filter="MECM / SCCM">MECM / SCCM</button>
-      <button class="filter-btn" data-filter="Intune">Intune</button>
-      <button class="filter-btn" data-filter="Windows / Troubleshooting">Troubleshooting</button>
-    </div>
-
-    <div class="script-grid" id="scriptGrid"></div>
-
-    <div class="band" style="margin-top:28px">
-      <div class="band-grid">
-        <div>
-          <div class="kicker">ashscript</div>
-          <h3>Scripts for packaging, deployment and endpoint automation.</h3>
-          <p>
+</div>
+<div class="script-search-wrap">
+<div class="script-search">
+<input aria-label="Search useful scripts" autocomplete="off" id="scriptSearch" placeholder="Search scripts, commands, tags, languages..." type="search"/>
+</div>
+<div class="script-count" id="scriptCount"></div>
+</div>
+<div class="filter-row" id="scriptFilters">
+<button class="filter-btn active" data-filter="All">All</button>
+<button class="filter-btn" data-filter="PowerShell">PowerShell</button>
+<button class="filter-btn" data-filter="VBScript">VBScript</button>
+<button class="filter-btn" data-filter="Batch">Batch</button>
+<button class="filter-btn" data-filter="HTA/VBScript">HTA</button>
+<button class="filter-btn" data-filter="Application Packaging">Packaging</button>
+<button class="filter-btn" data-filter="Registry">Registry</button>
+<button class="filter-btn" data-filter="MECM / SCCM">MECM / SCCM</button>
+<button class="filter-btn" data-filter="Intune">Intune</button>
+<button class="filter-btn" data-filter="Detection">Detection</button>
+<button class="filter-btn" data-filter="Files &amp; Folders">Files &amp; Folders</button>
+<button class="filter-btn" data-filter="Windows / Troubleshooting">Troubleshooting</button>
+<button class="filter-btn" data-filter="Windows / Utilities">Windows Utilities</button>
+</div>
+<div class="script-grid" id="scriptGrid"></div>
+<div class="band" style="margin-top:28px">
+<div class="band-grid">
+<div>
+<div class="kicker">ashscript</div>
+<h3>Scripts for packaging, deployment and endpoint automation.</h3>
+<p>
             The library is driven by <code>assets/data/scripts.json</code>. Add a script to the catalog and it becomes searchable, filterable and available through its own detail page.
           </p>
-        </div>
-        <a class="btn btn-primary" href="who-am-i.html">Who Am I →</a>
-      </div>
-    </div>
-
-  </div>
-
+</div>
+<a class="btn btn-primary" href="who-am-i/">Who Am I →</a>
+</div>
+</div>
+</div>
 </section>
-
-
 </main>
-
 <footer class="footer">
-  <div class="container footer-grid">
-    <small>© <span data-year></span> ashscript. Static GitHub Pages site.</small>
-    <div>
-      <a href="index.html">Scripts</a>
-      <a href="who-am-i.html">Who Am I</a>
-    </div>
-  </div>
+<div class="container footer-grid">
+<small> <span data-year=""></span> ashscript. Static GitHub Pages site.</small>
+<div>
+<a href="./">Scripts</a>
+<a href="intune/">Intune Tutorials</a>
+<a href="who-am-i/">Who Am I</a>
+</div>
+</div>
 </footer>
-
-<script src="assets/js/app.js" defer></script>
-<script src="assets/js/useful-scripts.js?v=62" defer></script>
+<script defer="" src="assets/js/app.js?v=20260927-ui5"></script>
+<script defer="" src="assets/js/useful-scripts.js?v=20260927-ui4"></script>
 </body>
 </html>

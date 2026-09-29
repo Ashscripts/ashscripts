@@ -1,98 +1,90 @@
-# ashscript — Premium Static Learning Site
+# ashscript : Static GitHub Pages Site
 
-A GitHub Pages-ready static site for:
+A GitHub Pages-ready static site for application packaging, endpoint automation, useful scripts, and a phase-based Microsoft Intune learning path.
 
-- Learn Application Packaging
-- Learn Azure AI
-- Learn SCCM / MECM
-- Learn Intune
-- Useful Scripts
-- Blog
-- Who Am I
+## Site sections
+
+- **Scripts** : searchable PowerShell, VBScript, Batch and HTA library.
+- **Intune Tutorials** : nine phases covering Intune foundations through advanced endpoint management.
+- **Who Am I** : author/profile page.
 
 ## Deploy to GitHub Pages
 
-1. Create a repository.
-2. Upload this project (all files).
+1. Create or open a GitHub repository.
+2. Upload the project files.
 3. In **Settings → Pages**, choose **Deploy from a branch**.
 4. Select `main` and `/ (root)`.
 5. Save.
 
 No framework, package manager, Node.js or build step is required.
 
-## Personalize
+## Local testing
 
-### Photo
-Replace the placeholder with:
-`assets/images/profile.jpg`
+Because the script library and Intune curriculum are loaded with `fetch()`, test through a local HTTP server rather than opening the HTML files with `file://`.
 
-Then the `Who Am I` page can use your actual photo.
+```bash
+python -m http.server 8000
+```
 
-### Your details
-Edit `who-am-i.html` and replace the sample role/focus text with your biography, certifications, LinkedIn, GitHub and contact details.
+Then open `http://localhost:8000/`.
 
-### New learning pages
-Duplicate any `learn-*.html` file, update its content, and add the new link to the navigation.
+## Useful Scripts library
 
-The expandable concept maps are SVG images in:
-`assets/diagrams/`
+The Useful Scripts page reads `assets/data/scripts.json` at runtime. To add another script:
 
-### New blog posts
-1. Copy `blog/post-02.html`.
-2. Rename the file.
-3. Update the title/date/content.
-4. Add a card to `blog/index.html`.
+1. Put the real source file in the appropriate `scripts/` directory.
+2. Add one catalog object to `assets/data/scripts.json`.
+3. Test the search, filters and detail-page link locally.
 
-### New packaging runbooks
-Duplicate one of the files in `how-to/` and link it from `how-to.html`.
+Each script opens through a clean URL such as `scripts/<slug>/`.
+
+## Intune tutorial
+
+The Intune curriculum index is available at the clean URL `intune/`. The phase/lesson catalog is stored in `assets/data/intune-tutorial.json`, so the navigation and lesson list can be updated without rewriting the page markup.
+
+Each lesson links to its own clean URL under `intune/`, using a descriptive lesson slug. The individual lesson page is designed as the destination for the detailed lesson material.
+
+The supplied ZIP did not contain the referenced PDF, so the phase and lesson structure is populated from the curriculum supplied with the request.
 
 ## Design direction
 
-The visual system is inspired by the provided reference image:
+The visual system uses:
 
 - near-black / graphite backgrounds
 - acid-lime accent `#d9ff00`
 - thin technical borders
-- neon glow used sparingly
+- restrained neon glow
 - compact uppercase labels
 - high-contrast editorial headings
 - responsive cards and navigation
 
+## Pretty URLs and favicon
 
-## Azure AI concept structure
+The site uses directory-based clean URLs compatible with static GitHub Pages hosting. Normal page URLs do not expose `.html`; for example, `intune/`, `who-am-i/`, and `scripts/<slug>/`. The supplied Ashpak “A” icon is used as the site favicon and app icon.
 
-The **Learn → Azure AI** page is now a concept library. Each card opens a dedicated tutorial page under:
-
-`learn/azure-ai/`
-
-Concept pages use the same article pattern as the rest of the site and include expandable visual concept maps.
-
-## Profile photo
-
-Your supplied photograph is now included as:
-
-`assets/images/profile.jpg`
-
-The **Who Am I** page references this image directly.
+## Intune Phase 1 Lessons
+Phase 1 lessons 1.1-1.5 are published under clean GitHub Pages URLs as native AshScript-themed HTML. The supplied lesson wording, tables, diagrams and flow charts are represented as web content and custom scalable SVG diagrams rather than PDF page screenshots.
 
 
-## Learn track structure
+## Intune curriculum status
 
-All four learning modules now use the same card-based concept library:
-- Application Packaging
-- Azure AI
-- SCCM / MECM
-- Intune
-
-Each track can be expanded by adding more concept cards and article pages under `learn/<track>/`.
+Phase 3 : Enrolling Devices is now live with lessons 3.1-3.7. Lesson pages use clean GitHub Pages URLs and native AshScript-styled content, diagrams, tables, and lesson navigation.
 
 
-## Data-driven Useful Scripts library
+## Intune tutorial status
 
-The Useful Scripts page reads `assets/data/scripts.json` at runtime. To add another script:
+Phases 6, 7, and 8 now include the supplied lesson material for Lessons 6.1-6.7, 7.1-7.5, and 8.1-8.5. The remaining curriculum lessons stay marked as planned until their source material is provided. Lesson content is rendered as native AshScript HTML with themed code/diagram cards and responsive tables; source PDFs are not required for the published pages.
 
-1. Put the real source file in `scripts/powershell/`, `scripts/vbscript/`, `scripts/batch/` or `scripts/hta-vbscript/`.
-2. Add one object to `assets/data/scripts.json` with `title`, `language`, `category`, `description`, `tags`, `body`, `slug` and `source`.
-3. Test locally using `python -m http.server 8000`.
 
-No HTML card needs to be created manually. The search, filters and detail page are driven from the JSON catalog.
+## Visual refinement pass
+The lesson reader uses grouped reference cards for bullet lists, a three-stage story navigation, lemon monospace URL links, full-width table section rows, and modern flow diagrams. The lesson pages do not expose source PDFs as the primary reading experience.
+
+### Local preview
+```powershell
+python -m http.server 8000
+```
+Open `http://127.0.0.1:8000/`.
+
+
+## UI refresh: 2026-09-27
+This build applies the supplied UI/UX change specification globally across the lesson readers: Learning Modules navigation, grouped reference lists, story-path navigation, complete table layouts, lemon URL treatment, spacing refinement, modern diagram boards, and removal of Concept Check/later wrap-up sections.

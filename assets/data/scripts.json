@@ -163,7 +163,7 @@
     "n": 17,
     "title": "Export multiple registry keys into a single .reg file",
     "language": "PowerShell",
-    "body": "# Output reg file\n$OutputFile = \"C:\\Temp\\SuwellReader_AllKeys.reg\"\n# List of registry keys to export\n$RegKeys = @(\n    \"HKLM\\SOFTWARE\\Classes\\Applications\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\Classes\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\Classes\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\Classes\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\CLSID\\{C7F277DC-6C47-AB2C-FB6A-070DC8BE7533}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\",\n    \"HKLM\\SOFTWARE\\Classes\\.ofd\",\n    \"HKLM\\SOFTWARE\\Classes\\OFD Document\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellofd\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellreaderax.OFDReaderActiveX\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellreaderax.OFDReaderActiveX.1\",\n    \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\MozillaPlugins\\@suwell.cn/npSuwellReader\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{C7F277DC-6C47-AB2C-FB6A-070DC8BE7533}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\"\n)\n# Create temp folder\n$TempFolder = \"C:\\Temp\\RegExportTemp\"\nif (!(Test-Path $TempFolder)) { New-Item -ItemType Directory -Path $TempFolder | Out-Null }\n# Create/Reset final output file with .reg header\n\"Windows Registry Editor Version 5.00`r`n\" | Out-File -FilePath $OutputFile -Encoding Unicode\n# Export each key\nforeach ($Key in $RegKeys) {\n    $SafeKeyName = ($Key -replace \"[\\\\:\\{\\}\\/]\", \"_\")\n    $TempFile = \"$TempFolder\\$SafeKeyName.reg\"\n    Write-Host \"Exporting $Key ...\"\n    # Export registry key\n    reg export \"$Key\" \"$TempFile\" /y 2>$null\n    # Check if export succeeded\n    if (Test-Path $TempFile) {\n        # Append content to final reg file (skip header)\n        (Get-Content $TempFile | Select-Object -Skip 1) |\n            Out-File -FilePath $OutputFile -Append -Encoding Unicode\n    } else {\n        Write-Host \"❗ Failed to export: $Key\"\n    }\n}\nWrite-Host \"`n All keys exported to: $OutputFile\"\n# Cleanup temporary files\nRemove-Item $TempFolder -Recurse -Force",
+    "body": "# Output reg file\n$OutputFile = \"C:\\Temp\\SuwellReader_AllKeys.reg\"\n# List of registry keys to export\n$RegKeys = @(\n    \"HKLM\\SOFTWARE\\Classes\\Applications\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\Classes\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\Classes\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\Classes\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\CLSID\\{C7F277DC-6C47-AB2C-FB6A-070DC8BE7533}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\Classes\\WOW6432Node\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\",\n    \"HKLM\\SOFTWARE\\Classes\\.ofd\",\n    \"HKLM\\SOFTWARE\\Classes\\OFD Document\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellofd\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellreaderax.OFDReaderActiveX\",\n    \"HKLM\\SOFTWARE\\Classes\\suwellreaderax.OFDReaderActiveX.1\",\n    \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SuwellReader.exe\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\MozillaPlugins\\@suwell.cn/npSuwellReader\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\CLSID\\{C7F277DC-6C47-AB2C-FB6A-070DC8BE7533}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\Interface\\{3DEB6A7F-6465-14D4-96CB-4347F5444765}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\Interface\\{505CCAC3-5124-481D-B7B4-B040538008F9}\",\n    \"HKLM\\SOFTWARE\\WOW6432Node\\Classes\\TypeLib\\{33670D88-9F7E-55C2-F199-2E324916748A}\"\n)\n# Create temp folder\n$TempFolder = \"C:\\Temp\\RegExportTemp\"\nif (!(Test-Path $TempFolder)) { New-Item -ItemType Directory -Path $TempFolder | Out-Null }\n# Create/Reset final output file with .reg header\n\"Windows Registry Editor Version 5.00`r`n\" | Out-File -FilePath $OutputFile -Encoding Unicode\n# Export each key\nforeach ($Key in $RegKeys) {\n    $SafeKeyName = ($Key -replace \"[\\\\:\\{\\}\\/]\", \"_\")\n    $TempFile = \"$TempFolder\\$SafeKeyName.reg\"\n    Write-Host \"Exporting $Key ...\"\n    # Export registry key\n    reg export \"$Key\" \"$TempFile\" /y 2>$null\n    # Check if export succeeded\n    if (Test-Path $TempFile) {\n        # Append content to final reg file (skip header)\n        (Get-Content $TempFile | Select-Object -Skip 1) |\n            Out-File -FilePath $OutputFile -Append -Encoding Unicode\n    } else {\n        Write-Host \" Failed to export: $Key\"\n    }\n}\nWrite-Host \"`n All keys exported to: $OutputFile\"\n# Cleanup temporary files\nRemove-Item $TempFolder -Recurse -Force",
     "slug": "export-multiple-registry-keys-single-reg",
     "category": "Registry",
     "description": "export multiple registry keys into a single .reg file",
@@ -533,7 +533,7 @@
     "n": 54,
     "title": "SCCM client repair",
     "language": "PowerShell",
-    "body": "<# LOG FILE LOCATION \"c:\\Temp\\ClientCleanup.log\"\n#>\n\n$ErrorActionPreference = 'SilentlyContinue'\n\nNew-Item -ItemType Directory -Force -Path \"C:\\Temp\"\nNew-Item -ItemType \"file\" -Path \"c:\\Temp\\ClientCleanup.log\"\n\n#TIMESTAMP FUNCTION FOR LOGGING\nfunction Get-TimeStamp {\n    \n    return \"[{0:MM/dd/yy} {0:hh:mm}]\" -f (Get-Date)\n    \n}\n#TIMESTAMP FUNCTION ENDS HERE......\n\n#SMSAGENT HOST CLEANUP\nStart-Sleep -s 10\nStop-Service ccmexec -Force\nStop-Service ccmsetup -Force\n$service = Get-WmiObject -Class Win32_Service -Filter \"Name='ccmexec'\"\nStart-Sleep -s 5\n$service.delete()\n$arrService_1 = Get-Service -Name \"ccmexec\"\nif ($arrService_1.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) \n::::::::::::::::::::::::::::::::::::::::::::STARTING THE SCRIPT EXECUTION::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SMS Agent Host was Deleted Successfully.\"\n}\n\n#SMSAGENT HOST IS IN KILLED........\n\n#REMOVING MIF AND SMSCFG FILES\nStart-Sleep -s 10\nRemove-Item –path \"C:\\Windows\\SMSCFG.INI\"\nGet-ChildItem -path \"C:\\Windows\\*.mif\" | Remove-Item -Force\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) .MIF and SMSCFG.ini removed\"\n#REMOVED MIF AND SMSCFG FILES............\n\n#TASK SCHEDULE KILLER\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Health Evaluation\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Health Evaluation\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Health Evaluation\" -Confirm:$False\n}\n\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Idle Detection\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Idle Detection\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Idle Detection\" -Confirm:$False\n}\n\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Passport for Work Certificate Enrollment Task\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Passport for Work Certificate Enrollment Task\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Passport for Work Certificate Enrollment Task\" -Confirm:$False\n}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) ConfigMgr Task Schedules Un-Registered.\"\n#TASK SCHEDULE KILLED SUCCESSFULLY..........\n\n#GARBAGE REGISTRY CLEANER\n$regkeypath1= \"hklm:\\SOFTWARE\\ConfigMgrStartup\"\n$regkeypath2= \"hklm:\\SOFTWARE\\Microsoft\\CCM\"\n$regkeypath3= \"hklm:\\SOFTWARE\\Microsoft\\CCMSetup\"\n$regkeypath4= \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\CCM\"\n$regkeypath5= \"hklm:\\SOFTWARE\\Microsoft\\SMS\"\n$regkeypath6= \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\SMS\"\n$value1 = (Get-ItemProperty $regkeypath).test -eq $null\n$value2 = (Get-ItemProperty $regkeypath).test -eq $null\n$value3 = (Get-ItemProperty $regkeypath).test -eq $null\n$value4 = (Get-ItemProperty $regkeypath).test -eq $null\n$value5 = (Get-ItemProperty $regkeypath).test -eq $null\n$value6 = (Get-ItemProperty $regkeypath).test -eq $null\nIf ($value1 -eq $False) {Remove-ItemProperty -path $regkeypath1 -Force}\nIf ($value2 -eq $False) {Remove-ItemProperty -path $regkeypath2 -Force}\nIf ($value3 -eq $False) {Remove-ItemProperty - path $regkeypath3 -Force}\nIf ($value4 -eq $False) {Remove-ItemProperty -path $regkeypath4 -Force}\nIf ($value5 -eq $False) {Remove-ItemProperty -path $regkeypath5 -Force}\nIf ($value6 -eq $False) {Remove-ItemProperty -path $regkeypath6 -Force}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SCCM Client related Garbage Registries cleaned up.\"\n#GARBAGE REGISTRY CLEANED..........\n\n#GARBAGE FOLDER REMOVER\nRemove-Item \"C:\\Windows\\CCM\" -Force -Recurse\nRemove-Item \"C:\\Windows\\ccmcache\" -Force -Recurse\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) CCM and ccmcache folder deletion initiated.\"\n#GARBAGE FOLDER REMOVED..........\n\n#CLEANING UP CLIENT RELATED CERTIFICATES\n$smscert = \"hklm:\\SOFTWARE\\Microsoft\\SystemCertificates\\SMS\"\n$smscert64 = \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\SystemCertificates\\SMS\"\n$smsval = (Get-ItemProperty $smscert).test -eq $null\n$smsvall = (Get-ItemProperty $smscert64).test -eq $null\nIf ($smsval -eq $False) {Remove-ItemProperty -path $smscert -Force}\nIf ($smsvall -eq $False) {Remove-ItemProperty -path $smscert64 -Force}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SCCM Client Certificated Deleted.\"\n#CLIENT RELATED CERTIFICATES REMOVED..........\n\n#CLIENT WMI CLEANUP\nStart-Sleep -s 5\n$wmi_check = 'winmgmt'\n$arrService = Get-Service -Name $wmi_check\nif ($arrService.Status -eq 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) WMI Service is in good state, initiating CCM and SMS Namespace deletion.\"\n$computer_name = $env:computername\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" | Remove-WmiObject}\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='SMS'\" -Namespace \"root\\cimv2\" | Remove-WmiObject}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) CCM and SMS Namespace Deleted Successfully.\"\n}\nif ($arrService.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) WMI Service is not active, Starting the service.\"\nStart-Service winmgmt -Force\n$computer_name = $env:computername\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" | Remove-WmiObject}\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='SMS'\" -Namespace \"root\\cimv2\" | Remove-WmiObject}\n}\n#WMI CLEANUP DONE..........\n\n#LOGGING THE STATUS\nStart-Sleep -s 7\nif ($arrService.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The winmgmt service cannot be started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Either access denied. or some other application is blocking/preventing it to get started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Script will be Aborted.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Finished with Error!\"\nexit\n}\nelse\n{\nif (Test-Path \"${env:systemdrive}\\Windows\\ccmsetup\\ccmsetup.exe\")\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Client has the ccmsetup sources, will use the same for installation.\"\nStart-Process \"${env:systemdrive}\\Windows\\ccmsetup\\ccmsetup.exe\" -ArgumentList \"/mp:SEPCSCM008.company.com SMSSITECODE=S01\" -Wait -PassThru\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The installation of SCCM client was initiated.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Please check in C:\\Windows\\ccmsetup.log to check the installation progress.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If success code is 7, the SCCM Client has been installed but reboot is required.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If success code is 0, the Client has been installed, reboot is not required.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If still the installation issue occurs, WMI needs to be repaired or Firewall Confliction.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) For Windows 10, Firewall Service (in services.msc) needs to be started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The Log Completed Here....\"\nexit\n}\nelse\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Client does not have the ccmsetup sources.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Please copy it from compliant machine under C:\\Windows\\ folder and re-run the script.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) At the moment, Script Aborts Here and Installation Skipped....\"\n}\n}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) ::::::::::::::::::::::::::::::::::::::::::::SCRIPT COMPLETED::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\"\n#SCRIPT ENDS HERE........",
+    "body": "<# LOG FILE LOCATION \"c:\\Temp\\ClientCleanup.log\"\n#>\n\n$ErrorActionPreference = 'SilentlyContinue'\n\nNew-Item -ItemType Directory -Force -Path \"C:\\Temp\"\nNew-Item -ItemType \"file\" -Path \"c:\\Temp\\ClientCleanup.log\"\n\n#TIMESTAMP FUNCTION FOR LOGGING\nfunction Get-TimeStamp {\n    \n    return \"[{0:MM/dd/yy} {0:hh:mm}]\" -f (Get-Date)\n    \n}\n#TIMESTAMP FUNCTION ENDS HERE......\n\n#SMSAGENT HOST CLEANUP\nStart-Sleep -s 10\nStop-Service ccmexec -Force\nStop-Service ccmsetup -Force\n$service = Get-WmiObject -Class Win32_Service -Filter \"Name='ccmexec'\"\nStart-Sleep -s 5\n$service.delete()\n$arrService_1 = Get-Service -Name \"ccmexec\"\nif ($arrService_1.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) \n::::::::::::::::::::::::::::::::::::::::::::STARTING THE SCRIPT EXECUTION::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SMS Agent Host was Deleted Successfully.\"\n}\n\n#SMSAGENT HOST IS IN KILLED........\n\n#REMOVING MIF AND SMSCFG FILES\nStart-Sleep -s 10\nRemove-Item -path \"C:\\Windows\\SMSCFG.INI\"\nGet-ChildItem -path \"C:\\Windows\\*.mif\" | Remove-Item -Force\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) .MIF and SMSCFG.ini removed\"\n#REMOVED MIF AND SMSCFG FILES............\n\n#TASK SCHEDULE KILLER\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Health Evaluation\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Health Evaluation\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Health Evaluation\" -Confirm:$False\n}\n\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Idle Detection\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Idle Detection\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Idle Detection\" -Confirm:$False\n}\n\nif ($(Get-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Passport for Work Certificate Enrollment Task\" -ErrorAction SilentlyContinue).TaskName -eq \"Configuration Manager Passport for Work Certificate Enrollment Task\")\n {\n    Unregister-ScheduledTask -TaskPath '\\Microsoft\\Configuration Manager\\' -TaskName \"Configuration Manager Passport for Work Certificate Enrollment Task\" -Confirm:$False\n}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) ConfigMgr Task Schedules Un-Registered.\"\n#TASK SCHEDULE KILLED SUCCESSFULLY..........\n\n#GARBAGE REGISTRY CLEANER\n$regkeypath1= \"hklm:\\SOFTWARE\\ConfigMgrStartup\"\n$regkeypath2= \"hklm:\\SOFTWARE\\Microsoft\\CCM\"\n$regkeypath3= \"hklm:\\SOFTWARE\\Microsoft\\CCMSetup\"\n$regkeypath4= \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\CCM\"\n$regkeypath5= \"hklm:\\SOFTWARE\\Microsoft\\SMS\"\n$regkeypath6= \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\SMS\"\n$value1 = (Get-ItemProperty $regkeypath).test -eq $null\n$value2 = (Get-ItemProperty $regkeypath).test -eq $null\n$value3 = (Get-ItemProperty $regkeypath).test -eq $null\n$value4 = (Get-ItemProperty $regkeypath).test -eq $null\n$value5 = (Get-ItemProperty $regkeypath).test -eq $null\n$value6 = (Get-ItemProperty $regkeypath).test -eq $null\nIf ($value1 -eq $False) {Remove-ItemProperty -path $regkeypath1 -Force}\nIf ($value2 -eq $False) {Remove-ItemProperty -path $regkeypath2 -Force}\nIf ($value3 -eq $False) {Remove-ItemProperty - path $regkeypath3 -Force}\nIf ($value4 -eq $False) {Remove-ItemProperty -path $regkeypath4 -Force}\nIf ($value5 -eq $False) {Remove-ItemProperty -path $regkeypath5 -Force}\nIf ($value6 -eq $False) {Remove-ItemProperty -path $regkeypath6 -Force}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SCCM Client related Garbage Registries cleaned up.\"\n#GARBAGE REGISTRY CLEANED..........\n\n#GARBAGE FOLDER REMOVER\nRemove-Item \"C:\\Windows\\CCM\" -Force -Recurse\nRemove-Item \"C:\\Windows\\ccmcache\" -Force -Recurse\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) CCM and ccmcache folder deletion initiated.\"\n#GARBAGE FOLDER REMOVED..........\n\n#CLEANING UP CLIENT RELATED CERTIFICATES\n$smscert = \"hklm:\\SOFTWARE\\Microsoft\\SystemCertificates\\SMS\"\n$smscert64 = \"hklm:\\SOFTWARE\\WOW6432Node\\Microsoft\\SystemCertificates\\SMS\"\n$smsval = (Get-ItemProperty $smscert).test -eq $null\n$smsvall = (Get-ItemProperty $smscert64).test -eq $null\nIf ($smsval -eq $False) {Remove-ItemProperty -path $smscert -Force}\nIf ($smsvall -eq $False) {Remove-ItemProperty -path $smscert64 -Force}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) SCCM Client Certificated Deleted.\"\n#CLIENT RELATED CERTIFICATES REMOVED..........\n\n#CLIENT WMI CLEANUP\nStart-Sleep -s 5\n$wmi_check = 'winmgmt'\n$arrService = Get-Service -Name $wmi_check\nif ($arrService.Status -eq 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) WMI Service is in good state, initiating CCM and SMS Namespace deletion.\"\n$computer_name = $env:computername\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" | Remove-WmiObject}\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='SMS'\" -Namespace \"root\\cimv2\" | Remove-WmiObject}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) CCM and SMS Namespace Deleted Successfully.\"\n}\nif ($arrService.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) WMI Service is not active, Starting the service.\"\nStart-Service winmgmt -Force\n$computer_name = $env:computername\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='CCM'\" -Namespace \"root\" | Remove-WmiObject}\nInvoke-Command -ComputerName $computer_name {Get-WmiObject -query \"Select * From __Namespace Where Name='SMS'\" -Namespace \"root\\cimv2\" | Remove-WmiObject}\n}\n#WMI CLEANUP DONE..........\n\n#LOGGING THE STATUS\nStart-Sleep -s 7\nif ($arrService.Status -ne 'Running')\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The winmgmt service cannot be started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Either access denied. or some other application is blocking/preventing it to get started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Script will be Aborted.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Finished with Error!\"\nexit\n}\nelse\n{\nif (Test-Path \"${env:systemdrive}\\Windows\\ccmsetup\\ccmsetup.exe\")\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Client has the ccmsetup sources, will use the same for installation.\"\nStart-Process \"${env:systemdrive}\\Windows\\ccmsetup\\ccmsetup.exe\" -ArgumentList \"/mp:SEPCSCM008.company.com SMSSITECODE=S01\" -Wait -PassThru\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The installation of SCCM client was initiated.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Please check in C:\\Windows\\ccmsetup.log to check the installation progress.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If success code is 7, the SCCM Client has been installed but reboot is required.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If success code is 0, the Client has been installed, reboot is not required.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) If still the installation issue occurs, WMI needs to be repaired or Firewall Confliction.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) For Windows 10, Firewall Service (in services.msc) needs to be started.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) The Log Completed Here....\"\nexit\n}\nelse\n{\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Client does not have the ccmsetup sources.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) Please copy it from compliant machine under C:\\Windows\\ folder and re-run the script.\"\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) At the moment, Script Aborts Here and Installation Skipped....\"\n}\n}\nAdd-Content \"c:\\Temp\\ClientCleanup.log\" \"$(Get-TimeStamp) ::::::::::::::::::::::::::::::::::::::::::::SCRIPT COMPLETED::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\"\n#SCRIPT ENDS HERE........",
     "slug": "client-repair",
     "category": "MECM / SCCM",
     "description": "SCCM client repair",
@@ -893,7 +893,7 @@
     "n": 90,
     "title": "Check to which collections the SCCM app is deployed to",
     "language": "PowerShell",
-    "body": "<#\n.SYNOPSIS\n    Generates a report showing SCCM application deployments to \"All Users\",\n    other collections, or no deployment at all.\n\n.COMPATIBILITY\n    PowerShell 5.1\n    SCCM Current Branch\n#>\n\n#region Configuration\n\n$SiteCode        = \"S01\"  # 🔧 CHANGE to your site code\n$ProviderMachine = \"SEPCSCM008.company.com\"  # 🔧 CHANGE if required\n$AppListPath     = \"C:\\Users\\shaiadm\\Desktop\\dev.txt\"\n$ReportPath      = \"C:\\Users\\shaiadm\\Desktop\\dev.csv\"\n\n#endregion Configuration\n\n#region Load SCCM Module\n\ntry {\n    Import-Module \"E:\\Program files\\Microsoft Configuration Manager\\AdminConsole\\bin\\ConfigurationManager\\ConfigurationManager.psd1\"\n    Set-Location \"$SiteCode`:\"\n}\ncatch {\n    throw \"Failed to load Configuration Manager module. Verify SCCM console install.\"\n}\n\n#endregion Load SCCM Module\n\n#region Validation\n\nif (-not (Test-Path $AppListPath)) {\n    throw \"Application list file not found: $AppListPath\"\n}\n\n#endregion Validation\n\n#region Processing\n\n$Results = foreach ($AppName in Get-Content $AppListPath) {\n\n    $AppName = $AppName.Trim()\n    if ([string]::IsNullOrWhiteSpace($AppName)) { continue }\n\n    try {\n        $App = Get-CMApplication -Name $AppName -ErrorAction SilentlyContinue\n\n        if (-not $App) {\n            [PSCustomObject]@{\n                ApplicationName     = $AppName\n                DeployedToAllUsers  = \"Not Found\"\n                OtherCollections    = \"\"\n                NoDeployment        = \"N/A\"\n            }\n            continue\n        }\n\n        $Deployments = Get-CMApplicationDeployment -ApplicationName $AppName\n\n        # No deployments\n        if (-not $Deployments) {\n            [PSCustomObject]@{\n                ApplicationName     = $AppName\n                DeployedToAllUsers  = \"No\"\n                OtherCollections    = \"\"\n                NoDeployment        = \"Yes\"\n            }\n            continue\n        }\n\n        $AllUsersDeployment = $Deployments |\n            Where-Object { $_.CollectionName -eq \"All Users\" }\n\n        $OtherCollections = $Deployments |\n            Where-Object { $_.CollectionName -ne \"All Users\" } |\n            Select-Object -ExpandProperty CollectionName -Unique\n\n        [PSCustomObject]@{\n            ApplicationName     = $AppName\n            DeployedToAllUsers  = if ($AllUsersDeployment) { \"Yes\" } else { \"No\" }\n            OtherCollections    = if ($OtherCollections) { $OtherCollections -join \"; \" } else { \"\" }\n            NoDeployment        = \"No\"\n        }\n    }\n    catch {\n        [PSCustomObject]@{\n            ApplicationName     = $AppName\n            DeployedToAllUsers  = \"Error\"\n            OtherCollections    = \"\"\n            NoDeployment        = \"Error\"\n        }\n    }\n}\n\n#endregion Processing\n\n#region Export\n\n$Results | Export-Csv -Path $ReportPath -NoTypeInformation -Encoding UTF8\nWrite-Host \"SCCM deployment report generated:\" -ForegroundColor Green\nWrite-Host $ReportPath\n\n#endregion Export",
+    "body": "<#\n.SYNOPSIS\n    Generates a report showing SCCM application deployments to \"All Users\",\n    other collections, or no deployment at all.\n\n.COMPATIBILITY\n    PowerShell 5.1\n    SCCM Current Branch\n#>\n\n#region Configuration\n\n$SiteCode        = \"S01\"  #  CHANGE to your site code\n$ProviderMachine = \"SEPCSCM008.company.com\"  #  CHANGE if required\n$AppListPath     = \"C:\\Users\\shaiadm\\Desktop\\dev.txt\"\n$ReportPath      = \"C:\\Users\\shaiadm\\Desktop\\dev.csv\"\n\n#endregion Configuration\n\n#region Load SCCM Module\n\ntry {\n    Import-Module \"E:\\Program files\\Microsoft Configuration Manager\\AdminConsole\\bin\\ConfigurationManager\\ConfigurationManager.psd1\"\n    Set-Location \"$SiteCode`:\"\n}\ncatch {\n    throw \"Failed to load Configuration Manager module. Verify SCCM console install.\"\n}\n\n#endregion Load SCCM Module\n\n#region Validation\n\nif (-not (Test-Path $AppListPath)) {\n    throw \"Application list file not found: $AppListPath\"\n}\n\n#endregion Validation\n\n#region Processing\n\n$Results = foreach ($AppName in Get-Content $AppListPath) {\n\n    $AppName = $AppName.Trim()\n    if ([string]::IsNullOrWhiteSpace($AppName)) { continue }\n\n    try {\n        $App = Get-CMApplication -Name $AppName -ErrorAction SilentlyContinue\n\n        if (-not $App) {\n            [PSCustomObject]@{\n                ApplicationName     = $AppName\n                DeployedToAllUsers  = \"Not Found\"\n                OtherCollections    = \"\"\n                NoDeployment        = \"N/A\"\n            }\n            continue\n        }\n\n        $Deployments = Get-CMApplicationDeployment -ApplicationName $AppName\n\n        # No deployments\n        if (-not $Deployments) {\n            [PSCustomObject]@{\n                ApplicationName     = $AppName\n                DeployedToAllUsers  = \"No\"\n                OtherCollections    = \"\"\n                NoDeployment        = \"Yes\"\n            }\n            continue\n        }\n\n        $AllUsersDeployment = $Deployments |\n            Where-Object { $_.CollectionName -eq \"All Users\" }\n\n        $OtherCollections = $Deployments |\n            Where-Object { $_.CollectionName -ne \"All Users\" } |\n            Select-Object -ExpandProperty CollectionName -Unique\n\n        [PSCustomObject]@{\n            ApplicationName     = $AppName\n            DeployedToAllUsers  = if ($AllUsersDeployment) { \"Yes\" } else { \"No\" }\n            OtherCollections    = if ($OtherCollections) { $OtherCollections -join \"; \" } else { \"\" }\n            NoDeployment        = \"No\"\n        }\n    }\n    catch {\n        [PSCustomObject]@{\n            ApplicationName     = $AppName\n            DeployedToAllUsers  = \"Error\"\n            OtherCollections    = \"\"\n            NoDeployment        = \"Error\"\n        }\n    }\n}\n\n#endregion Processing\n\n#region Export\n\n$Results | Export-Csv -Path $ReportPath -NoTypeInformation -Encoding UTF8\nWrite-Host \"SCCM deployment report generated:\" -ForegroundColor Green\nWrite-Host $ReportPath\n\n#endregion Export",
     "slug": "which-collections-deployed",
     "category": "MECM / SCCM",
     "description": "check to which collections the SCCM app is deployed to",
@@ -1145,7 +1145,7 @@
     "source": "scripts/powershell/get-file-hash-sha256.ps1"
   },
   {
-	"n": 114,
+    "n": 114,
     "title": "Get Installed Application Version",
     "language": "PowerShell",
     "category": "Detection",
@@ -1162,7 +1162,7 @@
     "source": "scripts/powershell/get-installed-application-version.ps1"
   },
   {
- 	"n": 115,
+    "n": 115,
     "title": "Check Pending Reboot",
     "language": "PowerShell",
     "category": "Windows / Troubleshooting",
@@ -1179,7 +1179,7 @@
     "source": "scripts/powershell/check-pending-reboot.ps1"
   },
   {
-	"n": 116,
+    "n": 116,
     "title": "Wait Until Process Finishes",
     "language": "PowerShell",
     "category": "Application Packaging",
@@ -1196,7 +1196,7 @@
     "source": "scripts/powershell/wait-until-process-finishes.ps1"
   },
   {
-	"n": 117,
+    "n": 117,
     "title": "Test Administrator Privileges",
     "language": "PowerShell",
     "category": "Windows / Utilities",
@@ -1213,7 +1213,7 @@
     "source": "scripts/powershell/test-administrator-privileges.ps1"
   },
   {
-	"n": 118,
+    "n": 118,
     "title": "Get Free Disk Space",
     "language": "PowerShell",
     "category": "Windows / Troubleshooting",
@@ -1230,7 +1230,7 @@
     "source": "scripts/powershell/get-free-disk-space.ps1"
   },
   {
-	"n": 119,
+    "n": 119,
     "title": "Get Intune Management Extension Logs",
     "language": "PowerShell",
     "category": "Intune",
@@ -1247,62 +1247,45 @@
     "source": "scripts/powershell/get-intune-management-extension-logs.ps1"
   },
   {
-	"n": 120,
-    "title": "Get Intune Management Extension Logs",
+    "n": 121,
+    "title": "Create a Folder If It Does Not Exist",
     "language": "PowerShell",
-    "category": "Intune",
-    "description": "List recent Intune Management Extension log files for Win32 app troubleshooting.",
+    "category": "Files & Folders",
+    "description": "Create a directory only when the target folder path does not already exist.",
     "tags": [
-      "intune",
-      "ime",
-      "win32",
-      "logs",
-      "troubleshooting"
+      "folder",
+      "directory",
+      "create",
+      "test-path",
+      "powershell",
+      "filesystem"
     ],
-    "body": "$Path = \"C:\\ProgramData\\Microsoft\\IntuneManagementExtension\\Logs\"\n\nGet-ChildItem $Path -ErrorAction SilentlyContinue |\n    Sort-Object LastWriteTime -Descending |\n    Select-Object Name, LastWriteTime, FullName",
-    "slug": "get-intune-management-extension-logs",
-    "source": "scripts/powershell/get-intune-management-extension-logs.ps1"
+    "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
+    "slug": "create-folder-if-not-exists",
+    "source": "scripts/powershell/create-folder-if-not-exists.ps1"
   },
   {
-  "n": 121,
-  "title": "Create a Folder If It Does Not Exist",
-  "language": "PowerShell",
-  "category": "Files & Folders",
-  "description": "Create a directory only when the target folder path does not already exist.",
-  "tags": [
-    "folder",
-    "directory",
-    "create",
-    "test-path",
-    "powershell",
-    "filesystem"
-  ],
-  "body": "if (!(Test-Path \"C:\\YourFolderPath\"))\n{\n    New-Item -ItemType Directory -Path \"C:\\YourFolderPath\" -ErrorAction SilentlyContinue\n}",
-  "slug": "create-folder-if-not-exists",
-  "source": "scripts/powershell/create-folder-if-not-exists.ps1"
-  },
-   {
-  "n": 122,
-  "title": "Check Running Process Command Line with PowerShell",
-  "language": "PowerShell",
-  "category": "Files & Folders",
-  "description": "Use PowerShell to view the command-line arguments of running processes, helping identify how an application was started and troubleshoot process-related issues.",
-  "tags": [
-  "process",
-  "running-process",
-  "command-line",
-  "task-manager",
-  "powershell",
-  "win32-process",
-  "troubleshooting",
-  "process-monitoring",
-  "windows",
-  "diagnostics",
-  "application-packaging",
-  "process-investigation"
-],
-  "body": "Get-CimInstance Win32_Process | Where-Object {$_.Name -eq \"powershell.exe\"} | Select-Object ProcessId, CommandLine",
-  "slug": "check-tskmgr-cmd",
-  "source": "scripts/powershell/check-tskmgr-cmd.ps1"
+    "n": 122,
+    "title": "Check Running Process Command Line with PowerShell",
+    "language": "PowerShell",
+    "category": "Files & Folders",
+    "description": "Use PowerShell to view the command-line arguments of running processes, helping identify how an application was started and troubleshoot process-related issues.",
+    "tags": [
+      "process",
+      "running-process",
+      "command-line",
+      "task-manager",
+      "powershell",
+      "win32-process",
+      "troubleshooting",
+      "process-monitoring",
+      "windows",
+      "diagnostics",
+      "application-packaging",
+      "process-investigation"
+    ],
+    "body": "Get-CimInstance Win32_Process | Where-Object {$_.Name -eq \"powershell.exe\"} | Select-Object ProcessId, CommandLine",
+    "slug": "check-tskmgr-cmd",
+    "source": "scripts/powershell/check-tskmgr-cmd.ps1"
   }
 ]

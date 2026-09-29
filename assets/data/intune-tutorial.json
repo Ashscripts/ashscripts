@@ -1,0 +1,467 @@
+[
+  {
+    "id": 1,
+    "marker": "",
+    "color": "#ff4d4f",
+    "title": "The Foundation",
+    "intro": "Ashpak makes the case. The tenant goes live.",
+    "lessons": [
+      {
+        "id": "1.1",
+        "title": "What is Microsoft Intune? (MDM vs MAM)",
+        "slug": "1-1-what-is-microsoft-intune-mdm-vs-mam",
+        "status": "live"
+      },
+      {
+        "id": "1.2",
+        "title": "How Intune Fits the Microsoft Ecosystem",
+        "slug": "1-2-how-intune-fits-the-microsoft-ecosystem",
+        "status": "live"
+      },
+      {
+        "id": "1.3",
+        "title": "Licensing: What AshScript Needs to Buy",
+        "slug": "1-3-licensing-what-ashscript-needs-to-buy",
+        "status": "live"
+      },
+      {
+        "id": "1.4",
+        "title": "Setting Up the AshScript Tenant",
+        "slug": "1-4-setting-up-the-ashscript-tenant",
+        "status": "live"
+      },
+      {
+        "id": "1.5",
+        "title": "Navigating the Intune Portal Like a Pro",
+        "slug": "1-5-navigating-the-intune-portal-like-a-pro",
+        "status": "live"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "marker": "",
+    "color": "#ff9f1c",
+    "title": "Identity is Everything",
+    "intro": "Before managing devices, we manage identities.",
+    "lessons": [
+      {
+        "id": "2.1",
+        "title": "Entra ID Fundamentals: Tenants, Users & Groups",
+        "slug": "2-1-entra-id-fundamentals-tenants-users-groups",
+        "status": "live"
+      },
+      {
+        "id": "2.2",
+        "title": "Entra Connect Sync: Bridging On-Prem AD to the Cloud",
+        "slug": "2-2-entra-connect-sync-bridging-on-prem-ad-to-the-cloud",
+        "status": "live"
+      },
+      {
+        "id": "2.3",
+        "title": "Creating & Managing Users and Groups (Static vs Dynamic)",
+        "slug": "2-3-creating-managing-users-and-groups-static-vs-dynamic",
+        "status": "live"
+      },
+      {
+        "id": "2.4",
+        "title": "RBAC: Roles & Permissions in Intune",
+        "slug": "2-4-rbac-roles-permissions-in-intune",
+        "status": "live"
+      },
+      {
+        "id": "2.5",
+        "title": "MFA & Conditional Access: Zero Trust Begins",
+        "slug": "2-5-mfa-conditional-access-zero-trust-begins",
+        "status": "live"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "marker": "",
+    "color": "#ffd60a",
+    "title": "Enrolling Devices",
+    "intro": "Ashpak's team starts onboarding the first 100 laptops.",
+    "lessons": [
+      {
+        "id": "3.1",
+        "title": "Enrollment Methods Overview: Every Platform Explained",
+        "slug": "3-1-enrollment-methods-overview-every-platform-explained",
+        "status": "live"
+      },
+      {
+        "id": "3.2",
+        "title": "Windows Autopilot: Zero Touch Deployment",
+        "slug": "3-2-windows-autopilot-zero-touch-deployment",
+        "status": "live"
+      },
+      {
+        "id": "3.3",
+        "title": "Co-Management: SCCM + Intune Working Together",
+        "slug": "3-3-co-management-sccm-intune-working-together",
+        "status": "live"
+      },
+      {
+        "id": "3.4",
+        "title": "macOS Enrollment: ADE, Company Portal & Profiles",
+        "slug": "3-4-macos-enrollment-ade-company-portal-profiles",
+        "status": "live"
+      },
+      {
+        "id": "3.5",
+        "title": "Android Enrollment: Enterprise, Work Profiles, COPE & BYOD",
+        "slug": "3-5-android-enrollment-enterprise-work-profiles-cope-byod",
+        "status": "live"
+      },
+      {
+        "id": "3.6",
+        "title": "BYOD Enrollment: Personal Devices, MAM vs MDM",
+        "slug": "3-6-byod-enrollment-personal-devices-mam-vs-mdm",
+        "status": "live"
+      },
+      {
+        "id": "3.7",
+        "title": "Enrollment Restrictions & Limits",
+        "slug": "3-7-enrollment-restrictions-limits",
+        "status": "live"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "marker": "",
+    "color": "#56e39f",
+    "title": "Configuration Profiles",
+    "intro": "GPOs served us well. Now it's time to think cloud-native.",
+    "lessons": [
+      {
+        "id": "4.1",
+        "title": "Configuration Profiles: The Foundation",
+        "slug": "4-1-configuration-profiles-the-foundation",
+        "status": "live"
+      },
+      {
+        "id": "4.2",
+        "title": "Wi-Fi and VPN Profiles: Every Device Connects Automatically",
+        "slug": "4-2-wi-fi-and-vpn-profiles-every-device-connects-automatically",
+        "status": "live"
+      },
+      {
+        "id": "4.3",
+        "title": "Email Profiles: Outlook Configured Before the User Even Logs In",
+        "slug": "4-3-email-profiles-outlook-configured-before-the-user-even-logs-in",
+        "status": "live"
+      },
+      {
+        "id": "4.4",
+        "title": "Windows Security Settings: Locking Down 800 Laptops",
+        "slug": "4-4-windows-security-settings-locking-down-800-laptops",
+        "status": "live"
+      },
+      {
+        "id": "4.5",
+        "title": "macOS Configuration Profiles: Securing the Apple Fleet",
+        "slug": "4-5-macos-configuration-profiles-securing-the-apple-fleet",
+        "status": "live"
+      },
+      {
+        "id": "4.6",
+        "title": "Android Configuration Profiles: Controlling 250 Corporate Phones",
+        "slug": "4-6-android-configuration-profiles-controlling-250-corporate-phones",
+        "status": "live"
+      },
+      {
+        "id": "4.7",
+        "title": "Certificate Profiles: The Infrastructure Behind Everything",
+        "slug": "4-7-certificate-profiles-the-infrastructure-behind-everything",
+        "status": "live"
+      },
+      {
+        "id": "4.8",
+        "title": "Policy Conflict Resolution: What Wins When Two Policies Fight",
+        "slug": "4-8-policy-conflict-resolution-what-wins-when-two-policies-fight",
+        "status": "planned"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "marker": "",
+    "color": "#5aa0ff",
+    "title": "Compliance & Conditional Access",
+    "intro": "A rogue device connects. Leadership panics. Ashpak has a plan.",
+    "lessons": [
+      {
+        "id": "5.1",
+        "title": "Compliance Policy Fundamentals",
+        "slug": "5-1-compliance-policy-fundamentals",
+        "status": "live"
+      },
+      {
+        "id": "5.2",
+        "title": "Windows Compliance Policies",
+        "slug": "5-2-windows-compliance-policies",
+        "status": "live"
+      },
+      {
+        "id": "5.3",
+        "title": "macOS Compliance Policies",
+        "slug": "5-3-macos-compliance-policies",
+        "status": "live"
+      },
+      {
+        "id": "5.4",
+        "title": "iOS Compliance Policies",
+        "slug": "5-4-ios-compliance-policies",
+        "status": "live"
+      },
+      {
+        "id": "5.5",
+        "title": "Android Compliance Policies",
+        "slug": "5-5-android-compliance-policies",
+        "status": "live"
+      },
+      {
+        "id": "5.6",
+        "title": "Compliance + Conditional Access Integration",
+        "slug": "5-6-compliance-conditional-access-integration",
+        "status": "live"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "marker": "",
+    "color": "#a78bfa",
+    "title": "App Management",
+    "intro": "Employees need apps. On company devices and personal phones.",
+    "lessons": [
+      {
+        "id": "6.1",
+        "title": "App Management Fundamentals",
+        "slug": "6-1-app-management-fundamentals",
+        "status": "live"
+      },
+      {
+        "id": "6.2",
+        "title": "Deploying Microsoft 365 Apps",
+        "slug": "6-2-deploying-microsoft-365-apps",
+        "status": "live"
+      },
+      {
+        "id": "6.3",
+        "title": "Android App Deployment: Managed Google Play",
+        "slug": "6-3-android-app-deployment-managed-google-play",
+        "status": "live"
+      },
+      {
+        "id": "6.4",
+        "title": "iOS App Deployment: Apple VPP",
+        "slug": "6-4-ios-app-deployment-apple-vpp",
+        "status": "live"
+      },
+      {
+        "id": "6.5",
+        "title": "Windows App Deployment: Win32 and Beyond",
+        "slug": "6-5-windows-app-deployment-win32-and-beyond",
+        "status": "live"
+      },
+      {
+        "id": "6.6",
+        "title": "App Protection Policies: Controlling What Apps Do With Company Data",
+        "slug": "6-6-app-protection-policies-controlling-what-apps-do-with-company-data",
+        "status": "live"
+      },
+      {
+        "id": "6.7",
+        "title": "Selective Wipe and App Retirement",
+        "slug": "6-7-selective-wipe-and-app-retirement",
+        "status": "live"
+      },
+      {
+        "id": "6.8",
+        "title": "Microsoft Store Apps & WinGet Integration",
+        "slug": "6-8-microsoft-store-apps-winget-integration",
+        "status": "planned"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "marker": "",
+    "color": "#b9c2b7",
+    "title": "Security & Endpoint Protection",
+    "intro": "The CISO asks: can Intune protect us from threats?",
+    "lessons": [
+      {
+        "id": "7.1",
+        "title": "Microsoft Defender for Endpoint: Onboarding via Intune",
+        "slug": "7-1-microsoft-defender-for-endpoint-onboarding-via-intune",
+        "status": "live"
+      },
+      {
+        "id": "7.2",
+        "title": "Threat Detection and Automated Response",
+        "slug": "7-2-threat-detection-and-automated-response",
+        "status": "live"
+      },
+      {
+        "id": "7.3",
+        "title": "Security Dashboards and Threat Hunting",
+        "slug": "7-3-security-dashboards-and-threat-hunting",
+        "status": "live"
+      },
+      {
+        "id": "7.4",
+        "title": "MDE + Intune Compliance Integration",
+        "slug": "7-4-mde-intune-compliance-integration",
+        "status": "live"
+      },
+      {
+        "id": "7.5",
+        "title": "Incident Response Workflow",
+        "slug": "7-5-incident-response-workflow",
+        "status": "live"
+      },
+      {
+        "id": "7.6",
+        "title": "Attack Surface Reduction (ASR) Rules",
+        "slug": "7-6-attack-surface-reduction-asr-rules",
+        "status": "planned"
+      },
+      {
+        "id": "7.7",
+        "title": "Microsoft Tunnel: VPN for Managed Devices",
+        "slug": "7-7-microsoft-tunnel-vpn-for-managed-devices",
+        "status": "planned"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "marker": "",
+    "color": "#a46b4c",
+    "title": "Monitoring, Reporting & Troubleshooting",
+    "intro": "Something broke. Ashpak needs to find out what; fast.",
+    "lessons": [
+      {
+        "id": "8.1",
+        "title": "Intune Built-In Reports and Dashboards",
+        "slug": "8-1-intune-built-in-reports-and-dashboards",
+        "status": "live"
+      },
+      {
+        "id": "8.2",
+        "title": "Custom Reports and Data Export",
+        "slug": "8-2-custom-reports-and-data-export",
+        "status": "live"
+      },
+      {
+        "id": "8.3",
+        "title": "Alerts, Monitoring, and Service Health",
+        "slug": "8-3-alerts-monitoring-and-service-health",
+        "status": "live"
+      },
+      {
+        "id": "8.4",
+        "title": "Day-to-Day Operational Workflows",
+        "slug": "8-4-day-to-day-operational-workflows",
+        "status": "live"
+      },
+      {
+        "id": "8.5",
+        "title": "The Weekly Operations Checklist",
+        "slug": "8-5-the-weekly-operations-checklist",
+        "status": "live"
+      },
+      {
+        "id": "8.6",
+        "title": "Log Analytics & Azure Monitor Integration",
+        "slug": "8-6-log-analytics-azure-monitor-integration",
+        "status": "planned"
+      },
+      {
+        "id": "8.7",
+        "title": "Microsoft Graph API: Automating Intune with Code",
+        "slug": "8-7-microsoft-graph-api-automating-intune-with-code",
+        "status": "planned"
+      },
+      {
+        "id": "8.8",
+        "title": "Common Troubleshooting Scenarios & Fixes",
+        "slug": "8-8-common-troubleshooting-scenarios-fixes",
+        "status": "planned"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "marker": "",
+    "color": "#ffd166",
+    "title": "Advanced & Real-World Scenarios",
+    "intro": "AshScript is fully cloud-managed. Now let's optimize.",
+    "lessons": [
+      {
+        "id": "9.1",
+        "title": "Windows Update for Business: Replacing WSUS",
+        "slug": "9-1-windows-update-for-business-replacing-wsus",
+        "status": "planned"
+      },
+      {
+        "id": "9.2",
+        "title": "Feature Updates & Driver Update Management",
+        "slug": "9-2-feature-updates-driver-update-management",
+        "status": "planned"
+      },
+      {
+        "id": "9.3",
+        "title": "Windows Autopatch: Fully Automated Patching",
+        "slug": "9-3-windows-autopatch-fully-automated-patching",
+        "status": "planned"
+      },
+      {
+        "id": "9.4",
+        "title": "Scope Tags: Managing Multi-Team Intune Environments",
+        "slug": "9-4-scope-tags-managing-multi-team-intune-environments",
+        "status": "planned"
+      },
+      {
+        "id": "9.5",
+        "title": "Kiosk Mode & Shared Device Configuration",
+        "slug": "9-5-kiosk-mode-shared-device-configuration",
+        "status": "planned"
+      },
+      {
+        "id": "9.6",
+        "title": "Endpoint Privilege Management (EPM)",
+        "slug": "9-6-endpoint-privilege-management-epm",
+        "status": "planned"
+      },
+      {
+        "id": "9.7",
+        "title": "Remote Help: Helpdesk via Intune",
+        "slug": "9-7-remote-help-helpdesk-via-intune",
+        "status": "planned"
+      },
+      {
+        "id": "9.8",
+        "title": "Advanced Endpoint Analytics",
+        "slug": "9-8-advanced-endpoint-analytics",
+        "status": "planned"
+      },
+      {
+        "id": "9.9",
+        "title": "Intune for Education: Shared & Classroom Devices",
+        "slug": "9-9-intune-for-education-shared-classroom-devices",
+        "status": "planned"
+      },
+      {
+        "id": "9.10",
+        "title": "Migration Complete: AshScript's Cloud-Managed Future",
+        "slug": "9-10-migration-complete-ashscript-s-cloud-managed-future",
+        "status": "planned"
+      }
+    ]
+  }
+]
