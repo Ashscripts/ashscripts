@@ -1,53 +1,920 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
-<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Navigating the Intune Portal Like a Pro · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=3" rel="icon" sizes="64x64" type="image/png"/>
-<link href="../../assets/images/ashscript-favicon.ico?v=3" rel="shortcut icon"/>
-<link href="../../assets/images/ashscript-favicon.png?v=3" rel="apple-touch-icon"/>
-<title>Lesson 1.5: Navigating the Intune Portal Like a Pro · ashscript</title>
-<link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
-</head>
-<body class="phase1-lesson" style="--lesson-accent:#ff4d4f">
-<header class="site-header">
-<div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav="">
-<a href="../../">Scripts</a>
-<details class="nav-dropdown" data-nav-dropdown="">
-<summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary>
-<div class="nav-submenu"><a aria-current="page" href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div>
-</details>
-<a href="../../who-am-i/">Who Am I</a>
-</nav>
-</div>
-</header>
-<main>
-<section class="page-hero intune-lesson-hero">
-<div class="container">
-<div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 1</span>/<span>1.5</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 1; THE FOUNDATION</div>
-<h1>Navigating the Intune Portal Like a Pro</h1>
-<p class="lesson-subtitle">Ashpak's first full day inside the portal</p>
-</div>
-</section>
-<section class="section lesson-reader">
-<div class="container lesson-reader-layout">
-<aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../#phase-1"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 1</small><strong>Phase 1 · The Foundation</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">1.5 Navigating the Intune Portal Like a Pro</div><a class="phase-back learning-modules-btn" href="../#phase-1">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-the-golden-rule-of-the-intune-portal"><span>02</span><strong>The Golden Rule of the Intune Portal</strong></a><a href="#section-the-portal-layout-full-map"><span>03</span><strong>The Portal Layout; Full Map</strong></a><a href="#section-deep-dive-every-major-section-explained"><span>04</span><strong>Deep Dive; Every Major Section Explained</strong></a><a href="#section-the-top-10-things-ashpak-does-in-the-portal-every-week"><span>05</span><strong>The Top 10 Things Ashpak Does in the Portal Every Week</strong></a><a href="#section-the-portals-you-ll-use-together"><span>06</span><strong>The Portals You'll Use Together</strong></a><a href="#section-one-more-navigation-trick-the-search-bar"><span>07</span><strong>One More Navigation Trick; The Search Bar</strong></a><a href="#section-phase-1-complete-what-ashscript-has-achieved"><span>08</span><strong>Phase 1 Complete; What AshScript Has Achieved</strong></a></nav></aside>
-<article aria-label="Lesson 1.5; Navigating the Intune Portal Like a Pro" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../#phase-1">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p class="">It's Ashpak's first morning with a live tenant. Licenses are assigned, the domain is verified, and the MDM authority is set. He opens his browser, navigates to <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> , and logs in with his ashpak.it@ashscript.com account.</p><p class="">The dashboard loads.</p><p class="">For a moment, he just stares at it. There are menus everywhere. Tiles. Numbers. Links. It's a lot to take in.</p><p class="">His colleague Priya leans over:</p><div class="quote">"Don't just click randomly. Learn the layout first. The portal is logically organized; once you understand the structure, you'll always know exactly where to go."</div><p class="">That's exactly what we're going to do right now.</p></section><section class="lesson-section" id="section-the-golden-rule-of-the-intune-portal"><h2>The Golden Rule of the Intune Portal</h2><div class="callout-accent">Everything in Intune flows through this sequence: WHO → WHAT → HOW → CHECK WHO gets managed? (Users &amp; Groups; from Entra ID)
-WHAT gets managed? (Devices &amp; Apps)
-HOW do we manage it? (Policies &amp; Profiles)
-CHECK; is it working? (Reports &amp; Monitoring)</div><p class="">Every single menu item in the portal maps to one of these four questions. Keep this in mind as we explore.</p></section><section class="lesson-section" id="section-the-portal-layout-full-map"><h2>The Portal Layout: Full Map</h2><p class="">Here's the complete left navigation panel of the Intune Admin Center, annotated for AshScript:</p><figure class="lesson-figure"><img alt="Portal Layout; Full Map" loading="lazy" src="../../assets/images/intune/lesson-1-5-portal-map.svg"/><figcaption>Portal Layout; Full Map</figcaption></figure></section><section class="lesson-section" id="section-deep-dive-every-major-section-explained"><h2>Deep Dive: Every Major Section Explained</h2><p class="">Let's walk through each section the way Ashpak would on his first day; not just what it is, but what real tasks live inside it.</p></section><h3>1. Home &amp; Dashboard</h3><p class="">URL: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> (landing page)</p><p class="">This is your daily health check view. The moment you log in, you should be scanning this page like a pilot checking instruments before takeoff.</p><p class="">What you'll see:</p><figure class="lesson-figure"><img alt="Intune Home dashboard" loading="lazy" src="../../assets/images/intune/lesson-1-5-home-dashboard.svg"/><figcaption>Intune Home dashboard</figcaption></figure><div class="callout-neutral"><strong>Pro tip</strong>You can customize the dashboard by pinning the tiles most relevant to you. Ashpak pins Device Compliance and App Deployment Status because those are what Riya asks about every Monday morning.</div><h3>2. Devices: The Heart of Intune</h3><p class="">Path: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Devices</p><p class="">This is where Ashpak will spend most of his time. Let's open it up and explore every sub-section:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>Section</th><th>What lives inside</th></tr></thead><tbody><tr><td>Overview</td><td>Summary of all enrolled devices by platform; Windows | macOS | iOS | Android | Linux</td></tr><tr><td>All Devices</td><td>Full inventory list; every enrolled device. Click any device → see device name, serial number, OS version; last check-in time; assigned user; compliance status; installed apps; applied policies; hardware info (RAM, storage, model)</td></tr><tr><td>Monitor</td><td>Enrollment failures, non-compliant devices, devices with policy errors</td></tr><tr><td>Enrollment</td><td>All enrollment methods and settings: Windows Autopilot; Apple enrollment (ADE for macOS/iOS); Android enrollment profiles; Enrollment restrictions; BYOD settings</td></tr><tr><td>Configuration Profiles</td><td>All settings pushed to devices (Wi-Fi, VPN, email, restrictions, etc.)</td></tr><tr><td>Compliance Policies</td><td>Rules defining what "healthy" means per platform</td></tr><tr><td>Scripts &amp; Remediations</td><td>PowerShell scripts for Windows, Shell scripts for macOS</td></tr></tbody></table></div><p class="">The most important view inside Devices:</p><p class="">Path: Devices → All Devices → Click any device</p><p class="">This single device view is your troubleshooting home base. When a user calls helpdesk saying "my policies aren't applying"; this is the first place you look.</p><h3>3. Apps: Deploy and Protect</h3><p class="">Path: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Apps</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>Section</th><th>What lives inside</th></tr></thead><tbody><tr><td>Overview</td><td>Summary of app deployments across all platforms</td></tr><tr><td>All Apps</td><td>Every app you've added to Intune (whether deployed yet or not)</td></tr><tr><td>Monitor</td><td>App install status; which devices have which apps, and which failed</td></tr><tr><td>By Platform</td><td>Windows apps; macOS apps; iOS/iPadOS apps; Android apps</td></tr><tr><td>App Protection Policies</td><td>Rules protecting company data on personal devices; MAM lives here</td></tr><tr><td>App Configuration Policies</td><td>Pre-configure apps before users open them (e.g. pre-fill Outlook server settings)</td></tr><tr><td>Policy Sets</td><td>Bundle policies + apps into one deployable package</td></tr></tbody></table></div><p class="">Real-world use case for AshScript: When Ashpak needs to deploy Microsoft Teams to all 1,000 laptops silently (no user action needed), he goes to Apps → Windows Apps → Add → Microsoft 365 Apps . We'll do exactly this in Phase 6.</p><h3>4. Endpoint Security: Your Security Control Tower</h3><p class="">Path: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Endpoint Security</p><p class="">This section is specifically for security-focused policies; separate from general configuration:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>Section</th><th>What lives inside</th></tr></thead><tbody><tr><td>Overview</td><td>Security posture summary</td></tr><tr><td>Security Baselines</td><td>Microsoft's pre-built hardening templates (MDM Security Baseline, Defender Baseline, etc.)</td></tr><tr><td>Antivirus</td><td>Microsoft Defender Antivirus settings</td></tr><tr><td>Disk Encryption</td><td>BitLocker (Windows) + FileVault (macOS)</td></tr><tr><td>Firewall</td><td>Windows Firewall rules and settings</td></tr><tr><td>Endpoint Detection &amp; Response</td><td>Defender for Endpoint integration</td></tr><tr><td>Attack Surface Reduction</td><td>Block risky behaviors (macros, scripts, etc.)</td></tr><tr><td>Account Protection</td><td>Windows Hello, credential guard settings</td></tr></tbody></table></div><p class="">AshScript scenario: After a near-miss ransomware incident (coming in Phase 5), Riya asks Ashpak to ensure BitLocker is enabled on every Windows laptop. This is where he'll do it; Endpoint Security → Disk Encryption .</p><h3>5. Reports: Your Proof That Everything Is Working</h3><p class="">Path: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Reports</p><p class="">This section is often underused by beginners but is critically important for real-world operations:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>Report</th><th>What it shows</th></tr></thead><tbody><tr><td>Device Compliance</td><td>Which devices are compliant vs non-compliant per policy, per platform</td></tr><tr><td>Device Configuration</td><td>Which configuration profiles applied successfully and which failed</td></tr><tr><td>Endpoint Analytics</td><td>Requires Intune Plan 2 or Suite; Device performance, startup times, app reliability scores</td></tr><tr><td>Windows Updates</td><td>Patch status across all Windows devices</td></tr><tr><td>Feature Updates</td><td>Windows version upgrade status</td></tr><tr><td>App Install Status</td><td>Which apps installed successfully, which failed, and why</td></tr><tr><td>Log Analytics Workspace</td><td>Export logs to Azure Monitor for deep-dive analysis</td></tr></tbody></table></div><div class="callout-neutral"><strong>Pro tip</strong>Every Monday, Ashpak exports the Device Compliance report and sends it to Riya. It's a one-page snapshot showing AshScript's security health. Leadership loves data; give them data.</div><h3>6. Tenant Administration: Your Control Room</h3><p class="">Path: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Tenant Administration</p><p class="">This is the behind-the-scenes engine room; configuration that affects the entire tenant:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>Section</th><th>What lives inside</th></tr></thead><tbody><tr><td>Tenant Status</td><td>Your tenant health, MDM authority, license count, service incidents</td></tr><tr><td>Roles</td><td>RBAC lives here; Built-in and custom admin roles; Who can do what in the portal</td></tr><tr><td>Connectors &amp; Tokens</td><td>Integrate Intune with other services: Apple MDM Push Certificate (needed for macOS/iOS); Google Play (needed for Android); Defender for Endpoint; SCCM (for co-management); Certificate Authority</td></tr><tr><td>Customization</td><td>Company branding in the Company Portal app; Logo, colors, support contact info</td></tr><tr><td>Audit Logs</td><td>Every action taken in Intune, by whom, and when; your compliance paper trail</td></tr><tr><td>Diagnostic Settings</td><td>Stream logs to Azure Monitor or storage account</td></tr></tbody></table></div><p class="">The Connectors section is critical. Before Ashpak can manage a single macOS device, he must add an Apple MDM Push Certificate here. Before managing Android, he needs a Google Play connection. These are prerequisites we'll set up in Phase 3.</p><section class="lesson-section" id="section-the-top-10-things-ashpak-does-in-the-portal-every-week"><h2>The Top 10 Things Ashpak Does in the Portal Every Week</h2><p class="">This is your real-world cheat sheet; what an actual Intune admin does regularly:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>#</th><th>Task</th><th>Where in Portal</th></tr></thead><tbody><tr><td>1</td><td>Check device compliance overview</td><td>Home → Dashboard</td></tr><tr><td>2</td><td>Investigate a specific failing device</td><td>Devices → All Devices → Device name</td></tr><tr><td>3</td><td>Check why a policy didn't apply</td><td>Devices → Device → Configuration Profiles tab</td></tr><tr><td>4</td><td>Deploy a new app</td><td>Apps → All Apps → Add</td></tr><tr><td>5</td><td>Create a new compliance rule</td><td>Devices → Compliance Policies → Create</td></tr><tr><td>6</td><td>Check app install failures</td><td>Reports → App Install Status</td></tr><tr><td>7</td><td>Review audit logs (who changed what)</td><td>Tenant Admin → Audit Logs</td></tr><tr><td>8</td><td>Remotely wipe a lost device</td><td>Devices → All Devices → Device → Wipe</td></tr><tr><td>9</td><td>Add a new admin with limited access</td><td>Tenant Admin → Roles</td></tr><tr><td>10</td><td>Check enrollment failures</td><td>Devices → Monitor → Enrollment Failures</td></tr></tbody></table></div></section><section class="lesson-section" id="section-the-portals-you-ll-use-together"><h2>The Portals You'll Use Together</h2><p class="">As a real-world Intune admin, you'll work across four portals regularly. Here's your bookmark list:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th>Portal</th><th>URL</th></tr></thead><tbody><tr><td>Intune Admin Center</td><td><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></td></tr><tr><td>Entra ID Admin Center</td><td><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a></td></tr><tr><td>M365 Admin Center</td><td><a class="lesson-url" href="https://admin.microsoft.com" rel="noopener noreferrer" target="_blank">admin.microsoft.com</a></td></tr><tr><td>Azure Portal</td><td><a class="lesson-url" href="https://portal.azure.com" rel="noopener noreferrer" target="_blank">portal.azure.com</a></td></tr></tbody></table></div><p class="">When to use which:</p><div class="bullet-cluster"><ul class="bullet-group"><li><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Device management, app deployment, policies</li><li><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a> → Users, groups, Conditional Access, MFA</li><li><a class="lesson-url" href="https://admin.microsoft.com" rel="noopener noreferrer" target="_blank">admin.microsoft.com</a> → Licenses, billing, service health</li><li><a class="lesson-url" href="https://portal.azure.com" rel="noopener noreferrer" target="_blank">portal.azure.com</a> → Advanced logging, Log Analytics, Azure resources</li></ul></div></section><section class="lesson-section" id="section-one-more-navigation-trick-the-search-bar"><h2>One More Navigation Trick: The Search Bar</h2><p class="">Location: Top center of the Intune portal</p><p class="">This is the most underused feature by beginners and the most used feature by experts.</p><p class="">Instead of clicking through menus:</p><div class="bullet-cluster"><ul class="bullet-group"><li>Type "compliance" → jump straight to Compliance Policies</li><li>Type "BitLocker" → jump straight to disk encryption settings</li><li>Type "Autopilot" → jump straight to Windows Autopilot</li><li>Type a device name → find that specific device instantly</li></ul></div><p class="">Ashpak uses the search bar 50+ times a day. Train yourself to use it from day one; it will save you enormous amounts of time.</p></section><section class="lesson-section" id="section-phase-1-complete-what-ashscript-has-achieved"><h2>Phase 1 Complete: What AshScript Has Achieved</h2><p class="">Let's take a moment to appreciate how far we've come in Phase 1:</p><div class="phase-complete"><p>1. Understood what Intune is (MDM vs MAM)</p><p>2. Mapped the Microsoft ecosystem (Intune + Entra ID + M365 + Conditional Access)</p><p>3. Made the right licensing decision (M365 E3)</p><p>4. Created and configured the AshScript tenant</p><p>5. Know the Intune portal inside and out</p><p><strong>Foundation: SOLID</strong></p><p><strong>Ready for Phase 2: YES</strong></p></div></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../1-4-setting-up-the-ashscript-tenant/"><span class="story-path-number">1.4</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Setting Up the AshScript Tenant</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">1.5</span><span class="story-path-label">YOU ARE HERE</span><strong>Navigating the Intune Portal Like a Pro</strong><small>The Foundation</small></div><a class="story-path-step story-path-next" href="../2-1-entra-id-fundamentals-tenants-users-groups/"><span class="story-path-number">2.1</span><span class="story-path-label">NEXT CHAPTER</span><strong>Entra ID Fundamentals: Tenants, Users &amp; Groups</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-1">Learning Modules</a></nav></article>
-</div>
-</section>
-</main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <meta
+      content="Navigating the Intune Portal Like a Pro · ashscript Intune tutorials"
+      name="description"
+    />
+    <meta content="#030503" name="theme-color" />
+    <link
+      href="../../assets/images/ashscript-favicon.png?v=3"
+      rel="icon"
+      sizes="64x64"
+      type="image/png"
+    />
+    <link
+      href="../../assets/images/ashscript-favicon.ico?v=3"
+      rel="shortcut icon"
+    />
+    <link
+      href="../../assets/images/ashscript-favicon.png?v=3"
+      rel="apple-touch-icon"
+    />
+    <title>
+      Lesson 1.5: Navigating the Intune Portal Like a Pro · ashscript
+    </title>
+    <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet" />
+  </head>
+  <body class="phase1-lesson" style="--lesson-accent:#ff4d4f">
+    <header class="site-header">
+      <div class="container nav">
+        <a aria-label="ashscript home" class="brand" href="../../"
+          ><span class="brand-mark"></span
+          ><span
+            >ashscript<span style="color:var(--lime)">.</span
+            ><small
+              >Application Packaging &amp; Endpoint Automation</small
+            ></span
+          ></a
+        >
+        <button
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          class="menu-toggle"
+          data-menu-toggle=""
+        >
+          MENU
+        </button>
+        <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+          <a href="../../">Scripts</a>
+          <details class="nav-dropdown" data-nav-dropdown="">
+            <summary>
+              Intune<span aria-hidden="true" class="nav-caret"></span>
+            </summary>
+            <div class="nav-submenu">
+              <a aria-current="page" href="../../intune/"
+                ><span class="submenu-kicker">LEARN</span
+                ><strong>Intune tutorials</strong></a
+              >
+            </div>
+          </details>
+          <a href="../../who-am-i/">Who Am I</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero intune-lesson-hero">
+        <div class="container">
+          <div class="breadcrumb">
+            <a href="../../">Home</a>/<a href="../../intune/"
+              >Intune Tutorials</a
+            >/<span>Phase 1</span>/<span>1.5</span>
+          </div>
+          <div class="lesson-hero-kicker">
+            <span class="lesson-hero-dot"></span>PHASE 1; THE FOUNDATION
+          </div>
+          <h1>Navigating the Intune Portal Like a Pro</h1>
+          <p class="lesson-subtitle">
+            Ashpak's first full day inside the portal
+          </p>
+        </div>
+      </section>
+      <section class="section lesson-reader">
+        <div class="container lesson-reader-layout">
+          <aside class="lesson-sidebar">
+            <div class="toc-label">COURSE NAVIGATION</div>
+            <a class="lesson-phase-link" href="../#phase-1"
+              ><span aria-hidden="true" class="lesson-phase-dot"></span
+              ><span class="lesson-phase-copy"
+                ><small>PHASE 1</small
+                ><strong>Phase 1 · The Foundation</strong></span
+              ></a
+            >
+            <div class="toc-label" style="margin-top:8px">CURRENT LESSON</div>
+            <div class="lesson-index">
+              1.5 Navigating the Intune Portal Like a Pro
+            </div>
+            <a class="phase-back learning-modules-btn" href="../#phase-1"
+              >Learning Modules</a
+            >
+            <div class="toc-label" style="margin-top:6px">ON THIS LESSON</div>
+            <nav aria-label="On this lesson" class="lesson-toc">
+              <a href="#section-the-scene"
+                ><span>01</span><strong>The Scene</strong></a
+              ><a href="#section-the-golden-rule-of-the-intune-portal"
+                ><span>02</span
+                ><strong>The Golden Rule of the Intune Portal</strong></a
+              ><a href="#section-the-portal-layout-full-map"
+                ><span>03</span><strong>The Portal Layout; Full Map</strong></a
+              ><a href="#section-deep-dive-every-major-section-explained"
+                ><span>04</span
+                ><strong>Deep Dive; Every Major Section Explained</strong></a
+              ><a
+                href="#section-the-top-10-things-ashpak-does-in-the-portal-every-week"
+                ><span>05</span
+                ><strong
+                  >The Top 10 Things Ashpak Does in the Portal Every
+                  Week</strong
+                ></a
+              ><a href="#section-the-portals-you-ll-use-together"
+                ><span>06</span
+                ><strong>The Portals You'll Use Together</strong></a
+              ><a href="#section-one-more-navigation-trick-the-search-bar"
+                ><span>07</span
+                ><strong>One More Navigation Trick; The Search Bar</strong></a
+              ><a href="#section-phase-1-complete-what-ashscript-has-achieved"
+                ><span>08</span
+                ><strong
+                  >Phase 1 Complete; What AshScript Has Achieved</strong
+                ></a
+              >
+            </nav>
+          </aside>
+          <article
+            aria-label="Lesson 1.5; Navigating the Intune Portal Like a Pro"
+            class="lesson-content"
+          >
+            <div class="lesson-toolbar">
+              <a class="btn btn-ghost learning-modules-btn" href="../#phase-1"
+                >Learning Modules</a
+              >
+            </div>
+            <section class="lesson-section" id="section-the-scene">
+              <h2>The Scene</h2>
+              <p class="">
+                It's Ashpak's first morning with a live tenant. Licenses are
+                assigned, the domain is verified, and the MDM authority is set.
+                He opens his browser, navigates to
+                <a
+                  class="lesson-url"
+                  href="https://intune.microsoft.com"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  >intune.microsoft.com</a
+                >
+                , and logs in with his ashpak.it@ashscript.com account.
+              </p>
+              <p class="">The dashboard loads.</p>
+              <p class="">
+                For a moment, he just stares at it. There are menus everywhere.
+                Tiles. Numbers. Links. It's a lot to take in.
+              </p>
+              <p class="">His colleague Priya leans over:</p>
+              <div class="quote">
+                "Don't just click randomly. Learn the layout first. The portal
+                is logically organized; once you understand the structure,
+                you'll always know exactly where to go."
+              </div>
+              <p class="">That's exactly what we're going to do right now.</p>
+            </section>
+            <section
+              class="lesson-section"
+              id="section-the-golden-rule-of-the-intune-portal"
+            >
+              <h2>The Golden Rule of the Intune Portal</h2>
+              <div class="callout-accent">
+                Everything in Intune flows through this sequence: WHO → WHAT →
+                HOW → CHECK WHO gets managed? (Users &amp; Groups; from Entra
+                ID) WHAT gets managed? (Devices &amp; Apps) HOW do we manage it?
+                (Policies &amp; Profiles) CHECK; is it working? (Reports &amp;
+                Monitoring)
+              </div>
+              <p class="">
+                Every single menu item in the portal maps to one of these four
+                questions. Keep this in mind as we explore.
+              </p>
+            </section>
+            <section
+              class="lesson-section"
+              id="section-the-portal-layout-full-map"
+            >
+              <h2>The Portal Layout: Full Map</h2>
+              <p class="">
+                Here's the complete left navigation panel of the Intune Admin
+                Center, annotated for AshScript:
+              </p>
+              <figure class="lesson-figure">
+                <img
+                  alt="Portal Layout; Full Map"
+                  loading="lazy"
+                  src="../../assets/images/intune/lesson-1-5-portal-map.svg"
+                />
+                <figcaption>Portal Layout; Full Map</figcaption>
+              </figure>
+            </section>
+            <section
+              class="lesson-section"
+              id="section-deep-dive-every-major-section-explained"
+            >
+              <h2>Deep Dive: Every Major Section Explained</h2>
+              <p class="">
+                Let's walk through each section the way Ashpak would on his
+                first day; not just what it is, but what real tasks live inside
+                it.
+              </p>
+            </section>
+            <h3>1. Home &amp; Dashboard</h3>
+            <p class="">
+              URL:
+              <a
+                class="lesson-url"
+                href="https://intune.microsoft.com"
+                rel="noopener noreferrer"
+                target="_blank"
+                >intune.microsoft.com</a
+              >
+              (landing page)
+            </p>
+            <p class="">
+              This is your daily health check view. The moment you log in, you
+              should be scanning this page like a pilot checking instruments
+              before takeoff.
+            </p>
+            <p class="">What you'll see:</p>
+            <figure class="lesson-figure">
+              <img
+                alt="Intune Home dashboard"
+                loading="lazy"
+                src="../../assets/images/intune/lesson-1-5-home-dashboard.svg"
+              />
+              <figcaption>Intune Home dashboard</figcaption>
+            </figure>
+            <div class="callout-neutral">
+              <strong>Pro tip</strong>You can customize the dashboard by pinning
+              the tiles most relevant to you. Ashpak pins Device Compliance and
+              App Deployment Status because those are what Riya asks about every
+              Monday morning.
+            </div>
+            <h3>2. Devices: The Heart of Intune</h3>
+            <p class="">
+              Path:
+              <a
+                class="lesson-url"
+                href="https://intune.microsoft.com"
+                rel="noopener noreferrer"
+                target="_blank"
+                >intune.microsoft.com</a
+              >
+              → Devices
+            </p>
+            <p class="">
+              This is where Ashpak will spend most of his time. Let's open it up
+              and explore every sub-section:
+            </p>
+            <div class="lesson-table-wrap">
+              <table class="lesson-table">
+                <thead>
+                  <tr>
+                    <th>Section</th>
+                    <th>What lives inside</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Overview</td>
+                    <td>
+                      Summary of all enrolled devices by platform; Windows |
+                      macOS | iOS | Android | Linux
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>All Devices</td>
+                    <td>
+                      Full inventory list; every enrolled device. Click any
+                      device → see device name, serial number, OS version; last
+                      check-in time; assigned user; compliance status; installed
+                      apps; applied policies; hardware info (RAM, storage,
+                      model)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Monitor</td>
+                    <td>
+                      Enrollment failures, non-compliant devices, devices with
+                      policy errors
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Enrollment</td>
+                    <td>
+                      All enrollment methods and settings: Windows Autopilot;
+                      Apple enrollment (ADE for macOS/iOS); Android enrollment
+                      profiles; Enrollment restrictions; BYOD settings
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Configuration Profiles</td>
+                    <td>
+                      All settings pushed to devices (Wi-Fi, VPN, email,
+                      restrictions, etc.)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Compliance Policies</td>
+                    <td>Rules defining what "healthy" means per platform</td>
+                  </tr>
+                  <tr>
+                    <td>Scripts &amp; Remediations</td>
+                    <td>
+                      PowerShell scripts for Windows, Shell scripts for macOS
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="">The most important view inside Devices:</p>
+            <p class="">Path: Devices → All Devices → Click any device</p>
+            <p class="">
+              This single device view is your troubleshooting home base. When a
+              user calls helpdesk saying "my policies aren't applying"; this is
+              the first place you look.
+            </p>
+            <h3>3. Apps: Deploy and Protect</h3>
+            <p class="">
+              Path:
+              <a
+                class="lesson-url"
+                href="https://intune.microsoft.com"
+                rel="noopener noreferrer"
+                target="_blank"
+                >intune.microsoft.com</a
+              >
+              → Apps
+            </p>
+            <div class="lesson-table-wrap">
+              <table class="lesson-table">
+                <thead>
+                  <tr>
+                    <th>Section</th>
+                    <th>What lives inside</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Overview</td>
+                    <td>Summary of app deployments across all platforms</td>
+                  </tr>
+                  <tr>
+                    <td>All Apps</td>
+                    <td>
+                      Every app you've added to Intune (whether deployed yet or
+                      not)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Monitor</td>
+                    <td>
+                      App install status; which devices have which apps, and
+                      which failed
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>By Platform</td>
+                    <td>
+                      Windows apps; macOS apps; iOS/iPadOS apps; Android apps
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>App Protection Policies</td>
+                    <td>
+                      Rules protecting company data on personal devices; MAM
+                      lives here
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>App Configuration Policies</td>
+                    <td>
+                      Pre-configure apps before users open them (e.g. pre-fill
+                      Outlook server settings)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Policy Sets</td>
+                    <td>Bundle policies + apps into one deployable package</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="">
+              Real-world use case for AshScript: When Ashpak needs to deploy
+              Microsoft Teams to all 1,000 laptops silently (no user action
+              needed), he goes to Apps → Windows Apps → Add → Microsoft 365 Apps
+              . We'll do exactly this in Phase 6.
+            </p>
+            <h3>4. Endpoint Security: Your Security Control Tower</h3>
+            <p class="">
+              Path:
+              <a
+                class="lesson-url"
+                href="https://intune.microsoft.com"
+                rel="noopener noreferrer"
+                target="_blank"
+                >intune.microsoft.com</a
+              >
+              → Endpoint Security
+            </p>
+            <p class="">
+              This section is specifically for security-focused policies;
+              separate from general configuration:
+            </p>
+            <div class="lesson-table-wrap">
+              <table class="lesson-table">
+                <thead>
+                  <tr>
+                    <th>Section</th>
+                    <th>What lives inside</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Overview</td>
+                    <td>Security posture summary</td>
+                  </tr>
+                  <tr>
+                    <td>Security Baselines</td>
+                    <td>
+                      Microsoft's pre-built hardening templates (MDM Security
+                      Baseline, Defender Baseline, etc.)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Antivirus</td>
+                    <td>Microsoft Defender Antivirus settings</td>
+                  </tr>
+                  <tr>
+                    <td>Disk Encryption</td>
+                    <td>BitLocker (Windows) + FileVault (macOS)</td>
+                  </tr>
+                  <tr>
+                    <td>Firewall</td>
+                    <td>Windows Firewall rules and settings</td>
+                  </tr>
+                  <tr>
+                    <td>Endpoint Detection &amp; Response</td>
+                    <td>Defender for Endpoint integration</td>
+                  </tr>
+                  <tr>
+                    <td>Attack Surface Reduction</td>
+                    <td>Block risky behaviors (macros, scripts, etc.)</td>
+                  </tr>
+                  <tr>
+                    <td>Account Protection</td>
+                    <td>Windows Hello, credential guard settings</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="">
+              AshScript scenario: After a near-miss ransomware incident (coming
+              in Phase 5), Riya asks Ashpak to ensure BitLocker is enabled on
+              every Windows laptop. This is where he'll do it; Endpoint Security
+              → Disk Encryption .
+            </p>
+            <h3>5. Reports: Your Proof That Everything Is Working</h3>
+            <p class="">
+              Path:
+              <a
+                class="lesson-url"
+                href="https://intune.microsoft.com"
+                rel="noopener noreferrer"
+                target="_blank"
+                >intune.microsoft.com</a
+              >
+              → Reports
+            </p>
+            <p class="">
+              This section is often underused by beginners but is critically
+              important for real-world operations:
+            </p>
+            <div class="lesson-table-wrap">
+              <table class="lesson-table">
+                <thead>
+                  <tr>
+                    <th>Report</th>
+                    <th>What it shows</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Device Compliance</td>
+                    <td>
+                      Which devices are compliant vs non-compliant per policy,
+                      per platform
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Device Configuration</td>
+                    <td>
+                      Which configuration profiles applied successfully and
+                      which failed
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Endpoint Analytics</td>
+                    <td>
+                      Requires Intune Plan 2 or Suite; Device performance,
+                      startup times, app reliability scores
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Windows Updates</td>
+                    <td>Patch status across all Windows devices</td>
+                  </tr>
+                  <tr>
+                    <td>Feature Updates</td>
+                    <td>Windows version upgrade status</td>
+                  </tr>
+                  <tr>
+                    <td>App Install Status</td>
+                    <td>
+                      Which apps installed successfully, which failed, and why
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Log Analytics Workspace</td>
+                    <td>Export logs to Azure Monitor for deep-dive analysis</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout-neutral">
+              <strong>Pro tip</strong>Every Monday, Ashpak exports the Device
+              Compliance report and sends it to Riya. It's a one-page snapshot
+              showing AshScript's security health. Leadership loves data; give
+              them data.
+            </div>
+            <h3>6. Tenant Administration: Your Control Room</h3>
+            <p class="">
+              Path:
+              <a
+                class="lesson-url"
+                href="https://intune.microsoft.com"
+                rel="noopener noreferrer"
+                target="_blank"
+                >intune.microsoft.com</a
+              >
+              → Tenant Administration
+            </p>
+            <p class="">
+              This is the behind-the-scenes engine room; configuration that
+              affects the entire tenant:
+            </p>
+            <div class="lesson-table-wrap">
+              <table class="lesson-table">
+                <thead>
+                  <tr>
+                    <th>Section</th>
+                    <th>What lives inside</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tenant Status</td>
+                    <td>
+                      Your tenant health, MDM authority, license count, service
+                      incidents
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Roles</td>
+                    <td>
+                      RBAC lives here; Built-in and custom admin roles; Who can
+                      do what in the portal
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Connectors &amp; Tokens</td>
+                    <td>
+                      Integrate Intune with other services: Apple MDM Push
+                      Certificate (needed for macOS/iOS); Google Play (needed
+                      for Android); Defender for Endpoint; SCCM (for
+                      co-management); Certificate Authority
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Customization</td>
+                    <td>
+                      Company branding in the Company Portal app; Logo, colors,
+                      support contact info
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Audit Logs</td>
+                    <td>
+                      Every action taken in Intune, by whom, and when; your
+                      compliance paper trail
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Diagnostic Settings</td>
+                    <td>Stream logs to Azure Monitor or storage account</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="">
+              The Connectors section is critical. Before Ashpak can manage a
+              single macOS device, he must add an Apple MDM Push Certificate
+              here. Before managing Android, he needs a Google Play connection.
+              These are prerequisites we'll set up in Phase 3.
+            </p>
+            <section
+              class="lesson-section"
+              id="section-the-top-10-things-ashpak-does-in-the-portal-every-week"
+            >
+              <h2>The Top 10 Things Ashpak Does in the Portal Every Week</h2>
+              <p class="">
+                This is your real-world cheat sheet; what an actual Intune admin
+                does regularly:
+              </p>
+              <div class="lesson-table-wrap">
+                <table class="lesson-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Task</th>
+                      <th>Where in Portal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Check device compliance overview</td>
+                      <td>Home → Dashboard</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Investigate a specific failing device</td>
+                      <td>Devices → All Devices → Device name</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Check why a policy didn't apply</td>
+                      <td>Devices → Device → Configuration Profiles tab</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Deploy a new app</td>
+                      <td>Apps → All Apps → Add</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Create a new compliance rule</td>
+                      <td>Devices → Compliance Policies → Create</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>Check app install failures</td>
+                      <td>Reports → App Install Status</td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>Review audit logs (who changed what)</td>
+                      <td>Tenant Admin → Audit Logs</td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td>Remotely wipe a lost device</td>
+                      <td>Devices → All Devices → Device → Wipe</td>
+                    </tr>
+                    <tr>
+                      <td>9</td>
+                      <td>Add a new admin with limited access</td>
+                      <td>Tenant Admin → Roles</td>
+                    </tr>
+                    <tr>
+                      <td>10</td>
+                      <td>Check enrollment failures</td>
+                      <td>Devices → Monitor → Enrollment Failures</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section
+              class="lesson-section"
+              id="section-the-portals-you-ll-use-together"
+            >
+              <h2>The Portals You'll Use Together</h2>
+              <p class="">
+                As a real-world Intune admin, you'll work across four portals
+                regularly. Here's your bookmark list:
+              </p>
+              <div class="lesson-table-wrap">
+                <table class="lesson-table">
+                  <thead>
+                    <tr>
+                      <th>Portal</th>
+                      <th>URL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Intune Admin Center</td>
+                      <td>
+                        <a
+                          class="lesson-url"
+                          href="https://intune.microsoft.com"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          >intune.microsoft.com</a
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Entra ID Admin Center</td>
+                      <td>
+                        <a
+                          class="lesson-url"
+                          href="https://entra.microsoft.com"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          >entra.microsoft.com</a
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>M365 Admin Center</td>
+                      <td>
+                        <a
+                          class="lesson-url"
+                          href="https://admin.microsoft.com"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          >admin.microsoft.com</a
+                        >
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Azure Portal</td>
+                      <td>
+                        <a
+                          class="lesson-url"
+                          href="https://portal.azure.com"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                          >portal.azure.com</a
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="">When to use which:</p>
+              <div class="bullet-cluster">
+                <ul class="bullet-group">
+                  <li>
+                    <a
+                      class="lesson-url"
+                      href="https://intune.microsoft.com"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      >intune.microsoft.com</a
+                    >
+                    → Device management, app deployment, policies
+                  </li>
+                  <li>
+                    <a
+                      class="lesson-url"
+                      href="https://entra.microsoft.com"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      >entra.microsoft.com</a
+                    >
+                    → Users, groups, Conditional Access, MFA
+                  </li>
+                  <li>
+                    <a
+                      class="lesson-url"
+                      href="https://admin.microsoft.com"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      >admin.microsoft.com</a
+                    >
+                    → Licenses, billing, service health
+                  </li>
+                  <li>
+                    <a
+                      class="lesson-url"
+                      href="https://portal.azure.com"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      >portal.azure.com</a
+                    >
+                    → Advanced logging, Log Analytics, Azure resources
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section
+              class="lesson-section"
+              id="section-one-more-navigation-trick-the-search-bar"
+            >
+              <h2>One More Navigation Trick: The Search Bar</h2>
+              <p class="">Location: Top center of the Intune portal</p>
+              <p class="">
+                This is the most underused feature by beginners and the most
+                used feature by experts.
+              </p>
+              <p class="">Instead of clicking through menus:</p>
+              <div class="bullet-cluster">
+                <ul class="bullet-group">
+                  <li>
+                    Type "compliance" → jump straight to Compliance Policies
+                  </li>
+                  <li>
+                    Type "BitLocker" → jump straight to disk encryption settings
+                  </li>
+                  <li>Type "Autopilot" → jump straight to Windows Autopilot</li>
+                  <li>
+                    Type a device name → find that specific device instantly
+                  </li>
+                </ul>
+              </div>
+              <p class="">
+                Ashpak uses the search bar 50+ times a day. Train yourself to
+                use it from day one; it will save you enormous amounts of time.
+              </p>
+            </section>
+            <section
+              class="lesson-section"
+              id="section-phase-1-complete-what-ashscript-has-achieved"
+            >
+              <h2>Phase 1 Complete: What AshScript Has Achieved</h2>
+              <p class="">
+                Let's take a moment to appreciate how far we've come in Phase 1:
+              </p>
+              <div class="phase-complete">
+                <p>1. Understood what Intune is (MDM vs MAM)</p>
+                <p>
+                  2. Mapped the Microsoft ecosystem (Intune + Entra ID + M365 +
+                  Conditional Access)
+                </p>
+                <p>3. Made the right licensing decision (M365 E3)</p>
+                <p>4. Created and configured the AshScript tenant</p>
+                <p>5. Know the Intune portal inside and out</p>
+                <p><strong>Foundation: SOLID</strong></p>
+                <p><strong>Ready for Phase 2: YES</strong></p>
+              </div>
+            </section>
+            <nav aria-label="Lesson story navigation" class="story-path">
+              <div class="story-path-head">
+                <span class="story-path-kicker">STORY PATH</span
+                ><strong class="story-path-title"
+                  >Continue Ashpak's Intune journey</strong
+                >
+              </div>
+              <div class="story-path-rail">
+                <a
+                  class="story-path-step story-path-prev"
+                  href="../1-4-setting-up-the-ashscript-tenant/"
+                  ><span class="story-path-number">1.4</span
+                  ><span class="story-path-label">PREVIOUS CHAPTER</span
+                  ><strong>Setting Up the AshScript Tenant</strong
+                  ><small>Revisit the story</small></a
+                >
+                <div
+                  aria-current="page"
+                  class="story-path-step story-path-current"
+                >
+                  <span class="story-path-number">1.5</span
+                  ><span class="story-path-label">YOU ARE HERE</span
+                  ><strong>Navigating the Intune Portal Like a Pro</strong
+                  ><small>The Foundation</small>
+                </div>
+                <a
+                  class="story-path-step story-path-next"
+                  href="../2-1-entra-id-fundamentals-tenants-users-groups/"
+                  ><span class="story-path-number">2.1</span
+                  ><span class="story-path-label">NEXT CHAPTER</span
+                  ><strong
+                    >Entra ID Fundamentals: Tenants, Users &amp; Groups</strong
+                  ><small>Continue the story</small></a
+                >
+              </div>
+              <a class="story-path-modules" href="../#phase-1"
+                >Learning Modules</a
+              >
+            </nav>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="container footer-grid">
+        <small
+          ><span data-year=""></span>ashscript. Static GitHub Pages site.</small
+        >
+        <div>
+          <a href="../../">Scripts</a
+          ><a href="../../intune/">Intune Tutorials</a
+          ><a href="../../who-am-i/">Who Am I</a>
+        </div>
+      </div>
+    </footer>
+    <script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
+  </body>
 </html>
