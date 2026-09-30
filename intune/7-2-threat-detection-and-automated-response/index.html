@@ -1,11 +1,649 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Threat Detection and Automated Response · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/><title>Lesson 7.2: Threat Detection and Automated Response · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase7-lesson" style="--lesson-accent:#b9c2b7"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 7</span>/<span>7.2</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 7; SECURITY &amp; ENDPOINT PROTECTION</div><h1>Threat Detection and Automated Response</h1><p class="lesson-subtitle">Ashpak configures MDE to detect, investigate, and respond automatically</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-7"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 7</small><strong>Phase 7; Security &amp; Endpoint Protection</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">7.2 Threat Detection and Automated Response</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-7">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-alert-1-ransomware-response-immediate-actions"><span>02</span><strong>Alert 1; Ransomware Response Immediate Actions:</strong></a><a href="#section-automated-investigation-queue"><span>03</span><strong>Automated Investigation Queue</strong></a><a href="#section-current-state-after-lesson-72"><span>04</span><strong>Current State After Lesson 7.2</strong></a><a href="#section-lesson-73-security-dashboards-and-threat-hunting-ashpak-learns-to-hunt"><span>05</span><strong>Lesson 7.3; Security Dashboards and Threat Hunting; Ashpak learns to hunt threats before they find him ;</strong></a></nav></aside>
-<article aria-label="Lesson 7.2; Threat Detection and Automated Response" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-7">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Now continuing directly to Lesson 7.2...</p><p>Lesson 7.2; Threat Detection and Automated Response; Ashpak configures MDE to detect, investigate, and respond automatically ;</p><p>The Scene Tuesday morning. 831 devices are onboarded. The MDE dashboard shows 2 high-severity alerts Ashpak hasn't investigated yet. He opens them: Alert 1:</p><p>1 HIGH: Ransomware-linked behaviour detected 2 Device: ASHPC-SALES-19 3 User: sales19@ashscript.com 4 Time: Yesterday 23:41 5 Detail: Rapid file encryption pattern detected 6 in Documents folder. 847 files renamed 7 with .crypted extension in 4 minutes.</p><p>Alert 2:</p><p>1 HIGH: Credential dumping attempt 2 Device: ASHPC-DEV-07 3 User: dev07@ashscript.com 4 Time: Today 08:12 5 Detail: Process attempted to read LSASS memory. 6 Process: suspicious_tool.exe 7 Blocked by Credential Guard</p><p>Two high-severity threats. On real employee devices. Right now. Ashpak takes a breath. He was going to spend today configuring automated response policies. Instead, he's going to do both; investigate these threats AND configure automation so future threats handle themselves.</p></section><section class="lesson-section" id="section-alert-1-ransomware-response-immediate-actions"><h2>Alert 1: Ransomware Response Immediate Actions:</h2><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Incidents &amp; alerts → Alerts 3 → HIGH: Ransomware-linked behaviour 4 → ASHPC-SALES-19 5 6 STEP 1: Isolate immediately 7 Device actions → Isolate device 8 (Stops any potential spread to network) 9 10 STEP 2: Review alert details 11 Files encrypted: 847 files in Documents 12 Process responsible: explorer.exe 13 (unusual; Explorer shouldn't mass-rename) 14 └── Child: crypted_installer.exe 15 └── Launched by: user double-clicked 16 From: Downloads folder 17 File: Invoice_Dec2024.exe 18 [FAKE INVOICE; MALWARE] 19 20 STEP 3: Check for lateral movement 21 Advanced Hunting query: 22 DeviceNetworkEvents 23 | where DeviceName == "ASHPC-SALES-19" 24 | where Timestamp &gt; ago(24h) 25 | where RemotePort in (445, 139, 3389) 26 (SMB/RDP connections; lateral movement 27 indicators) 28 29 Result: 0 events 30 (No lateral movement detected) 31 32 STEP 4: Check other devices 33 Did anyone else get the same email? 34 Advanced Hunting: 35 EmailEvents 36 | where Subject contains "Invoice_Dec" 37 | where Timestamp &gt; ago(24h) 38 39 Result: 3 other recipients ← warn them</p><p>Automated Investigation Result:</p><p>1 MDE AUTOMATED INVESTIGATION (triggered automatically): 2 Duration: 38 minutes 3 4 Findings: 5 Malicious files identified: 6 Invoice_Dec2024.exe Quarantined 7 crypted_installer.exe Quarantined 8 C:\Windows\Temp\key.dat Quarantined 9 10 Encrypted files: 11 847 files with .crypted extension 12 Recovery: Shadow copies available 13 (VSS not deleted; ransomware 14 didn't complete full attack chain) 15 16 Lateral movement: None 17 Data exfiltration: None detected 18 19 Recommended action: 20 Restore encrypted files from VSS 21 Remove device from isolation after 22 file restoration</p><p>Configuring Automated Investigation and Response (AIR) Ashpak configures MDE to automatically investigate and remediate threats without waiting for manual approval:</p><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Settings → Endpoints 3 └── Advanced features 4 → Automated investigation: On 5 → Automatically resolve alerts: On 6 7 └── Auto remediation level 8 Device groups: All devices 9 Automation level: 10 ● Full; remediate threats 11 automatically 12 (Trusted; MDE investigates 13 AND remediates without 14 manual approval)</p><p>Device group automation levels:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="0"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">AUTOMATION LEVELS BY DEVICE GROUP</div></div><div class="diagram-group"><div class="diagram-group-title">All devices (default):</div><div class="diagram-items"><div class="diagram-item">Full automation</div><div class="diagram-item">(Investigate + remediate automatically)</div><div class="diagram-item">High-value targets (Finance, Exec, Dev):</div><div class="diagram-item">Semi; require approval for remediation</div><div class="diagram-item">(Investigate automatically but wait</div><div class="diagram-item">for IT approval before remediating</div><div class="diagram-item">; extra caution on sensitive devices)</div><div class="diagram-item">Servers (if any):</div><div class="diagram-item">No automated remediation</div><div class="diagram-item">(Manual review only; servers are</div><div class="diagram-item">critical infrastructure)</div></div></div></div></figure><p>Attack Surface Reduction (ASR) Rules; Advanced Ashpak revisits ASR from Phase 4 (Lesson 4.4), but now configures the remaining rules via MDE's Security Settings Management for maximum coverage:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">RULE</th><th scope="col">MODE</th></tr></thead><tbody><tr><td>Block ransomware behaviours<br/>(new rule in Defender)</td><td>Block<br/>(detects mass file<br/>rename patterns)</td></tr><tr><td>Use advanced protection against<br/>ransomware</td><td>Block</td></tr><tr><td>Block executable files from<br/>running unless they meet a<br/>prevalence, age, or trusted<br/>list criteria</td><td>Block<br/>(LOLBins blocked ;<br/>new executables from<br/>internet blocked fo<br/>24h minimum)</td></tr><tr><td>Block persistence through<br/>WMI event subscription</td><td>Block<br/>(WMI persistence<br/>technique blocked)</td></tr></tbody></table></div><p>"Block executable files unless they meet prevalence/age criteria" is one of the most powerful ASR rules. When enabled, any executable that: Has been downloaded from the internet recently (&lt; 24 hours) Is rarely seen across Microsoft's global telemetry Is not digitally signed by a trusted publisher</p><p>...is blocked from running. The Invoice_Dec2024.exe that triggered Alert 1 would have been blocked by this rule before it ever executed.</p><p>Configuring Alert Notifications Ashpak needs to be notified immediately when high-severity alerts occur; not discover them the morning after:</p><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Settings → Microsoft Defender XDR 3 └── Email notifications 4 → + Add notification rule 5 6 Name: AshScript-HighSeverity-Alerts 7 8 Alert severity: 9 High 10 Informational (for specific alert types) 11 12 Alert categories: 13 Ransomware 14 Credential theft 15 Network anomaly 16 Suspicious behaviour 17 18 Notification recipients: 19 ashpak.it@ashscript.com 20 security@ashscript.com 21 22 → Save</p><p>Automated Response; Live Response For the second alert (credential dumping), Ashpak uses Live Response; a remote shell into the device:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="1"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Assets</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Devices</span></div><div class="diagram-item">→ ASHPC-DEV-07</div><div class="diagram-item">→ Device actions</div><div class="diagram-item">→ Initiate live response session</div><div class="diagram-item">LIVE RESPONSE CONSOLE OPENS:</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">&gt; dir C:\Users\dev07\Downloads</div><div class="diagram-item">suspicious_tool.exe (347 KB); FOUND</div><div class="diagram-item">Downloaded: 08:09 today (3 minutes before alert)</div><div class="diagram-item">&gt; processes</div><div class="diagram-item">Name PID Status</div><div class="diagram-item">suspicious_tool.exe 7823 Terminated (by Defender)</div><div class="diagram-item">&gt; getfile C:\Users\dev07\Downloads\suspicious_tool.exe</div><div class="diagram-item">File downloaded to MDE portal for analysis</div><div class="diagram-item">&gt; remediate suspicious_tool.exe</div><div class="diagram-item">File quarantined</div><div class="diagram-item">&gt; scheduledtasks</div><div class="diagram-item">No suspicious scheduled tasks found</div><div class="diagram-item">&gt; run AntivirusScan</div><div class="diagram-item">Scan started... 4 minutes...</div><div class="diagram-item">No additional threats found</div><div class="diagram-item">&gt; exit</div></div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Alert resolved. No remediation needed beyond</div><div class="diagram-item">quarantine. Device not isolated (Credential Guard</div><div class="diagram-item">blocked the attack before any credentials extracted).</div></div></div></div></figure><p>Custom Detection Rules Ashpak creates custom detection rules that trigger alerts based on specific behaviour patterns at AshScript:</p><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Hunting → Custom detections 3 → + Create detection rule 4 5 Name: AshScript-LargeEmailExfil-Detection 6 Description: Alert when user forwards 10+ emails 7 to external address within 1 hour 8 (insider threat / account compromise)</p><p>KQL Query:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">kql</div></div></figure><p>1 EmailEvents 2 | where Timestamp &gt; ago(1h) 3 | where DeliveryAction == "Delivered" 4 | where RecipientEmailAddress !endswith "@ashscript.com" 5 | where EmailDirection == "Outbound" 6 | summarize 7 EmailCount = count(), 8 Recipients = make_set(RecipientEmailAddress) 9 by SenderFromAddress, bin(Timestamp, 1h) 10 | where EmailCount &gt;= 10</p><p>11 | project 12 Timestamp, 13 SenderFromAddress, 14 EmailCount, 15 Recipients</p><p>1 Alert settings: 2 Severity: High 3 Category: Exfiltration 4 Run frequency: Every 1 hour 5 Alert title: Potential mass email exfiltration 6 7 → Save</p><p>Custom detections run as KQL queries on a schedule. They extend MDE's built-in detections with organisation-specific logic. Ashpak builds several: Mass file access in SharePoint (&gt; 500 files in 10 min) Login from country not in approved travel list USB device connected to Finance/Legal laptops PowerShell with encoded commands executed New local admin account created</p></section><section class="lesson-section" id="section-automated-investigation-queue"><h2>Automated Investigation Queue</h2><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Actions &amp; submissions 3 → Action center 4 5 PENDING ACTIONS (requires approval): 6 Device: ASHPC-DEV-07 7 Action: Quarantine suspicious_tool.exe 8 Source: Automated investigation 9 → Approve 10 11 COMPLETED ACTIONS: 12 Device: ASHPC-SALES-19 13 Action: Quarantine Invoice_Dec2024.exe</p><p>14 Status: Completed 15 Action: Quarantine crypted_installer.exe 16 Status: Completed 17 Action: Restore files from VSS 18 Status: Completed; 847 files restored</p></section><section class="lesson-section" id="section-current-state-after-lesson-72"><h2>Current State After Lesson 7.2</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="2"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT</div><div class="diagram-items"><div class="diagram-item">Security dashboards + threat hunting (Lesson 7.3)</div><div class="diagram-item">MDE + Intune compliance integration (Lesson 7.4)</div><div class="diagram-item">Incident response workflow (Lesson 7.5)</div></div></div></div></figure></section><section class="lesson-section" id="section-lesson-73-security-dashboards-and-threat-hunting-ashpak-learns-to-hunt"><h2>Lesson 7.3: Security Dashboards and Threat Hunting: Ashpak learns to hunt threats before they find him :</h2><p>The Scene Wednesday morning. The ransomware and credential dump alerts are resolved. But Ashpak is unsettled. He found out about both threats because MDE alerted him. What if there are threats that haven't triggered alerts yet? What if something is quietly running; staying under the threshold, evading detection? He opens <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> and navigates to Advanced Hunting.</p><blockquote class="quote">"Reactive security is not enough. The best defenders hunt."</blockquote></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../7-1-microsoft-defender-for-endpoint-onboarding-via-intune/"><span class="story-path-number">7.1</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Microsoft Defender for Endpoint: Onboarding via Intune</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">7.2</span><span class="story-path-label">YOU ARE HERE</span><strong>Threat Detection and Automated Response</strong><small>Security &amp; Endpoint Protection</small></div><a class="story-path-step story-path-next" href="../7-3-security-dashboards-and-threat-hunting/"><span class="story-path-number">7.3</span><span class="story-path-label">NEXT CHAPTER</span><strong>Security Dashboards and Threat Hunting</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-7">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script><script defer="" src="../../assets/js/lesson-toc.js"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Threat Detection and Automated Response &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/>
+  <title>
+   Lesson 7.2: Threat Detection and Automated Response &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 7
+      </span>
+      /
+      <span>
+       7.2
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 7; SECURITY &amp; ENDPOINT PROTECTION
+     </div>
+     <h1>
+      Threat Detection and Automated Response
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak configures MDE to detect, investigate, and respond automatically
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-7">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 7
+        </small>
+        <strong>
+         Phase 7; Security &amp; Endpoint Protection
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       7.2 Threat Detection and Automated Response
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-7">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-alert-1-ransomware-response-immediate-actions">
+        <span>
+         02
+        </span>
+        <strong>
+         Alert 1; Ransomware Response Immediate Actions:
+        </strong>
+       </a>
+       <a href="#section-automated-investigation-queue">
+        <span>
+         03
+        </span>
+        <strong>
+         Automated Investigation Queue
+        </strong>
+       </a>
+       <a href="#section-current-state-after-lesson-72">
+        <span>
+         04
+        </span>
+        <strong>
+         Current State After Lesson 7.2
+        </strong>
+       </a>
+       <a href="#section-lesson-73-security-dashboards-and-threat-hunting-ashpak-learns-to-hunt">
+        <span>
+         05
+        </span>
+        <strong>
+         Lesson 7.3; Security Dashboards and Threat Hunting; Ashpak learns to hunt threats before they find him ;
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 7.2; Threat Detection and Automated Response" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-7">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Now continuing directly to Lesson 7.2...
+       </p>
+       <p>
+        Lesson 7.2; Threat Detection and Automated Response; Ashpak configures MDE to detect, investigate, and respond automatically ;
+       </p>
+       <p>
+        The Scene Tuesday morning. 831 devices are onboarded. The MDE dashboard shows 2 high-severity alerts Ashpak hasn't investigated yet. He opens them: Alert 1:
+       </p>
+       <p>
+        1 HIGH: Ransomware-linked behaviour detected 2 Device: ASHPC-SALES-19 3 User: sales19@ashscript.com 4 Time: Yesterday 23:41 5 Detail: Rapid file encryption pattern detected 6 in Documents folder. 847 files renamed 7 with .crypted extension in 4 minutes.
+       </p>
+       <p>
+        Alert 2:
+       </p>
+       <p>
+        1 HIGH: Credential dumping attempt 2 Device: ASHPC-DEV-07 3 User: dev07@ashscript.com 4 Time: Today 08:12 5 Detail: Process attempted to read LSASS memory. 6 Process: suspicious_tool.exe 7 Blocked by Credential Guard
+       </p>
+       <p>
+        Two high-severity threats. On real employee devices. Right now. Ashpak takes a breath. He was going to spend today configuring automated response policies. Instead, he's going to do both; investigate these threats AND configure automation so future threats handle themselves.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-alert-1-ransomware-response-immediate-actions">
+       <h2>
+        Alert 1: Ransomware Response Immediate Actions:
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Incidents &amp; alerts &rarr; Alerts 3 &rarr; HIGH: Ransomware-linked behaviour 4 &rarr; ASHPC-SALES-19 5 6 STEP 1: Isolate immediately 7 Device actions &rarr; Isolate device 8 (Stops any potential spread to network) 9 10 STEP 2: Review alert details 11 Files encrypted: 847 files in Documents 12 Process responsible: explorer.exe 13 (unusual; Explorer shouldn't mass-rename) 14 &boxur;&boxh;&boxh; Child: crypted_installer.exe 15 &boxur;&boxh;&boxh; Launched by: user double-clicked 16 From: Downloads folder 17 File: Invoice_Dec2024.exe 18 [FAKE INVOICE; MALWARE] 19 20 STEP 3: Check for lateral movement 21 Advanced Hunting query: 22 DeviceNetworkEvents 23 | where DeviceName == "ASHPC-SALES-19" 24 | where Timestamp &gt; ago(24h) 25 | where RemotePort in (445, 139, 3389) 26 (SMB/RDP connections; lateral movement 27 indicators) 28 29 Result: 0 events 30 (No lateral movement detected) 31 32 STEP 4: Check other devices 33 Did anyone else get the same email? 34 Advanced Hunting: 35 EmailEvents 36 | where Subject contains "Invoice_Dec" 37 | where Timestamp &gt; ago(24h) 38 39 Result: 3 other recipients &larr; warn them
+       </p>
+       <p>
+        Automated Investigation Result:
+       </p>
+       <p>
+        1 MDE AUTOMATED INVESTIGATION (triggered automatically): 2 Duration: 38 minutes 3 4 Findings: 5 Malicious files identified: 6 Invoice_Dec2024.exe Quarantined 7 crypted_installer.exe Quarantined 8 C:\Windows\Temp\key.dat Quarantined 9 10 Encrypted files: 11 847 files with .crypted extension 12 Recovery: Shadow copies available 13 (VSS not deleted; ransomware 14 didn't complete full attack chain) 15 16 Lateral movement: None 17 Data exfiltration: None detected 18 19 Recommended action: 20 Restore encrypted files from VSS 21 Remove device from isolation after 22 file restoration
+       </p>
+       <p>
+        Configuring Automated Investigation and Response (AIR) Ashpak configures MDE to automatically investigate and remediate threats without waiting for manual approval:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Settings &rarr; Endpoints 3 &boxur;&boxh;&boxh; Advanced features 4 &rarr; Automated investigation: On 5 &rarr; Automatically resolve alerts: On 6 7 &boxur;&boxh;&boxh; Auto remediation level 8 Device groups: All devices 9 Automation level: 10 ● Full; remediate threats 11 automatically 12 (Trusted; MDE investigates 13 AND remediates without 14 manual approval)
+       </p>
+       <p>
+        Device group automation levels:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="0">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           AUTOMATION LEVELS BY DEVICE GROUP
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           All devices (default):
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Full automation
+           </div>
+           <div class="diagram-item">
+            (Investigate + remediate automatically)
+           </div>
+           <div class="diagram-item">
+            High-value targets (Finance, Exec, Dev):
+           </div>
+           <div class="diagram-item">
+            Semi; require approval for remediation
+           </div>
+           <div class="diagram-item">
+            (Investigate automatically but wait
+           </div>
+           <div class="diagram-item">
+            for IT approval before remediating
+           </div>
+           <div class="diagram-item">
+            ; extra caution on sensitive devices)
+           </div>
+           <div class="diagram-item">
+            Servers (if any):
+           </div>
+           <div class="diagram-item">
+            No automated remediation
+           </div>
+           <div class="diagram-item">
+            (Manual review only; servers are
+           </div>
+           <div class="diagram-item">
+            critical infrastructure)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Attack Surface Reduction (ASR) Rules; Advanced Ashpak revisits ASR from Phase 4 (Lesson 4.4), but now configures the remaining rules via MDE's Security Settings Management for maximum coverage:
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            RULE
+           </th>
+           <th scope="col">
+            MODE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Block ransomware behaviours
+            <br/>
+            (new rule in Defender)
+           </td>
+           <td>
+            Block
+            <br/>
+            (detects mass file
+            <br/>
+            rename patterns)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Use advanced protection against
+            <br/>
+            ransomware
+           </td>
+           <td>
+            Block
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Block executable files from
+            <br/>
+            running unless they meet a
+            <br/>
+            prevalence, age, or trusted
+            <br/>
+            list criteria
+           </td>
+           <td>
+            Block
+            <br/>
+            (LOLBins blocked ;
+            <br/>
+            new executables from
+            <br/>
+            internet blocked fo
+            <br/>
+            24h minimum)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Block persistence through
+            <br/>
+            WMI event subscription
+           </td>
+           <td>
+            Block
+            <br/>
+            (WMI persistence
+            <br/>
+            technique blocked)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        "Block executable files unless they meet prevalence/age criteria" is one of the most powerful ASR rules. When enabled, any executable that: Has been downloaded from the internet recently (&lt; 24 hours) Is rarely seen across Microsoft's global telemetry Is not digitally signed by a trusted publisher
+       </p>
+       <p>
+        ...is blocked from running. The Invoice_Dec2024.exe that triggered Alert 1 would have been blocked by this rule before it ever executed.
+       </p>
+       <p>
+        Configuring Alert Notifications Ashpak needs to be notified immediately when high-severity alerts occur; not discover them the morning after:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Settings &rarr; Microsoft Defender XDR 3 &boxur;&boxh;&boxh; Email notifications 4 &rarr; + Add notification rule 5 6 Name: AshScript-HighSeverity-Alerts 7 8 Alert severity: 9 High 10 Informational (for specific alert types) 11 12 Alert categories: 13 Ransomware 14 Credential theft 15 Network anomaly 16 Suspicious behaviour 17 18 Notification recipients: 19 ashpak.it@ashscript.com 20 security@ashscript.com 21 22 &rarr; Save
+       </p>
+       <p>
+        Automated Response; Live Response For the second alert (credential dumping), Ashpak uses Live Response; a remote shell into the device:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="1">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+            security.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Assets
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Devices
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; ASHPC-DEV-07
+          </div>
+          <div class="diagram-item">
+           &rarr; Device actions
+          </div>
+          <div class="diagram-item">
+           &rarr; Initiate live response session
+          </div>
+          <div class="diagram-item">
+           LIVE RESPONSE CONSOLE OPENS:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            &gt; dir C:\Users\dev07\Downloads
+           </div>
+           <div class="diagram-item">
+            suspicious_tool.exe (347 KB); FOUND
+           </div>
+           <div class="diagram-item">
+            Downloaded: 08:09 today (3 minutes before alert)
+           </div>
+           <div class="diagram-item">
+            &gt; processes
+           </div>
+           <div class="diagram-item">
+            Name PID Status
+           </div>
+           <div class="diagram-item">
+            suspicious_tool.exe 7823 Terminated (by Defender)
+           </div>
+           <div class="diagram-item">
+            &gt; getfile C:\Users\dev07\Downloads\suspicious_tool.exe
+           </div>
+           <div class="diagram-item">
+            File downloaded to MDE portal for analysis
+           </div>
+           <div class="diagram-item">
+            &gt; remediate suspicious_tool.exe
+           </div>
+           <div class="diagram-item">
+            File quarantined
+           </div>
+           <div class="diagram-item">
+            &gt; scheduledtasks
+           </div>
+           <div class="diagram-item">
+            No suspicious scheduled tasks found
+           </div>
+           <div class="diagram-item">
+            &gt; run AntivirusScan
+           </div>
+           <div class="diagram-item">
+            Scan started... 4 minutes...
+           </div>
+           <div class="diagram-item">
+            No additional threats found
+           </div>
+           <div class="diagram-item">
+            &gt; exit
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Alert resolved. No remediation needed beyond
+           </div>
+           <div class="diagram-item">
+            quarantine. Device not isolated (Credential Guard
+           </div>
+           <div class="diagram-item">
+            blocked the attack before any credentials extracted).
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Custom Detection Rules Ashpak creates custom detection rules that trigger alerts based on specific behaviour patterns at AshScript:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Hunting &rarr; Custom detections 3 &rarr; + Create detection rule 4 5 Name: AshScript-LargeEmailExfil-Detection 6 Description: Alert when user forwards 10+ emails 7 to external address within 1 hour 8 (insider threat / account compromise)
+       </p>
+       <p>
+        KQL Query:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          kql
+         </div>
+        </div>
+       </figure>
+       <p>
+        1 EmailEvents 2 | where Timestamp &gt; ago(1h) 3 | where DeliveryAction == "Delivered" 4 | where RecipientEmailAddress !endswith "@ashscript.com" 5 | where EmailDirection == "Outbound" 6 | summarize 7 EmailCount = count(), 8 Recipients = make_set(RecipientEmailAddress) 9 by SenderFromAddress, bin(Timestamp, 1h) 10 | where EmailCount &gt;= 10
+       </p>
+       <p>
+        11 | project 12 Timestamp, 13 SenderFromAddress, 14 EmailCount, 15 Recipients
+       </p>
+       <p>
+        1 Alert settings: 2 Severity: High 3 Category: Exfiltration 4 Run frequency: Every 1 hour 5 Alert title: Potential mass email exfiltration 6 7 &rarr; Save
+       </p>
+       <p>
+        Custom detections run as KQL queries on a schedule. They extend MDE's built-in detections with organisation-specific logic. Ashpak builds several: Mass file access in SharePoint (&gt; 500 files in 10 min) Login from country not in approved travel list USB device connected to Finance/Legal laptops PowerShell with encoded commands executed New local admin account created
+       </p>
+      </section>
+      <section class="lesson-section" id="section-automated-investigation-queue">
+       <h2>
+        Automated Investigation Queue
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Actions &amp; submissions 3 &rarr; Action center 4 5 PENDING ACTIONS (requires approval): 6 Device: ASHPC-DEV-07 7 Action: Quarantine suspicious_tool.exe 8 Source: Automated investigation 9 &rarr; Approve 10 11 COMPLETED ACTIONS: 12 Device: ASHPC-SALES-19 13 Action: Quarantine Invoice_Dec2024.exe
+       </p>
+       <p>
+        14 Status: Completed 15 Action: Quarantine crypted_installer.exe 16 Status: Completed 17 Action: Restore files from VSS 18 Status: Completed; 847 files restored
+       </p>
+      </section>
+      <section class="lesson-section" id="section-current-state-after-lesson-72">
+       <h2>
+        Current State After Lesson 7.2
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="2">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Security dashboards + threat hunting (Lesson 7.3)
+           </div>
+           <div class="diagram-item">
+            MDE + Intune compliance integration (Lesson 7.4)
+           </div>
+           <div class="diagram-item">
+            Incident response workflow (Lesson 7.5)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-lesson-73-security-dashboards-and-threat-hunting-ashpak-learns-to-hunt">
+       <h2>
+        Lesson 7.3: Security Dashboards and Threat Hunting: Ashpak learns to hunt threats before they find him :
+       </h2>
+       <p>
+        The Scene Wednesday morning. The ransomware and credential dump alerts are resolved. But Ashpak is unsettled. He found out about both threats because MDE alerted him. What if there are threats that haven't triggered alerts yet? What if something is quietly running; staying under the threshold, evading detection? He opens
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        and navigates to Advanced Hunting.
+       </p>
+       <blockquote class="quote">
+        "Reactive security is not enough. The best defenders hunt."
+       </blockquote>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../7-1-microsoft-defender-for-endpoint-onboarding-via-intune/">
+         <span class="story-path-number">
+          7.1
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Microsoft Defender for Endpoint: Onboarding via Intune
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          7.2
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Threat Detection and Automated Response
+         </strong>
+         <small>
+          Security &amp; Endpoint Protection
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../7-3-security-dashboards-and-threat-hunting/">
+         <span class="story-path-number">
+          7.3
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Security Dashboards and Threat Hunting
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-7">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/lesson-toc.js">
+  </script>
+ </body>
+</html>

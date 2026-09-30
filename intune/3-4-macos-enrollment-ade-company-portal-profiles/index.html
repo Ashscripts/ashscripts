@@ -1,58 +1,1859 @@
 <!DOCTYPE html>
-
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
-<link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
-<title>Lesson 3.4: macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal · ashscript</title>
-<link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
-</head>
-<body class="phase3-lesson" style="--lesson-accent:#ffd60a">
-<header class="site-header"><div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav="">
-<a href="../../">Scripts</a>
-<details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details>
-<a href="../../who-am-i/">Who Am I</a>
-</nav>
-</div></header>
-<main>
-<section class="page-hero intune-lesson-hero">
-<div class="container">
-<div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 3</span>/<span>3.4</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 3; ENROLLING DEVICES</div>
-<h1>macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal</h1>
-<p class="lesson-subtitle">Ashpak enters the Apple ecosystem</p>
-</div>
-</section>
-<section class="section lesson-reader">
-<div class="container lesson-reader-layout">
-<aside class="lesson-sidebar">
-<div class="toc-label">COURSE NAVIGATION</div>
-<a class="lesson-phase-link" href="../../intune/#phase-3">
-<span aria-hidden="true" class="lesson-phase-dot"></span>
-<span class="lesson-phase-copy"><small>PHASE 3</small><strong>Phase 3 · Enrolling Devices</strong></span>
-</a>
-<div class="toc-label" style="margin-top:8px">CURRENT LESSON</div>
-<div class="lesson-index">3.4 macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal</div>
-<a class="phase-back learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a>
-<div class="toc-label" style="margin-top:6px">ON THIS LESSON</div>
-<nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-macos-management-in-intune-whats-possible"><span>02</span><strong>macOS Management in Intune; What's Possible</strong></a><a href="#section-the-three-prerequisites-for-macos-enrollment"><span>03</span><strong>The Three Prerequisites for macOS Enrollment</strong></a><a href="#section-step-1-apple-mdm-push-certificate"><span>04</span><strong>Step 1; Apple MDM Push Certificate</strong></a><a href="#section-how-the-push-certificate-works"><span>05</span><strong>How the Push Certificate Works:</strong></a><a href="#section-create-the-apple-mdm-push-certificate"><span>06</span><strong>Create the Apple MDM Push Certificate:</strong></a><a href="#section-step-2-apple-business-manager-abm"><span>07</span><strong>Step 2; Apple Business Manager (ABM)</strong></a><a href="#section-setting-up-apple-business-manager"><span>08</span><strong>Setting Up Apple Business Manager:</strong></a><a href="#section-step-3-ade-token-connecting-abm-to-intune"><span>09</span><strong>Step 3; ADE Token: Connecting ABM to Intune</strong></a><a href="#section-in-intune-create-mdm-server"><span>10</span><strong>In Intune; Create MDM Server:</strong></a><a href="#section-assigning-devices-to-intune-in-abm"><span>11</span><strong>Assigning Devices to Intune in ABM</strong></a><a href="#section-creating-an-ade-enrollment-profile-for-macos"><span>12</span><strong>Creating an ADE Enrollment Profile for macOS</strong></a><a href="#section-profile-configuration"><span>13</span><strong>Profile Configuration:</strong></a><a href="#section-the-macos-ade-enrollment-experience-user-view"><span>14</span><strong>The macOS ADE Enrollment Experience; User View</strong></a><a href="#section-method-2-company-portal-enrollment-existing-macs"><span>15</span><strong>Method 2; Company Portal Enrollment (Existing Macs)</strong></a><a href="#section-what-priya-does"><span>16</span><strong>What Priya Does:</strong></a><a href="#section-what-intune-installs-on-priyas-mac"><span>17</span><strong>What Intune Installs on Priya's Mac:</strong></a><a href="#section-filevault-encryption-non-negotiable-for-ashscript"><span>18</span><strong>FileVault Encryption; Non-Negotiable for AshScript</strong></a><a href="#section-macos-compliance-policy"><span>19</span><strong>macOS Compliance Policy</strong></a><a href="#section-macos-shell-scripts-extending-intunes-reach"><span>20</span><strong>macOS Shell Scripts; Extending Intune's Reach</strong></a><a href="#section-supervised-vs-unsupervised-key-difference"><span>21</span><strong>Supervised vs Unsupervised; Key Difference</strong></a><a href="#section-ashscript-macos-enrollment-summary"><span>22</span><strong>AshScript macOS Enrollment Summary</strong></a><a href="#section-ashscripts-current-state-after-lesson-34"><span>23</span><strong>AshScript's Current State After Lesson 3.4</strong></a><a href="#section-key-concepts-to-lock-in"><span>24</span><strong>Key Concepts to Lock In</strong></a></nav>
-</aside>
-<article aria-label="Lesson 3.4; macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal" class="lesson-content">
-<div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Wednesday afternoon. A pallet of 50 MacBooks arrives at AshScript's Mumbai office. Another 100 are</p><p>already in use across the company; designers, developers, and executives who have been using</p><p>Macs for years, completely unmanaged.</p><p>Priya from the design team walks over:</p><blockquote class="quote">"I heard IT is going to manage our Macs now. I want to be clear; I have custom fonts, design</blockquote><p>tools, and a very specific setup. I don't want any of that touched."</p><p>Ashpak nods:</p><blockquote class="quote">"We're not here to change your workflow, Priya. We need to ensure your Mac is encrypted, has</blockquote><p>the latest security updates, and can access company resources safely. Your design tools stay</p><p>exactly as they are."</p><p>She thinks for a moment:</p><blockquote class="quote">"Fine. What do I need to do?"</blockquote><blockquote class="quote">"For the new Macs; nothing. For your existing Mac; about 10 minutes."</blockquote><p>That's the promise of macOS enrollment done right. Let's build it.</p></section><section class="lesson-section" id="section-macos-management-in-intune-whats-possible"><h2>macOS Management in Intune: What's Possible</h2><p>Before enrolling a single Mac, Ashpak needs to understand what Intune can and cannot do with</p><p>macOS:</p></section><section class="lesson-section" id="section-the-three-prerequisites-for-macos-enrollment"><h2>The Three Prerequisites for macOS Enrollment</h2><p>Before a single Mac can enroll, Ashpak must configure three things in the Intune portal:</p><p>Let's set up each one.</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">PREREQUISITE 1: Apple MDM Push Certificate</div><div class="diagram-tile">→ Allows Intune to communicate with Apple devices</div><div class="diagram-tile">→ Required for ALL Apple platforms (macOS + iOS)</div><div class="diagram-tile">→ Must be renewed annually</div><div class="diagram-tile">PREREQUISITE 2: Apple Business Manager (ABM) Account</div><div class="diagram-tile">→ Apple's free enterprise device management portal</div><div class="diagram-tile">→ Links purchased devices to your tenant</div><div class="diagram-tile">→ Required for ADE (zero-touch) enrollment</div><div class="diagram-tile">PREREQUISITE 3: ADE Token (MDM Server Token)</div><div class="diagram-tile">→ Links ABM to your specific Intune tenant</div><div class="diagram-tile">→ Downloaded from ABM, uploaded to Intune</div><div class="diagram-tile">→ Must be renewed annually</div></div></figure><div class="table-lead">macOS enrollment prerequisites</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Prerequisite</th><th scope="col">Purpose</th><th scope="col">Renewal / note</th></tr></thead><tbody><tr><td>Apple MDM Push Certificate</td><td>Allows Intune to communicate with Apple devices</td><td>Required for all Apple platforms • renew annually</td></tr><tr><td>Apple Business Manager (ABM)</td><td>Links purchased devices to the tenant</td><td>Required for ADE • free enterprise portal</td></tr><tr><td>ADE Token (MDM Server Token)</td><td>Links ABM to the specific Intune tenant</td><td>Downloaded from ABM, uploaded to Intune • renew annually</td></tr></tbody></table></div></section><section class="lesson-section" id="section-step-1-apple-mdm-push-certificate"><h2>Step 1: Apple MDM Push Certificate</h2><p>This is the master key that enables Intune to manage any Apple device. Without it, zero Apple devices</p><p>can enroll.</p><figure class="lesson-figure native-diagram"><img alt="Apple MDM Push Certificate flow between Intune, Apple and devices." loading="lazy" src="../../assets/images/intune/lesson-3-4-apple-push.svg"/><figcaption>Intune CSR → Apple certificate portal → certificate → APNs → Intune</figcaption></figure></section><section class="lesson-section" id="section-how-the-push-certificate-works"><h3>How the Push Certificate Works:</h3></section><section class="lesson-section" id="section-create-the-apple-mdm-push-certificate"><h3>Create the Apple MDM Push Certificate:</h3><p>Step-by-step:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">STEP 1: Download CSR</div><div class="diagram-tile">Click "Download your CSR"</div><div class="diagram-tile">Save file: MDM_Microsoft Intune_Certificate.csr</div><div class="diagram-tile">This is your Certificate Signing Request</div><div class="diagram-tile">STEP 2: Create certificate at Apple</div><div class="diagram-tile">Click "Create your MDM push certificate"</div></div></figure><div class="callout-accent">Critical warning about the Apple ID: Always use a shared company Apple ID (like</div><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">mdm@ashscript.com ); never a personal one. The Apple MDM Push Certificate is tied to the Apple</div></div></figure><p>ID that created it. If Ashpak uses his personal Apple ID and leaves the company, the certificate</p><p>cannot be renewed; and all Apple devices lose management. This has happened in real</p><p>organisations.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Annual renewal: The push certificate expires every year. Set a calendar reminder 30 days</li></ul></div><p>before expiry. If it lapses; all Apple devices unenroll from Intune and must be re-enrolled</p><p>manually.</p><figure class="lesson-figure native-diagram"><img alt="Apple MDM Push Certificate flow between Intune, Apple and devices." loading="lazy" src="../../assets/images/intune/lesson-3-4-apple-push.svg"/><figcaption>Intune CSR → Apple certificate portal → certificate → APNs → Intune</figcaption></figure></section><section class="lesson-section" id="section-step-2-apple-business-manager-abm"><h2>Step 2: Apple Business Manager (ABM)</h2><p>Apple Business Manager is Apple's free web portal for enterprises. It's where AshScript:</p><p>Registers purchased Apple devices for ADE</p><p>Manages Volume Purchase Program (VPP) app licences</p><p>Connects to Intune as an MDM server</p></section><section class="lesson-section" id="section-setting-up-apple-business-manager"><h3>Setting Up Apple Business Manager:</h3><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">→ Opens: <a class="lesson-url" href="https://identity.apple.com" rel="noopener noreferrer" target="_blank">https://identity.apple.com</a></div><div class="diagram-tile">Sign in with: ashpak-apple@ashscript.com</div><div class="diagram-tile">↑ IMPORTANT: Use a company Apple ID</div><div class="diagram-tile">NOT a personal Apple ID</div><div class="diagram-tile">If Ashpak leaves → company keeps cert</div><div class="diagram-tile">Portal: Apple Push Certificates Portal</div><div class="diagram-tile">Save as: MDM_Certificate.pem</div><div class="diagram-tile">STEP 3: Upload to Intune</div><div class="diagram-tile diagram-tile-heading">Back in Intune portal:</div><div class="diagram-tile">Apple ID: ashpak-apple@ashscript.com</div><div class="diagram-tile">Upload certificate: MDM_Certificate.pem</div><div class="diagram-tile">→ Upload → Done</div><div class="diagram-tile">Apple MDM Push Certificate: Active</div><div class="diagram-tile">Expiry: 25 Sept 2027 (renew before this date!)</div></div></figure><div class="callout-accent">D-U-N-S Number: Required to verify AshScript is a legitimate organisation. Most businesses</div><p>already have one; check with your finance team before applying.</p></section><section class="lesson-section" id="section-step-3-ade-token-connecting-abm-to-intune"><h2>Step 3: ADE Token: Connecting ABM to Intune</h2><p>The ADE token links Apple Business Manager to AshScript's specific Intune tenant.</p><figure class="lesson-figure native-diagram"><img alt="macOS Automated Device Enrollment flow." loading="lazy" src="../../assets/images/intune/lesson-3-4-ade-flow.svg"/><figcaption>Apple Business Manager → ADE token → Intune → MacBook → ready device</figcaption></figure></section><section class="lesson-section" id="section-in-intune-create-mdm-server"><h3>In Intune: Create MDM Server:</h3><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">ENROL IN APPLE BUSINESS MANAGER</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Navigate to: <a class="lesson-url" href="https://business.apple.com" rel="noopener noreferrer" target="_blank">https://business.apple.com</a></div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">Click "Enrol Now"</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">Fill in AshScript company details</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">Provide D-U-N-S Number</div></div><div class="diagram-tile">(Dun &amp; Bradstreet business identifier)</div><div class="diagram-tile">Get from: <a class="lesson-url" href="https://www.dnb.com/duns-number.html" rel="noopener noreferrer" target="_blank">https://www.dnb.com/duns-number.html</a></div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">Apple verifies the organisation (3-5 business days)</div></div><div class="diagram-tile"><span class="diagram-tile-number">6</span><div class="diagram-tile-body">ABM account approved for AshScript</div></div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">STEP 1: Download Intune public key</div><div class="diagram-tile">Click "Download your public key"</div><div class="diagram-tile">Save: Intune_public_key.pem</div><div class="diagram-tile">STEP 2: Create MDM Server in Apple Business Manager</div><div class="diagram-tile">Go to: business.apple.com</div><div class="diagram-tile">Name: Intune-AshScript</div><div class="diagram-tile">Upload key: Intune_public_key.pem</div></div></figure></section><section class="lesson-section" id="section-assigning-devices-to-intune-in-abm"><h2>Assigning Devices to Intune in ABM</h2><p>Now Ashpak links the 50 new MacBooks to the Intune MDM server in ABM:</p><p>Then sync in Intune to pull the device list:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">→ Save</div><div class="diagram-tile diagram-tile-heading">Download the server token:</div><div class="diagram-tile">Save: AshScript_Token.p7m</div><div class="diagram-tile">STEP 3: Upload token to Intune</div><div class="diagram-tile diagram-tile-heading">Back in Intune:</div><div class="diagram-tile">Upload token: AshScript_Token.p7m</div><div class="diagram-tile">Apple ID: ashpak-apple@ashscript.com</div><div class="diagram-tile">→ Next → Create</div><div class="diagram-tile">ADE Token Active</div><div class="diagram-tile">Token Name: Intune-AshScript</div><div class="diagram-tile">Devices: 0 (none assigned yet)</div><div class="diagram-tile">Expiry: 25 Sept 2027</div><div class="diagram-tile">business.apple.com</div><div class="diagram-tile">; registered by Apple reseller at purchase)</div><div class="diagram-tile">→ Continue → Done</div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">50 devices now visible</div></div></figure></section><section class="lesson-section" id="section-creating-an-ade-enrollment-profile-for-macos"><h2>Creating an ADE Enrollment Profile for macOS</h2><p>The enrollment profile controls the Setup Assistant experience; what the user sees when they first</p><p>turn on the Mac.</p><div class="table-lead">ADE enrollment profile</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Setting</th><th scope="col">AshScript value</th></tr></thead><tbody><tr><td>User affinity</td><td>Enrol with User Affinity (device tied to specific user)</td></tr><tr><td>Authentication method</td><td>Setup Assistant with modern auth</td></tr><tr><td>Install Company Portal</td><td>Yes (required for user affinity)</td></tr><tr><td>Department</td><td>AshScript IT</td></tr><tr><td>Support phone number</td><td>+91 22 XXXX XXXX</td></tr><tr><td>Supervised mode</td><td>Yes</td></tr><tr><td>Locked enrollment</td><td>Yes</td></tr><tr><td>Await final configuration</td><td>Yes (blocks desktop until policies apply)</td></tr></tbody></table></div></section><section class="lesson-section" id="section-profile-configuration"><h3>Profile Configuration:</h3><p>Basics:</p><p>Management Settings:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Name: AshScript macOS Standard Enrollment</div><div class="diagram-tile">Description: ADE profile for all AshScript MacBooks</div></div></figure><p>Setup Assistant Panes; What to Show/Hide:</p><p>Assign the profile:</p></section><section class="lesson-section" id="section-the-macos-ade-enrollment-experience-user-view"><h2>The macOS ADE Enrollment Experience: User View</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">These are the screens during macOS first-run setup.</div><div class="diagram-tile diagram-tile-heading">Corporate devices should skip unnecessary ones:</div><div class="diagram-tile diagram-tile-heading">HIDDEN (pre-accepted/pre-configured by IT):</div><div class="diagram-tile">Privacy</div><div class="diagram-tile">Location Services</div><div class="diagram-tile">Apple ID (use work account instead)</div><div class="diagram-tile">Terms and Conditions</div><div class="diagram-tile">Siri setup</div><div class="diagram-tile">Screen Time</div><div class="diagram-tile">iCloud storage</div><div class="diagram-tile diagram-tile-heading">SHOWN (user must complete):</div><div class="diagram-tile">Language selection</div><div class="diagram-tile">Wi-Fi selection</div><div class="diagram-tile">Company sign-in (Entra ID credentials)</div><div class="diagram-tile diagram-tile-heading">Assignments:</div><div class="diagram-tile">Assign to: All ADE devices</div><div class="diagram-tile">(or specific device group)</div><div class="diagram-tile">→ Create</div></div></figure><p>With everything configured, here's what happens when the new MacBook is turned on:</p></section><section class="lesson-section" id="section-method-2-company-portal-enrollment-existing-macs"><h2>Method 2: Company Portal Enrollment (Existing Macs)</h2><p>For AshScript's 100 existing MacBooks (not purchased through ABM), Ashpak uses the Company</p><p>Portal enrollment method. This is Priya's Mac; already set up, not going to be wiped.</p></section><section class="lesson-section" id="section-what-priya-does"><h3>What Priya Does:</h3><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">USER EXPERIENCE; NEW MacBook (ADE Enrolled)</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Employee opens box, turns on MacBook</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">macOS Setup Assistant starts:</div></div><div class="diagram-tile">Language → Country → Wi-Fi selection</div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">Screen appears:</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">Sign in with Entra ID account:</div></div><div class="diagram-tile">priya@ashscript.com → MFA approval</div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">Enrollment completes automatically</div></div><div class="diagram-tile"><span class="diagram-tile-number">6</span><div class="diagram-tile-body">Configuration profiles download and apply:</div></div><div class="diagram-tile">Wi-Fi profile</div><div class="diagram-tile">FileVault encryption enabled</div><div class="diagram-tile">Certificate deployed</div><div class="diagram-tile">Compliance policy evaluating</div><div class="diagram-tile"><span class="diagram-tile-number">7</span><div class="diagram-tile-body">Desktop appears; Mac is managed</div></div><div class="diagram-tile">Company Portal app installed and visible</div><div class="diagram-tile">Total time: ~20-25 minutes</div><div class="diagram-tile">User effort: Minimal (language, Wi-Fi, sign in)</div></div></figure></section><section class="lesson-section" id="section-what-intune-installs-on-priyas-mac"><h3>What Intune Installs on Priya's Mac:</h3><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">STEP 1: Download Company Portal</div><div class="diagram-tile">Open Mac App Store</div><div class="diagram-tile">Search: "Intune Company Portal"</div><div class="diagram-tile">Download and install (free)</div><div class="diagram-tile">STEP 2: Sign in to Company Portal</div><div class="diagram-tile">Open Company Portal</div><div class="diagram-tile">Sign in: priya@ashscript.com</div><div class="diagram-tile">MFA approval on phone</div><div class="diagram-tile">STEP 3: Begin enrollment</div><div class="diagram-tile">Company Portal: "Get Started"</div><div class="diagram-tile">→ "Begin" → Follow prompts</div><div class="diagram-tile">→ Download Management Profile</div><div class="diagram-tile">STEP 4: Install Management Profile</div><div class="diagram-tile">System Settings → Privacy &amp; Security</div><div class="diagram-tile">→ Profiles → Downloaded Profile</div><div class="diagram-tile">→ Install → Enter Mac password</div><div class="diagram-tile">→ Install → Done</div><div class="diagram-tile">STEP 5: Enrolled</div><div class="diagram-tile">Company Portal shows: "Device is compliant"</div><div class="diagram-tile">Priya's Mac now appears in Intune</div><div class="diagram-tile diagram-tile-heading">MANAGEMENT PROFILE CONTENTS</div><div class="diagram-tile">MDM enrollment certificate</div><div class="diagram-tile">Intune agent (Microsoft Intune MDM Agent)</div><div class="diagram-tile diagram-tile-heading">CONFIGURATION PROFILES THAT THEN PUSH:</div><div class="diagram-tile">Wi-Fi profile (connects to AshScript corporate Wi-Fi)</div><div class="diagram-tile">Certificate profile (corp auth certificate)</div><div class="diagram-tile">FileVault settings (encryption policy)</div><div class="diagram-tile">Compliance settings</div><div class="diagram-tile diagram-tile-heading">WHAT IS NOT TOUCHED:</div><div class="diagram-tile">× Priya's design apps (Adobe, Figma, Sketch)</div><div class="diagram-tile">× Her custom fonts</div><div class="diagram-tile">× Her file system (personal files untouched)</div><div class="diagram-tile">× Her browser bookmarks</div></div></figure><p>This is the answer Ashpak gave Priya. Intune installs a management profile; a lightweight agent</p><p>; and pushes company policies. It doesn't touch personal apps, files, or settings.</p></section><section class="lesson-section" id="section-filevault-encryption-non-negotiable-for-ashscript"><h2>FileVault Encryption: Non-Negotiable for AshScript</h2><p>Every AshScript Mac must have FileVault enabled; Apple's full-disk encryption. Without it, a stolen</p><p>laptop means exposed company data.</p><p>Intune manages FileVault via a configuration profile:</p><p>What happens when FileVault policy applies:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">× Her local settings and preferences</div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Platform: macOS</div><div class="diagram-tile">Profile Type: Endpoint Protection</div><div class="diagram-tile">Enable FileVault: Yes</div><div class="diagram-tile">Recovery key rotation: Every 6 months</div><div class="diagram-tile">Hide recovery key: Yes</div><div class="diagram-tile">Disable sign-out: No</div><div class="diagram-tile">Number of times allowed</div><div class="diagram-tile">to bypass: 3</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Policy pushes to Mac</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">User is prompted: "Your organisation requires</div></div><div class="diagram-tile">FileVault encryption."</div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">User clicks Enable → enters their Mac password</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">FileVault encrypts the disk (runs in background)</div></div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">Recovery key is escrowed to Intune automatically</div></div><div class="diagram-tile">(stored securely; IT can retrieve if needed)</div><div class="diagram-tile"><span class="diagram-tile-number">6</span><div class="diagram-tile-body">Device becomes compliant for encryption requirement</div></div></div></figure><p>Retrieve FileVault recovery key (if user forgets password):</p></section><section class="lesson-section" id="section-macos-compliance-policy"><h2>macOS Compliance Policy</h2><p>Ashpak creates a macOS compliance policy alongside enrollment:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Key: X3K7-M2P9-...</div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Platform: macOS</div><div class="diagram-tile diagram-tile-heading">Device Health:</div><div class="diagram-tile">Require system integrity protection</div><div class="diagram-tile">Require device to have no compromised</div><div class="diagram-tile">software</div><div class="diagram-tile diagram-tile-heading">Device Properties:</div><div class="diagram-tile">Minimum OS version: 13.0 (Ventura)</div><div class="diagram-tile">Maximum OS version: (none; allow all)</div><div class="diagram-tile diagram-tile-heading">System Security:</div><div class="diagram-tile">Require password</div><div class="diagram-tile">Minimum length: 8</div><div class="diagram-tile">Require encryption (FileVault)</div><div class="diagram-tile">Minutes idle before</div><div class="diagram-tile">screen lock: 5</div><div class="diagram-tile diagram-tile-heading">Actions for noncompliance:</div><div class="diagram-tile">Day 0: Mark device noncompliant</div><div class="diagram-tile">Day 3: Send email to user</div><div class="diagram-tile">Day 14: Block access (CA enforcement)</div><div class="diagram-tile">Assign to: INTUNE-DEV-MACOS</div></div></figure></section><section class="lesson-section" id="section-macos-shell-scripts-extending-intunes-reach"><h2>macOS Shell Scripts: Extending Intune's Reach</h2><p>For settings that Intune configuration profiles can't handle natively, Ashpak uses shell scripts. Intune</p><p>can deploy and run shell scripts on macOS devices silently:</p><p>Example; Disable guest account on all Macs:</p><p>Script settings in Intune:</p></section><section class="lesson-section" id="section-supervised-vs-unsupervised-key-difference"><h2>Supervised vs Unsupervised: Key Difference</h2><p>This distinction matters significantly for what Intune can manage:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">bash</div><div class="diagram-tile">#!/bin/bash</div><div class="diagram-tile"># Disable guest user account on AshScript Macs</div><div class="diagram-tile"># Run as: System context</div><div class="diagram-tile"># Frequency: Once</div><div class="diagram-tile"># Disable guest account</div><div class="diagram-tile">dscl . -create /Users/Guest AuthenticationAuthority ";DisabledUser;"</div><div class="diagram-tile">defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false</div><div class="diagram-tile">echo "Guest account disabled successfully"</div><div class="diagram-tile">exit 0</div><div class="diagram-tile">Script: GuestDisable.sh</div><div class="diagram-tile">Run as account: System</div><div class="diagram-tile">Hide script: Yes</div><div class="diagram-tile">Max run times: Once</div><div class="diagram-tile">Retry times: 3</div><div class="diagram-tile">Assign to: INTUNE-DEV-MACOS</div></div></figure><div class="table-lead">macOS management comparison</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Supervised (ADE enrolled)</th><th scope="col">Unsupervised (Company Portal enrolled)</th></tr></thead><tbody><tr><td>New Macs via ABM/ADE</td><td>Existing Macs via Company Portal</td></tr><tr><td>Silent app install</td><td>Warning: User approval needed for some installs</td></tr><tr><td>Locked enrollment</td><td>× User can unenroll</td></tr><tr><td>Lost mode available</td><td>× No lost mode</td></tr><tr><td>More profile options available</td><td>× Fewer profile options</td></tr><tr><td>Bootstrap token</td><td>× No bootstrap token</td></tr></tbody></table></div></section><section class="lesson-section" id="section-ashscript-macos-enrollment-summary"><h2>AshScript macOS Enrollment Summary</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">TOTAL macOS DEVICES: 150</div><div class="diagram-tile diagram-tile-heading">MANAGED AFTER ROLLOUT: 150 (100%)</div></div></figure><div class="table-lead">AshScript macOS enrollment plan</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Device type</th><th scope="col">Enrollment method</th></tr></thead><tbody><tr><td>50 new MacBooks</td><td>ADE via Apple Business Manager • Zero-touch • supervised • user turns on → auto-enrolls</td></tr><tr><td>100 existing MacBooks</td><td>Company Portal (manual) • user installs CP, signs in • 10 minutes per device • unsupervised enrollment</td></tr></tbody></table></div></section><section class="lesson-section" id="section-ashscripts-current-state-after-lesson-34"><h2>AshScript's Current State After Lesson 3.4</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>Apple MDM Push Certificate</td><td>Master key for all Apple management; renew annually</td></tr><tr><td>Company Apple ID</td><td>Always use shared company Apple ID; never personal</td></tr><tr><td>ADE</td><td>Zero-touch for new Apple devices via ABM</td></tr><tr><td>FileVault</td><td>Mandatory full-disk encryption for AshScript Macs</td></tr><tr><td>Recovery key escrow</td><td>Intune stores FileVault key; retrieve from device page</td></tr><tr><td>Shell scripts</td><td>Extend Intune management beyond native profiles</td></tr><tr><td>User affinity</td><td>Ties device to specific user</td></tr></tbody></table></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in"><h2>Key Concepts to Lock In</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">Apple MDM Push Certificate Master key for ALL Apple management; renew annually</div><div class="diagram-tile">Company Apple ID Always use shared company Apple ID; never personal</div><div class="diagram-tile">Apple Business Manager Free enterprise portal; registers devices for ADE</div><div class="diagram-tile">ADE Token Links ABM Intune; renew annually</div><div class="diagram-tile">ADE Zero-touch enrollment for new Apple devices via ABM</div><div class="diagram-tile">Company Portal Manual enrollment method for existing Macs</div><div class="diagram-tile">Supervised ADE enrolled; more management capabilities</div><div class="diagram-tile">Unsupervised Company Portal enrolled; fewer capabilities</div><div class="diagram-tile">FileVault macOS full disk encryption; mandatory for compliance</div><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">Recovery key escrow Intune stores FileVault key; retrieve from device page</div><div class="diagram-tile">Shell scripts Extend Intune management beyond native profiles</div><div class="diagram-tile">User affinity Ties device to specific user; required for personal Macs</div></div></figure></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../3-3-co-management-sccm-intune-working-together/"><span class="story-path-number">3.3</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Co-Management: SCCM + Intune Working Together</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">3.4</span><span class="story-path-label">YOU ARE HERE</span><strong>macOS Enrollment: ADE, Company Portal &amp; Profiles</strong><small>Enrolling Devices</small></div><a class="story-path-step story-path-next" href="../3-5-android-enrollment-enterprise-work-profiles-cope-byod/"><span class="story-path-number">3.5</span><span class="story-path-label">NEXT CHAPTER</span><strong>Android Enrollment: Enterprise, Work Profiles, COPE &amp; BYOD</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-3">Learning Modules</a></nav></article>
-</div>
-</section>
-</main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
-<script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4"></script>
-</body></html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
+  <title>
+   Lesson 3.4: macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase3-lesson" style="--lesson-accent:#ffd60a">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 3
+      </span>
+      /
+      <span>
+       3.4
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 3; ENROLLING DEVICES
+     </div>
+     <h1>
+      macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak enters the Apple ecosystem
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-3">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 3
+        </small>
+        <strong>
+         Phase 3 &middot; Enrolling Devices
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       3.4 macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-3">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-macos-management-in-intune-whats-possible">
+        <span>
+         02
+        </span>
+        <strong>
+         macOS Management in Intune; What's Possible
+        </strong>
+       </a>
+       <a href="#section-the-three-prerequisites-for-macos-enrollment">
+        <span>
+         03
+        </span>
+        <strong>
+         The Three Prerequisites for macOS Enrollment
+        </strong>
+       </a>
+       <a href="#section-step-1-apple-mdm-push-certificate">
+        <span>
+         04
+        </span>
+        <strong>
+         Step 1; Apple MDM Push Certificate
+        </strong>
+       </a>
+       <a href="#section-how-the-push-certificate-works">
+        <span>
+         05
+        </span>
+        <strong>
+         How the Push Certificate Works:
+        </strong>
+       </a>
+       <a href="#section-create-the-apple-mdm-push-certificate">
+        <span>
+         06
+        </span>
+        <strong>
+         Create the Apple MDM Push Certificate:
+        </strong>
+       </a>
+       <a href="#section-step-2-apple-business-manager-abm">
+        <span>
+         07
+        </span>
+        <strong>
+         Step 2; Apple Business Manager (ABM)
+        </strong>
+       </a>
+       <a href="#section-setting-up-apple-business-manager">
+        <span>
+         08
+        </span>
+        <strong>
+         Setting Up Apple Business Manager:
+        </strong>
+       </a>
+       <a href="#section-step-3-ade-token-connecting-abm-to-intune">
+        <span>
+         09
+        </span>
+        <strong>
+         Step 3; ADE Token: Connecting ABM to Intune
+        </strong>
+       </a>
+       <a href="#section-in-intune-create-mdm-server">
+        <span>
+         10
+        </span>
+        <strong>
+         In Intune; Create MDM Server:
+        </strong>
+       </a>
+       <a href="#section-assigning-devices-to-intune-in-abm">
+        <span>
+         11
+        </span>
+        <strong>
+         Assigning Devices to Intune in ABM
+        </strong>
+       </a>
+       <a href="#section-creating-an-ade-enrollment-profile-for-macos">
+        <span>
+         12
+        </span>
+        <strong>
+         Creating an ADE Enrollment Profile for macOS
+        </strong>
+       </a>
+       <a href="#section-profile-configuration">
+        <span>
+         13
+        </span>
+        <strong>
+         Profile Configuration:
+        </strong>
+       </a>
+       <a href="#section-the-macos-ade-enrollment-experience-user-view">
+        <span>
+         14
+        </span>
+        <strong>
+         The macOS ADE Enrollment Experience; User View
+        </strong>
+       </a>
+       <a href="#section-method-2-company-portal-enrollment-existing-macs">
+        <span>
+         15
+        </span>
+        <strong>
+         Method 2; Company Portal Enrollment (Existing Macs)
+        </strong>
+       </a>
+       <a href="#section-what-priya-does">
+        <span>
+         16
+        </span>
+        <strong>
+         What Priya Does:
+        </strong>
+       </a>
+       <a href="#section-what-intune-installs-on-priyas-mac">
+        <span>
+         17
+        </span>
+        <strong>
+         What Intune Installs on Priya's Mac:
+        </strong>
+       </a>
+       <a href="#section-filevault-encryption-non-negotiable-for-ashscript">
+        <span>
+         18
+        </span>
+        <strong>
+         FileVault Encryption; Non-Negotiable for AshScript
+        </strong>
+       </a>
+       <a href="#section-macos-compliance-policy">
+        <span>
+         19
+        </span>
+        <strong>
+         macOS Compliance Policy
+        </strong>
+       </a>
+       <a href="#section-macos-shell-scripts-extending-intunes-reach">
+        <span>
+         20
+        </span>
+        <strong>
+         macOS Shell Scripts; Extending Intune's Reach
+        </strong>
+       </a>
+       <a href="#section-supervised-vs-unsupervised-key-difference">
+        <span>
+         21
+        </span>
+        <strong>
+         Supervised vs Unsupervised; Key Difference
+        </strong>
+       </a>
+       <a href="#section-ashscript-macos-enrollment-summary">
+        <span>
+         22
+        </span>
+        <strong>
+         AshScript macOS Enrollment Summary
+        </strong>
+       </a>
+       <a href="#section-ashscripts-current-state-after-lesson-34">
+        <span>
+         23
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 3.4
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in">
+        <span>
+         24
+        </span>
+        <strong>
+         Key Concepts to Lock In
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 3.4; macOS Enrollment: ADE, Apple Business Manager &amp; Company Portal" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Wednesday afternoon. A pallet of 50 MacBooks arrives at AshScript's Mumbai office. Another 100 are
+       </p>
+       <p>
+        already in use across the company; designers, developers, and executives who have been using
+       </p>
+       <p>
+        Macs for years, completely unmanaged.
+       </p>
+       <p>
+        Priya from the design team walks over:
+       </p>
+       <blockquote class="quote">
+        "I heard IT is going to manage our Macs now. I want to be clear; I have custom fonts, design
+       </blockquote>
+       <p>
+        tools, and a very specific setup. I don't want any of that touched."
+       </p>
+       <p>
+        Ashpak nods:
+       </p>
+       <blockquote class="quote">
+        "We're not here to change your workflow, Priya. We need to ensure your Mac is encrypted, has
+       </blockquote>
+       <p>
+        the latest security updates, and can access company resources safely. Your design tools stay
+       </p>
+       <p>
+        exactly as they are."
+       </p>
+       <p>
+        She thinks for a moment:
+       </p>
+       <blockquote class="quote">
+        "Fine. What do I need to do?"
+       </blockquote>
+       <blockquote class="quote">
+        "For the new Macs; nothing. For your existing Mac; about 10 minutes."
+       </blockquote>
+       <p>
+        That's the promise of macOS enrollment done right. Let's build it.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-macos-management-in-intune-whats-possible">
+       <h2>
+        macOS Management in Intune: What's Possible
+       </h2>
+       <p>
+        Before enrolling a single Mac, Ashpak needs to understand what Intune can and cannot do with
+       </p>
+       <p>
+        macOS:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-the-three-prerequisites-for-macos-enrollment">
+       <h2>
+        The Three Prerequisites for macOS Enrollment
+       </h2>
+       <p>
+        Before a single Mac can enroll, Ashpak must configure three things in the Intune portal:
+       </p>
+       <p>
+        Let's set up each one.
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          PREREQUISITE 1: Apple MDM Push Certificate
+         </div>
+         <div class="diagram-tile">
+          &rarr; Allows Intune to communicate with Apple devices
+         </div>
+         <div class="diagram-tile">
+          &rarr; Required for ALL Apple platforms (macOS + iOS)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Must be renewed annually
+         </div>
+         <div class="diagram-tile">
+          PREREQUISITE 2: Apple Business Manager (ABM) Account
+         </div>
+         <div class="diagram-tile">
+          &rarr; Apple's free enterprise device management portal
+         </div>
+         <div class="diagram-tile">
+          &rarr; Links purchased devices to your tenant
+         </div>
+         <div class="diagram-tile">
+          &rarr; Required for ADE (zero-touch) enrollment
+         </div>
+         <div class="diagram-tile">
+          PREREQUISITE 3: ADE Token (MDM Server Token)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Links ABM to your specific Intune tenant
+         </div>
+         <div class="diagram-tile">
+          &rarr; Downloaded from ABM, uploaded to Intune
+         </div>
+         <div class="diagram-tile">
+          &rarr; Must be renewed annually
+         </div>
+        </div>
+       </figure>
+       <div class="table-lead">
+        macOS enrollment prerequisites
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Prerequisite
+           </th>
+           <th scope="col">
+            Purpose
+           </th>
+           <th scope="col">
+            Renewal / note
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Apple MDM Push Certificate
+           </td>
+           <td>
+            Allows Intune to communicate with Apple devices
+           </td>
+           <td>
+            Required for all Apple platforms &bull; renew annually
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Apple Business Manager (ABM)
+           </td>
+           <td>
+            Links purchased devices to the tenant
+           </td>
+           <td>
+            Required for ADE &bull; free enterprise portal
+           </td>
+          </tr>
+          <tr>
+           <td>
+            ADE Token (MDM Server Token)
+           </td>
+           <td>
+            Links ABM to the specific Intune tenant
+           </td>
+           <td>
+            Downloaded from ABM, uploaded to Intune &bull; renew annually
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-step-1-apple-mdm-push-certificate">
+       <h2>
+        Step 1: Apple MDM Push Certificate
+       </h2>
+       <p>
+        This is the master key that enables Intune to manage any Apple device. Without it, zero Apple devices
+       </p>
+       <p>
+        can enroll.
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="Apple MDM Push Certificate flow between Intune, Apple and devices." loading="lazy" src="../../assets/images/intune/lesson-3-4-apple-push.svg"/>
+        <figcaption>
+         Intune CSR &rarr; Apple certificate portal &rarr; certificate &rarr; APNs &rarr; Intune
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-how-the-push-certificate-works">
+       <h3>
+        How the Push Certificate Works:
+       </h3>
+      </section>
+      <section class="lesson-section" id="section-create-the-apple-mdm-push-certificate">
+       <h3>
+        Create the Apple MDM Push Certificate:
+       </h3>
+       <p>
+        Step-by-step:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          STEP 1: Download CSR
+         </div>
+         <div class="diagram-tile">
+          Click "Download your CSR"
+         </div>
+         <div class="diagram-tile">
+          Save file: MDM_Microsoft Intune_Certificate.csr
+         </div>
+         <div class="diagram-tile">
+          This is your Certificate Signing Request
+         </div>
+         <div class="diagram-tile">
+          STEP 2: Create certificate at Apple
+         </div>
+         <div class="diagram-tile">
+          Click "Create your MDM push certificate"
+         </div>
+        </div>
+       </figure>
+       <div class="callout-accent">
+        Critical warning about the Apple ID: Always use a shared company Apple ID (like
+       </div>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          mdm@ashscript.com ); never a personal one. The Apple MDM Push Certificate is tied to the Apple
+         </div>
+        </div>
+       </figure>
+       <p>
+        ID that created it. If Ashpak uses his personal Apple ID and leaves the company, the certificate
+       </p>
+       <p>
+        cannot be renewed; and all Apple devices lose management. This has happened in real
+       </p>
+       <p>
+        organisations.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Annual renewal: The push certificate expires every year. Set a calendar reminder 30 days
+         </li>
+        </ul>
+       </div>
+       <p>
+        before expiry. If it lapses; all Apple devices unenroll from Intune and must be re-enrolled
+       </p>
+       <p>
+        manually.
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="Apple MDM Push Certificate flow between Intune, Apple and devices." loading="lazy" src="../../assets/images/intune/lesson-3-4-apple-push.svg"/>
+        <figcaption>
+         Intune CSR &rarr; Apple certificate portal &rarr; certificate &rarr; APNs &rarr; Intune
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-step-2-apple-business-manager-abm">
+       <h2>
+        Step 2: Apple Business Manager (ABM)
+       </h2>
+       <p>
+        Apple Business Manager is Apple's free web portal for enterprises. It's where AshScript:
+       </p>
+       <p>
+        Registers purchased Apple devices for ADE
+       </p>
+       <p>
+        Manages Volume Purchase Program (VPP) app licences
+       </p>
+       <p>
+        Connects to Intune as an MDM server
+       </p>
+      </section>
+      <section class="lesson-section" id="section-setting-up-apple-business-manager">
+       <h3>
+        Setting Up Apple Business Manager:
+       </h3>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          &rarr; Opens:
+          <a class="lesson-url" href="https://identity.apple.com" rel="noopener noreferrer" target="_blank">
+           https://identity.apple.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Sign in with: ashpak-apple@ashscript.com
+         </div>
+         <div class="diagram-tile">
+          &uarr; IMPORTANT: Use a company Apple ID
+         </div>
+         <div class="diagram-tile">
+          NOT a personal Apple ID
+         </div>
+         <div class="diagram-tile">
+          If Ashpak leaves &rarr; company keeps cert
+         </div>
+         <div class="diagram-tile">
+          Portal: Apple Push Certificates Portal
+         </div>
+         <div class="diagram-tile">
+          Save as: MDM_Certificate.pem
+         </div>
+         <div class="diagram-tile">
+          STEP 3: Upload to Intune
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Back in Intune portal:
+         </div>
+         <div class="diagram-tile">
+          Apple ID: ashpak-apple@ashscript.com
+         </div>
+         <div class="diagram-tile">
+          Upload certificate: MDM_Certificate.pem
+         </div>
+         <div class="diagram-tile">
+          &rarr; Upload &rarr; Done
+         </div>
+         <div class="diagram-tile">
+          Apple MDM Push Certificate: Active
+         </div>
+         <div class="diagram-tile">
+          Expiry: 25 Sept 2027 (renew before this date!)
+         </div>
+        </div>
+       </figure>
+       <div class="callout-accent">
+        D-U-N-S Number: Required to verify AshScript is a legitimate organisation. Most businesses
+       </div>
+       <p>
+        already have one; check with your finance team before applying.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-step-3-ade-token-connecting-abm-to-intune">
+       <h2>
+        Step 3: ADE Token: Connecting ABM to Intune
+       </h2>
+       <p>
+        The ADE token links Apple Business Manager to AshScript's specific Intune tenant.
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="macOS Automated Device Enrollment flow." loading="lazy" src="../../assets/images/intune/lesson-3-4-ade-flow.svg"/>
+        <figcaption>
+         Apple Business Manager &rarr; ADE token &rarr; Intune &rarr; MacBook &rarr; ready device
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-in-intune-create-mdm-server">
+       <h3>
+        In Intune: Create MDM Server:
+       </h3>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          ENROL IN APPLE BUSINESS MANAGER
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Navigate to:
+           <a class="lesson-url" href="https://business.apple.com" rel="noopener noreferrer" target="_blank">
+            https://business.apple.com
+           </a>
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           Click "Enrol Now"
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           Fill in AshScript company details
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           Provide D-U-N-S Number
+          </div>
+         </div>
+         <div class="diagram-tile">
+          (Dun &amp; Bradstreet business identifier)
+         </div>
+         <div class="diagram-tile">
+          Get from:
+          <a class="lesson-url" href="https://www.dnb.com/duns-number.html" rel="noopener noreferrer" target="_blank">
+           https://www.dnb.com/duns-number.html
+          </a>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           Apple verifies the organisation (3-5 business days)
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           6
+          </span>
+          <div class="diagram-tile-body">
+           ABM account approved for AshScript
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          STEP 1: Download Intune public key
+         </div>
+         <div class="diagram-tile">
+          Click "Download your public key"
+         </div>
+         <div class="diagram-tile">
+          Save: Intune_public_key.pem
+         </div>
+         <div class="diagram-tile">
+          STEP 2: Create MDM Server in Apple Business Manager
+         </div>
+         <div class="diagram-tile">
+          Go to: business.apple.com
+         </div>
+         <div class="diagram-tile">
+          Name: Intune-AshScript
+         </div>
+         <div class="diagram-tile">
+          Upload key: Intune_public_key.pem
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-assigning-devices-to-intune-in-abm">
+       <h2>
+        Assigning Devices to Intune in ABM
+       </h2>
+       <p>
+        Now Ashpak links the 50 new MacBooks to the Intune MDM server in ABM:
+       </p>
+       <p>
+        Then sync in Intune to pull the device list:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          &rarr; Save
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Download the server token:
+         </div>
+         <div class="diagram-tile">
+          Save: AshScript_Token.p7m
+         </div>
+         <div class="diagram-tile">
+          STEP 3: Upload token to Intune
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Back in Intune:
+         </div>
+         <div class="diagram-tile">
+          Upload token: AshScript_Token.p7m
+         </div>
+         <div class="diagram-tile">
+          Apple ID: ashpak-apple@ashscript.com
+         </div>
+         <div class="diagram-tile">
+          &rarr; Next &rarr; Create
+         </div>
+         <div class="diagram-tile">
+          ADE Token Active
+         </div>
+         <div class="diagram-tile">
+          Token Name: Intune-AshScript
+         </div>
+         <div class="diagram-tile">
+          Devices: 0 (none assigned yet)
+         </div>
+         <div class="diagram-tile">
+          Expiry: 25 Sept 2027
+         </div>
+         <div class="diagram-tile">
+          business.apple.com
+         </div>
+         <div class="diagram-tile">
+          ; registered by Apple reseller at purchase)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Continue &rarr; Done
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          50 devices now visible
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-creating-an-ade-enrollment-profile-for-macos">
+       <h2>
+        Creating an ADE Enrollment Profile for macOS
+       </h2>
+       <p>
+        The enrollment profile controls the Setup Assistant experience; what the user sees when they first
+       </p>
+       <p>
+        turn on the Mac.
+       </p>
+       <div class="table-lead">
+        ADE enrollment profile
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Setting
+           </th>
+           <th scope="col">
+            AshScript value
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            User affinity
+           </td>
+           <td>
+            Enrol with User Affinity (device tied to specific user)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Authentication method
+           </td>
+           <td>
+            Setup Assistant with modern auth
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Install Company Portal
+           </td>
+           <td>
+            Yes (required for user affinity)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Department
+           </td>
+           <td>
+            AshScript IT
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Support phone number
+           </td>
+           <td>
+            +91 22 XXXX XXXX
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Supervised mode
+           </td>
+           <td>
+            Yes
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Locked enrollment
+           </td>
+           <td>
+            Yes
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Await final configuration
+           </td>
+           <td>
+            Yes (blocks desktop until policies apply)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-profile-configuration">
+       <h3>
+        Profile Configuration:
+       </h3>
+       <p>
+        Basics:
+       </p>
+       <p>
+        Management Settings:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Name: AshScript macOS Standard Enrollment
+         </div>
+         <div class="diagram-tile">
+          Description: ADE profile for all AshScript MacBooks
+         </div>
+        </div>
+       </figure>
+       <p>
+        Setup Assistant Panes; What to Show/Hide:
+       </p>
+       <p>
+        Assign the profile:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-the-macos-ade-enrollment-experience-user-view">
+       <h2>
+        The macOS ADE Enrollment Experience: User View
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          These are the screens during macOS first-run setup.
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Corporate devices should skip unnecessary ones:
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          HIDDEN (pre-accepted/pre-configured by IT):
+         </div>
+         <div class="diagram-tile">
+          Privacy
+         </div>
+         <div class="diagram-tile">
+          Location Services
+         </div>
+         <div class="diagram-tile">
+          Apple ID (use work account instead)
+         </div>
+         <div class="diagram-tile">
+          Terms and Conditions
+         </div>
+         <div class="diagram-tile">
+          Siri setup
+         </div>
+         <div class="diagram-tile">
+          Screen Time
+         </div>
+         <div class="diagram-tile">
+          iCloud storage
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          SHOWN (user must complete):
+         </div>
+         <div class="diagram-tile">
+          Language selection
+         </div>
+         <div class="diagram-tile">
+          Wi-Fi selection
+         </div>
+         <div class="diagram-tile">
+          Company sign-in (Entra ID credentials)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Assignments:
+         </div>
+         <div class="diagram-tile">
+          Assign to: All ADE devices
+         </div>
+         <div class="diagram-tile">
+          (or specific device group)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Create
+         </div>
+        </div>
+       </figure>
+       <p>
+        With everything configured, here's what happens when the new MacBook is turned on:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-2-company-portal-enrollment-existing-macs">
+       <h2>
+        Method 2: Company Portal Enrollment (Existing Macs)
+       </h2>
+       <p>
+        For AshScript's 100 existing MacBooks (not purchased through ABM), Ashpak uses the Company
+       </p>
+       <p>
+        Portal enrollment method. This is Priya's Mac; already set up, not going to be wiped.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-what-priya-does">
+       <h3>
+        What Priya Does:
+       </h3>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          USER EXPERIENCE; NEW MacBook (ADE Enrolled)
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Employee opens box, turns on MacBook
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           macOS Setup Assistant starts:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Language &rarr; Country &rarr; Wi-Fi selection
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           Screen appears:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           Sign in with Entra ID account:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          priya@ashscript.com &rarr; MFA approval
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           Enrollment completes automatically
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           6
+          </span>
+          <div class="diagram-tile-body">
+           Configuration profiles download and apply:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Wi-Fi profile
+         </div>
+         <div class="diagram-tile">
+          FileVault encryption enabled
+         </div>
+         <div class="diagram-tile">
+          Certificate deployed
+         </div>
+         <div class="diagram-tile">
+          Compliance policy evaluating
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           7
+          </span>
+          <div class="diagram-tile-body">
+           Desktop appears; Mac is managed
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Company Portal app installed and visible
+         </div>
+         <div class="diagram-tile">
+          Total time: ~20-25 minutes
+         </div>
+         <div class="diagram-tile">
+          User effort: Minimal (language, Wi-Fi, sign in)
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-what-intune-installs-on-priyas-mac">
+       <h3>
+        What Intune Installs on Priya's Mac:
+       </h3>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          STEP 1: Download Company Portal
+         </div>
+         <div class="diagram-tile">
+          Open Mac App Store
+         </div>
+         <div class="diagram-tile">
+          Search: "Intune Company Portal"
+         </div>
+         <div class="diagram-tile">
+          Download and install (free)
+         </div>
+         <div class="diagram-tile">
+          STEP 2: Sign in to Company Portal
+         </div>
+         <div class="diagram-tile">
+          Open Company Portal
+         </div>
+         <div class="diagram-tile">
+          Sign in: priya@ashscript.com
+         </div>
+         <div class="diagram-tile">
+          MFA approval on phone
+         </div>
+         <div class="diagram-tile">
+          STEP 3: Begin enrollment
+         </div>
+         <div class="diagram-tile">
+          Company Portal: "Get Started"
+         </div>
+         <div class="diagram-tile">
+          &rarr; "Begin" &rarr; Follow prompts
+         </div>
+         <div class="diagram-tile">
+          &rarr; Download Management Profile
+         </div>
+         <div class="diagram-tile">
+          STEP 4: Install Management Profile
+         </div>
+         <div class="diagram-tile">
+          System Settings &rarr; Privacy &amp; Security
+         </div>
+         <div class="diagram-tile">
+          &rarr; Profiles &rarr; Downloaded Profile
+         </div>
+         <div class="diagram-tile">
+          &rarr; Install &rarr; Enter Mac password
+         </div>
+         <div class="diagram-tile">
+          &rarr; Install &rarr; Done
+         </div>
+         <div class="diagram-tile">
+          STEP 5: Enrolled
+         </div>
+         <div class="diagram-tile">
+          Company Portal shows: "Device is compliant"
+         </div>
+         <div class="diagram-tile">
+          Priya's Mac now appears in Intune
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          MANAGEMENT PROFILE CONTENTS
+         </div>
+         <div class="diagram-tile">
+          MDM enrollment certificate
+         </div>
+         <div class="diagram-tile">
+          Intune agent (Microsoft Intune MDM Agent)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CONFIGURATION PROFILES THAT THEN PUSH:
+         </div>
+         <div class="diagram-tile">
+          Wi-Fi profile (connects to AshScript corporate Wi-Fi)
+         </div>
+         <div class="diagram-tile">
+          Certificate profile (corp auth certificate)
+         </div>
+         <div class="diagram-tile">
+          FileVault settings (encryption policy)
+         </div>
+         <div class="diagram-tile">
+          Compliance settings
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WHAT IS NOT TOUCHED:
+         </div>
+         <div class="diagram-tile">
+          &times; Priya's design apps (Adobe, Figma, Sketch)
+         </div>
+         <div class="diagram-tile">
+          &times; Her custom fonts
+         </div>
+         <div class="diagram-tile">
+          &times; Her file system (personal files untouched)
+         </div>
+         <div class="diagram-tile">
+          &times; Her browser bookmarks
+         </div>
+        </div>
+       </figure>
+       <p>
+        This is the answer Ashpak gave Priya. Intune installs a management profile; a lightweight agent
+       </p>
+       <p>
+        ; and pushes company policies. It doesn't touch personal apps, files, or settings.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-filevault-encryption-non-negotiable-for-ashscript">
+       <h2>
+        FileVault Encryption: Non-Negotiable for AshScript
+       </h2>
+       <p>
+        Every AshScript Mac must have FileVault enabled; Apple's full-disk encryption. Without it, a stolen
+       </p>
+       <p>
+        laptop means exposed company data.
+       </p>
+       <p>
+        Intune manages FileVault via a configuration profile:
+       </p>
+       <p>
+        What happens when FileVault policy applies:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          &times; Her local settings and preferences
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Platform: macOS
+         </div>
+         <div class="diagram-tile">
+          Profile Type: Endpoint Protection
+         </div>
+         <div class="diagram-tile">
+          Enable FileVault: Yes
+         </div>
+         <div class="diagram-tile">
+          Recovery key rotation: Every 6 months
+         </div>
+         <div class="diagram-tile">
+          Hide recovery key: Yes
+         </div>
+         <div class="diagram-tile">
+          Disable sign-out: No
+         </div>
+         <div class="diagram-tile">
+          Number of times allowed
+         </div>
+         <div class="diagram-tile">
+          to bypass: 3
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Policy pushes to Mac
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           User is prompted: "Your organisation requires
+          </div>
+         </div>
+         <div class="diagram-tile">
+          FileVault encryption."
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           User clicks Enable &rarr; enters their Mac password
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           FileVault encrypts the disk (runs in background)
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           Recovery key is escrowed to Intune automatically
+          </div>
+         </div>
+         <div class="diagram-tile">
+          (stored securely; IT can retrieve if needed)
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           6
+          </span>
+          <div class="diagram-tile-body">
+           Device becomes compliant for encryption requirement
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Retrieve FileVault recovery key (if user forgets password):
+       </p>
+      </section>
+      <section class="lesson-section" id="section-macos-compliance-policy">
+       <h2>
+        macOS Compliance Policy
+       </h2>
+       <p>
+        Ashpak creates a macOS compliance policy alongside enrollment:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Key: X3K7-M2P9-...
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Platform: macOS
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Device Health:
+         </div>
+         <div class="diagram-tile">
+          Require system integrity protection
+         </div>
+         <div class="diagram-tile">
+          Require device to have no compromised
+         </div>
+         <div class="diagram-tile">
+          software
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Device Properties:
+         </div>
+         <div class="diagram-tile">
+          Minimum OS version: 13.0 (Ventura)
+         </div>
+         <div class="diagram-tile">
+          Maximum OS version: (none; allow all)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          System Security:
+         </div>
+         <div class="diagram-tile">
+          Require password
+         </div>
+         <div class="diagram-tile">
+          Minimum length: 8
+         </div>
+         <div class="diagram-tile">
+          Require encryption (FileVault)
+         </div>
+         <div class="diagram-tile">
+          Minutes idle before
+         </div>
+         <div class="diagram-tile">
+          screen lock: 5
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Actions for noncompliance:
+         </div>
+         <div class="diagram-tile">
+          Day 0: Mark device noncompliant
+         </div>
+         <div class="diagram-tile">
+          Day 3: Send email to user
+         </div>
+         <div class="diagram-tile">
+          Day 14: Block access (CA enforcement)
+         </div>
+         <div class="diagram-tile">
+          Assign to: INTUNE-DEV-MACOS
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-macos-shell-scripts-extending-intunes-reach">
+       <h2>
+        macOS Shell Scripts: Extending Intune's Reach
+       </h2>
+       <p>
+        For settings that Intune configuration profiles can't handle natively, Ashpak uses shell scripts. Intune
+       </p>
+       <p>
+        can deploy and run shell scripts on macOS devices silently:
+       </p>
+       <p>
+        Example; Disable guest account on all Macs:
+       </p>
+       <p>
+        Script settings in Intune:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-supervised-vs-unsupervised-key-difference">
+       <h2>
+        Supervised vs Unsupervised: Key Difference
+       </h2>
+       <p>
+        This distinction matters significantly for what Intune can manage:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          bash
+         </div>
+         <div class="diagram-tile">
+          #!/bin/bash
+         </div>
+         <div class="diagram-tile">
+          # Disable guest user account on AshScript Macs
+         </div>
+         <div class="diagram-tile">
+          # Run as: System context
+         </div>
+         <div class="diagram-tile">
+          # Frequency: Once
+         </div>
+         <div class="diagram-tile">
+          # Disable guest account
+         </div>
+         <div class="diagram-tile">
+          dscl . -create /Users/Guest AuthenticationAuthority ";DisabledUser;"
+         </div>
+         <div class="diagram-tile">
+          defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false
+         </div>
+         <div class="diagram-tile">
+          echo "Guest account disabled successfully"
+         </div>
+         <div class="diagram-tile">
+          exit 0
+         </div>
+         <div class="diagram-tile">
+          Script: GuestDisable.sh
+         </div>
+         <div class="diagram-tile">
+          Run as account: System
+         </div>
+         <div class="diagram-tile">
+          Hide script: Yes
+         </div>
+         <div class="diagram-tile">
+          Max run times: Once
+         </div>
+         <div class="diagram-tile">
+          Retry times: 3
+         </div>
+         <div class="diagram-tile">
+          Assign to: INTUNE-DEV-MACOS
+         </div>
+        </div>
+       </figure>
+       <div class="table-lead">
+        macOS management comparison
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Supervised (ADE enrolled)
+           </th>
+           <th scope="col">
+            Unsupervised (Company Portal enrolled)
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            New Macs via ABM/ADE
+           </td>
+           <td>
+            Existing Macs via Company Portal
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Silent app install
+           </td>
+           <td>
+            Warning: User approval needed for some installs
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Locked enrollment
+           </td>
+           <td>
+            &times; User can unenroll
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Lost mode available
+           </td>
+           <td>
+            &times; No lost mode
+           </td>
+          </tr>
+          <tr>
+           <td>
+            More profile options available
+           </td>
+           <td>
+            &times; Fewer profile options
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Bootstrap token
+           </td>
+           <td>
+            &times; No bootstrap token
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscript-macos-enrollment-summary">
+       <h2>
+        AshScript macOS Enrollment Summary
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          TOTAL macOS DEVICES: 150
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          MANAGED AFTER ROLLOUT: 150 (100%)
+         </div>
+        </div>
+       </figure>
+       <div class="table-lead">
+        AshScript macOS enrollment plan
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Device type
+           </th>
+           <th scope="col">
+            Enrollment method
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            50 new MacBooks
+           </td>
+           <td>
+            ADE via Apple Business Manager &bull; Zero-touch &bull; supervised &bull; user turns on &rarr; auto-enrolls
+           </td>
+          </tr>
+          <tr>
+           <td>
+            100 existing MacBooks
+           </td>
+           <td>
+            Company Portal (manual) &bull; user installs CP, signs in &bull; 10 minutes per device &bull; unsupervised enrollment
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-current-state-after-lesson-34">
+       <h2>
+        AshScript's Current State After Lesson 3.4
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Apple MDM Push Certificate
+           </td>
+           <td>
+            Master key for all Apple management; renew annually
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Company Apple ID
+           </td>
+           <td>
+            Always use shared company Apple ID; never personal
+           </td>
+          </tr>
+          <tr>
+           <td>
+            ADE
+           </td>
+           <td>
+            Zero-touch for new Apple devices via ABM
+           </td>
+          </tr>
+          <tr>
+           <td>
+            FileVault
+           </td>
+           <td>
+            Mandatory full-disk encryption for AshScript Macs
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Recovery key escrow
+           </td>
+           <td>
+            Intune stores FileVault key; retrieve from device page
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Shell scripts
+           </td>
+           <td>
+            Extend Intune management beyond native profiles
+           </td>
+          </tr>
+          <tr>
+           <td>
+            User affinity
+           </td>
+           <td>
+            Ties device to specific user
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in">
+       <h2>
+        Key Concepts to Lock In
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          Apple MDM Push Certificate Master key for ALL Apple management; renew annually
+         </div>
+         <div class="diagram-tile">
+          Company Apple ID Always use shared company Apple ID; never personal
+         </div>
+         <div class="diagram-tile">
+          Apple Business Manager Free enterprise portal; registers devices for ADE
+         </div>
+         <div class="diagram-tile">
+          ADE Token Links ABM Intune; renew annually
+         </div>
+         <div class="diagram-tile">
+          ADE Zero-touch enrollment for new Apple devices via ABM
+         </div>
+         <div class="diagram-tile">
+          Company Portal Manual enrollment method for existing Macs
+         </div>
+         <div class="diagram-tile">
+          Supervised ADE enrolled; more management capabilities
+         </div>
+         <div class="diagram-tile">
+          Unsupervised Company Portal enrolled; fewer capabilities
+         </div>
+         <div class="diagram-tile">
+          FileVault macOS full disk encryption; mandatory for compliance
+         </div>
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          Recovery key escrow Intune stores FileVault key; retrieve from device page
+         </div>
+         <div class="diagram-tile">
+          Shell scripts Extend Intune management beyond native profiles
+         </div>
+         <div class="diagram-tile">
+          User affinity Ties device to specific user; required for personal Macs
+         </div>
+        </div>
+       </figure>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../3-3-co-management-sccm-intune-working-together/">
+         <span class="story-path-number">
+          3.3
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Co-Management: SCCM + Intune Working Together
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          3.4
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          macOS Enrollment: ADE, Company Portal &amp; Profiles
+         </strong>
+         <small>
+          Enrolling Devices
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../3-5-android-enrollment-enterprise-work-profiles-cope-byod/">
+         <span class="story-path-number">
+          3.5
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Android Enrollment: Enterprise, Work Profiles, COPE &amp; BYOD
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-3">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4">
+  </script>
+ </body>
+</html>

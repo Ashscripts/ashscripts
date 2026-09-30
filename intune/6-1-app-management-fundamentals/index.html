@@ -1,11 +1,1218 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="App Management Fundamentals · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/><title>Lesson 6.1: App Management Fundamentals · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase6-lesson" style="--lesson-accent:#a78bfa"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 6</span>/<span>6.1</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 6; APP MANAGEMENT</div><h1>App Management Fundamentals</h1><p class="lesson-subtitle">Ashpak becomes the app store for 847 devices</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-6"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 6</small><strong>Phase 6 · App Management</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">6.1 App Management Fundamentals</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-6">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-assignment-types-required-vs-available-vs-uninstall-every-app-in-intun"><span>02</span><strong>Assignment Types; Required vs Available vs Uninstall Every app in Intune can be assigned in three ways:</strong></a><a href="#section-the-same-app-can-have-multiple-assignment-types-for-different-groups"><span>03</span><strong>The same app can have multiple assignment types for different groups:</strong></a><a href="#section-app-deployment-flow-how-apps-get-from-intune-to-devices"><span>04</span><strong>App Deployment Flow How apps get from Intune to devices:</strong></a><a href="#section-app-reporting-in-intune-ashpak-monitors-app-deployment-across-the-flee"><span>05</span><strong>App Reporting in Intune Ashpak monitors app deployment across the fleet:</strong></a><a href="#section-ashscripts-app-management-plan"><span>06</span><strong>AshScript's App Management Plan</strong></a><a href="#section-current-state-after-lesson-61"><span>07</span><strong>Current State After Lesson 6.1</strong></a><a href="#section-key-concepts-to-lock-in-lesson-61"><span>08</span><strong>Key Concepts to Lock In; Lesson 6.1</strong></a><a href="#section-app-types-win32-for-windows-lob-managed-play-for-android-vpp-for-ios"><span>09</span><strong>App types Win32 for Windows LOB, Managed Play for Android, VPP for iOS</strong></a><a href="#section-lesson-62-deploying-microsoft-365-apps-ashpak-pushes-word-excel-outloo"><span>10</span><strong>Lesson 6.2; Deploying Microsoft 365 Apps; Ashpak pushes Word, Excel, Outlook and Teams to 800 laptops silently ;</strong></a><a href="#section-microsoft-365-apps-in-intune-the-special-treatment"><span>11</span><strong>Microsoft 365 Apps in Intune; The Special Treatment</strong></a></nav></aside>
-<article aria-label="Lesson 6.1; App Management Fundamentals" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-6">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>The Scene Monday morning. Phase 6. Ashpak arrives to find a spreadsheet on his desk from Riya. Subject line: "App Audit; Action Required." He opens it:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="0"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT APP AUDIT; CURRENT STATE</div><div class="diagram-items"><div class="diagram-item">Total unique apps found across fleet: 94</div><div class="diagram-item">Apps IT knows about and approves: 31</div><div class="diagram-item">Apps IT has never heard of: 63</div><div class="diagram-item">Apps with active software licences: 12</div><div class="diagram-item">Licence compliance status: Unknown</div><div class="diagram-item">Apps installed on devices they</div><div class="diagram-item">shouldn't be on: 23</div><div class="diagram-item">Users who installed apps themselves</div><div class="diagram-item">without IT approval: 341</div><div class="diagram-item">Personal apps found on corporate</div><div class="diagram-item">devices: 47 types</div></div></div></div></figure><p>At the bottom, Riya has written in red pen:</p><blockquote class="quote">"We are paying for 300 Microsoft 365 licences that are assigned manually, one by one. Copilot licences are assigned to people who left the company. We have no idea what's running on our devices. Fix this."</blockquote><p>Ashpak puts the spreadsheet down.</p><blockquote class="quote">"App management. This is the messiest part of any Intune deployment. Let's build it properly."</blockquote><p>What Is App Management in Intune? Intune app management covers the complete lifecycle of every application on every managed device:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="1"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">APP MANAGEMENT LIFECYCLE</div></div><div class="diagram-group diagram-label-only"><div class="diagram-group-title">DISCOVER DEPLOY PROTECT</div></div><div class="diagram-group"><div class="diagram-group-title">What apps Push apps Control what</div><div class="diagram-items"><div class="diagram-item">should run? silently to apps can do</div><div class="diagram-item">What apps groups with company</div><div class="diagram-item">are running? Required vs data (MAM)</div><div class="diagram-item">Available</div></div></div><div class="diagram-group"><div class="diagram-group-title">LICENCE UPDATE RETIRE</div><div class="diagram-items"><div class="diagram-item">Track app Push updates Remove apps</div><div class="diagram-item">licences automatically selectively</div><div class="diagram-item">VPP/volume Version Wipe company</div><div class="diagram-item">purchasing control data only</div></div></div></div></figure><p>App Types in Intune Intune supports many different app types. Understanding which type to use for which scenario is the foundation of app management:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">APP TYPE</th><th scope="col">USE CASE</th></tr></thead><tbody><tr class="table-section-row"><td class="table-section-cell" colspan="2">WINDOWS</td></tr><tr><td>Microsoft 365 Apps<br/>(suite)</td><td>Deploy M365 suite (Word, Excel,<br/>Outlook, Teams); most common</td></tr><tr><td>Win32 app (.intunewin)</td><td>Traditional .exe or .msi wrapped<br/>for Intune; most flexible<br/>Custom line-of-business apps</td></tr><tr><td>Microsoft Store app<br/>(new)</td><td>Apps from Microsoft Store<br/>Modern WinGet-based deployment</td></tr><tr><td>MSIX / AppX</td><td>Modern Windows app packages</td></tr><tr><td>Web app</td><td>Shortcut/link deployed as app</td></tr><tr><td>Windows app (Win32)</td><td>Line-of-business .exe/.msi</td></tr><tr class="table-section-row"><td class="table-section-cell" colspan="2">macOS</td></tr><tr><td>macOS app (.pkg)</td><td>Standard macOS package</td></tr><tr><td>Microsoft 365 Apps</td><td>M365 suite for Mac</td></tr><tr><td>macOS DMG app</td><td>DMG-packaged apps</td></tr><tr><td>Web app</td><td>Shortcut deployed as app</td></tr><tr class="table-section-row"><td class="table-section-cell" colspan="2">iOS / iPadOS</td></tr><tr><td>iOS store app</td><td>App Store apps (user pays or free)</td></tr><tr><td>iOS VPP app</td><td>Volume Purchase Program; bulk<br/>purchased apps, IT owns licences</td></tr><tr><td>Line-of-business</td><td>Custom .ipa apps not in App Store</td></tr><tr class="table-section-row"><td class="table-section-cell" colspan="2">ANDROID</td></tr><tr><td>Managed Google Play<br/>app</td><td>Recommended: Primary for Android Enterprise<br/>IT-approved apps from managed store</td></tr><tr><td>Android LOB</td><td>Custom .apk apps</td></tr><tr class="table-section-row"><td class="table-section-cell" colspan="2">ALL PLATFORMS</td></tr><tr><td>Web app<br/>Built-in app</td><td>Browser-accessible web apps<br/>Platform native apps (e.g. Camera)</td></tr></tbody></table></div></section><section class="lesson-section" id="section-assignment-types-required-vs-available-vs-uninstall-every-app-in-intun"><h2>Assignment Types: Required vs Available vs Uninstall Every app in Intune can be assigned in three ways:</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">ASSIGNMENT TYPE</th><th scope="col">BEHAVIOUR</th></tr></thead><tbody><tr><td>Required</td><td>App installs automatically<br/>User cannot remove it<br/>Reinstalls if deleted<br/>Use for: mandatory work apps<br/>(Outlook, Teams, Intune agent)</td></tr><tr><td>Available for enrolled<br/>devices</td><td>App appears in Company Portal<br/>User chooses to install it<br/>User can remove it<br/>Use for: optional productivity<br/>apps (Adobe Reader, Zoom)</td></tr><tr><td>Uninstall</td><td>App is actively removed<br/>from the device<br/>Use for: removing deprecated<br/>apps, end-of-life software<br/>(IE11, old AnyConnect version)</td></tr></tbody></table></div></section><section class="lesson-section" id="section-the-same-app-can-have-multiple-assignment-types-for-different-groups"><h2>The same app can have multiple assignment types for different groups:</h2><p>1 Microsoft Teams: 2 Required → INTUNE-DEV-WINDOWS-CORPORATE 3 (all corporate Windows laptops) 4 Available → INTUNE-DEV-WINDOWS-BYOD 5 (BYOD users can install if they want) 6 Uninstall → INTUNE-GRP-Contractors-Offboarded 7 (remove from contractor devices at offboarding)</p><p>App Categories; AshScript's Classification Before building the app catalogue, Ashpak classifies every app in the audit spreadsheet:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">CATEGORY</th><th scope="col">EXAMPLES / POLICY</th></tr></thead><tbody><tr><td>CORE; Required<br/>All managed devices</td><td>Outlook, Teams, Edge,<br/>Company Portal, Defende<br/>Assignment: Required</td></tr><tr><td>PRODUCTIVITY; Required<br/>Relevant device groups</td><td>Microsoft 365 Apps (Word, Excel)<br/>OneDrive, SharePoint app<br/>Assignment: Required to group</td></tr><tr><td>ROLE-SPECIFIC ;<br/>Required to role group</td><td>CRM app (Sales only)<br/>AutoCAD (Design only)<br/>Power BI Desktop (Analytics)<br/>Assignment: Required to role</td></tr><tr><td>OPTIONAL; Available<br/>All enrolled devices</td><td>Adobe Reader, Zoom, Slack,<br/>VLC Media Playe<br/>Assignment: Available</td></tr><tr><td>BLOCKED; Uninstall<br/>Corporate devices</td><td>Personal gaming apps,<br/>unapproved consumer apps<br/>Assignment: Uninstall from<br/>corporate device groups</td></tr><tr><td>UNKNOWN; Review</td><td>63 apps from the audit<br/>IT review: approve or block</td></tr></tbody></table></div></section><section class="lesson-section" id="section-app-deployment-flow-how-apps-get-from-intune-to-devices"><h2>App Deployment Flow How apps get from Intune to devices:</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="2"><div class="diagram-group"><div class="diagram-group-title">APP DEPLOYMENT FLOW</div><div class="diagram-items"><div class="diagram-item">▼</div><div class="diagram-item">Intune shows: Installed / Failed ×</div></div></div></div></figure><p>The Company Portal; User's App Store The Company Portal app is the user-facing interface for Intune app management. It serves two purposes:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="3"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">COMPANY PORTAL; TWO ROLES</div></div><div class="diagram-group"><div class="diagram-group-title">ROLE 1: DEVICE COMPLIANCE DASHBOARD</div><div class="diagram-items"><div class="diagram-item">Shows device compliance status</div><div class="diagram-item">Lists compliance issues with fix instructions</div><div class="diagram-item">User can trigger manual sync</div><div class="diagram-item">Shows which profiles are applied</div></div></div><div class="diagram-group"><div class="diagram-group-title">ROLE 2: OPTIONAL APP CATALOGUE</div><div class="diagram-item">• Shows all "Available" apps assigned to user</div><div class="diagram-flow"><span class="diagram-chip">• User clicks Install</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">app installs silently</span></div><div class="diagram-item">• Self-service; no IT involvement needed</div><div class="diagram-item">• IT controls which apps appear here</div></div></div></figure><p>Company Portal must be deployed to all devices:</p><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Apps → All apps 3 └── [Search: Company Portal] 4 → Microsoft Intune Company Portal 5 → Assign 6 Required: INTUNE-DEV-ALL 7 (every enrolled device 8 gets Company Portal)</p></section><section class="lesson-section" id="section-app-reporting-in-intune-ashpak-monitors-app-deployment-across-the-flee"><h2>App Reporting in Intune Ashpak monitors app deployment across the fleet:</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="4"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Apps</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Monitor</span></div><div class="diagram-item">App install status</div><div class="diagram-item">App: Microsoft Teams</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Installed: 812</div><div class="diagram-item">Not installed: 35 ×</div><div class="diagram-item">Pending: 0</div><div class="diagram-item">Failed: 0</div><div class="diagram-item">Not applicable: 0</div></div></div></div></figure><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Apps → Monitor 3 └── Discovered apps 4 (Shows every app found on every 5 managed device; not just IT-deployed) 6 7 App Devices Version 8 Microsoft Teams 812 24.x.x 9 Google Chrome 634 120.x 10 VLC Media Player 203 3.x 11 Steam 47 ← flag this 12 TikTok 23 ← flag this 13 WhatsApp Business 156 ← review</p><p>Discovered apps is the answer to Riya's audit finding. Intune automatically inventories every app on every managed device. Ashpak uses this report to identify unapproved apps and create uninstall assignments for them.</p><p>App Protection Policies (MAM); Preview App Protection Policies (APP); also called MAM policies; are the data protection layer for apps. They're covered fully in Lesson 6.6, but Ashpak introduces the concept now:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="5"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">WITHOUT APP PROTECTION POLICY:</div></div><div class="diagram-group"><div class="diagram-group-title">User opens Outlook on their phone</div><div class="diagram-item">→ Reads company email</div><div class="diagram-item">→ Copies email text</div><div class="diagram-item">→ Pastes into personal WhatsApp</div><div class="diagram-item">→ Company data leaked ×</div><div class="diagram-item">WITH APP PROTECTION POLICY:</div></div><div class="diagram-group"><div class="diagram-group-title">User opens Outlook on their phone</div><div class="diagram-item">→ Reads company email</div><div class="diagram-item">→ Tries to copy email text</div><div class="diagram-item">→ APP blocks copy to clipboard</div><div class="diagram-item">(or restricts paste to work apps only)</div><div class="diagram-item">→ Cannot paste into WhatsApp ×</div><div class="diagram-item">→ Company data stays in managed apps</div></div></div></figure><p>App Protection Policies work with or without device enrollment; which is why the CA-CORP- CompliantOrMAM-BYOD policy from Lesson 5.6 works for unmanaged devices.</p></section><section class="lesson-section" id="section-ashscripts-app-management-plan"><h2>AshScript's App Management Plan</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">LESSON</th><th scope="col">WHAT ASHPAK BUILDS</th></tr></thead><tbody><tr><td>6.2 Microsoft 365 Apps</td><td>Deploy M365 suite to all<br/>Windows + macOS devices</td></tr><tr><td>6.3 Android Apps</td><td>Managed Google Play setup<br/>Required + available apps<br/>for all Android modes</td></tr><tr><td>6.4 iOS Apps</td><td>Apple VPP setup<br/>Volume-purchased apps<br/>Required + available for iOS</td></tr><tr><td>6.5 Windows Apps</td><td>Win32 app packaging<br/>LOB app deployment<br/>Dependencies + supersedence</td></tr><tr><td>6.6 App Protection<br/>Policies</td><td>MAM policies for all platforms<br/>Data protection within apps<br/>BYOD + enrolled device</td></tr><tr><td>6.7 Selective Wipe</td><td>Remove company data on demand<br/>App retirement process</td></tr></tbody></table></div></section><section class="lesson-section" id="section-current-state-after-lesson-61"><h2>Current State After Lesson 6.1</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="6"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT</div><div class="diagram-items"><div class="diagram-item">Microsoft 365 Apps deployment (Lesson 6.2)</div><div class="diagram-item">Android app management (Lesson 6.3)</div><div class="diagram-item">iOS app management (Lesson 6.4)</div><div class="diagram-item">Windows app packaging (Lesson 6.5)</div><div class="diagram-item">App Protection Policies (Lesson 6.6)</div><div class="diagram-item">Selective wipe (Lesson 6.7)</div></div></div></div></figure></section><section class="lesson-section" id="section-key-concepts-to-lock-in-lesson-61"><h2>Key Concepts to Lock In: Lesson 6.1</h2><p>Concept Remember This</p><p>Required assignment Auto-installs silently; user cannot remove</p><p>Available assignment Appears in Company Portal; user chooses</p><p>Uninstall assignment Actively removes app from device</p><p>Same app, multiple assignments Different groups get different assignment types</p><p>Discovered apps Intune inventories ALL apps; not just IT-deployed</p><p>Concept Remember This</p><p>Company Portal dual role Compliance dashboard + optional app catalogue</p></section><section class="lesson-section" id="section-app-types-win32-for-windows-lob-managed-play-for-android-vpp-for-ios"><h3>App types Win32 for Windows LOB, Managed Play for Android, VPP for iOS</h3><p>MAM preview Data protection within apps; works with/without enrollment</p><p>Now continuing directly to Lesson 6.2...</p></section><section class="lesson-section" id="section-lesson-62-deploying-microsoft-365-apps-ashpak-pushes-word-excel-outloo"><h2>Lesson 6.2: Deploying Microsoft 365 Apps: Ashpak pushes Word, Excel, Outlook and Teams to 800 laptops silently :</h2><p>The Scene Monday late morning. The app audit spreadsheet is still on Ashpak's screen. He filters to the most critical gap:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="7"><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">App: Microsoft 365 Apps (Word/Excel/Outlook/Teams)</div><div class="diagram-item">Corporate Windows devices without M365: 127</div><div class="diagram-item">macOS devices without M365: 31</div><div class="diagram-item">Devices running outdated M365 version: 203</div></div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Total gap: 361 devices missing or outdated M365</div></div></div></div></figure><p>127 Windows laptops don't have the full Microsoft 365 suite. Users are working with older Office versions, some even Office 2016. 31 MacBooks are in the same state. 203 more devices have M365 but haven't updated in months; security vulnerabilities, feature gaps, compatibility issues. Riya's note from the audit: "We pay for M365 E3 licences for everyone. Every laptop should have the apps. Why don't they?" Because nobody deployed them centrally. Each employee either had Office pre-installed from the manufacturer, downloaded it themselves, or went without. No standardisation. No version control. No central management. Ashpak is about to change that.</p></section><section class="lesson-section" id="section-microsoft-365-apps-in-intune-the-special-treatment"><h2>Microsoft 365 Apps in Intune: The Special Treatment</h2></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../5-6-compliance-conditional-access-integration/"><span class="story-path-number">5.6</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Compliance + Conditional Access Integration</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">6.1</span><span class="story-path-label">YOU ARE HERE</span><strong>App Management Fundamentals</strong><small>App Management</small></div><a class="story-path-step story-path-next" href="../6-2-deploying-microsoft-365-apps/"><span class="story-path-number">6.2</span><span class="story-path-label">NEXT CHAPTER</span><strong>Deploying Microsoft 365 Apps</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-6">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script><script defer="" src="../../assets/js/lesson-toc.js"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="App Management Fundamentals &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/>
+  <title>
+   Lesson 6.1: App Management Fundamentals &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 6
+      </span>
+      /
+      <span>
+       6.1
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 6; APP MANAGEMENT
+     </div>
+     <h1>
+      App Management Fundamentals
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak becomes the app store for 847 devices
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-6">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 6
+        </small>
+        <strong>
+         Phase 6 &middot; App Management
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       6.1 App Management Fundamentals
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-6">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-assignment-types-required-vs-available-vs-uninstall-every-app-in-intun">
+        <span>
+         02
+        </span>
+        <strong>
+         Assignment Types; Required vs Available vs Uninstall Every app in Intune can be assigned in three ways:
+        </strong>
+       </a>
+       <a href="#section-the-same-app-can-have-multiple-assignment-types-for-different-groups">
+        <span>
+         03
+        </span>
+        <strong>
+         The same app can have multiple assignment types for different groups:
+        </strong>
+       </a>
+       <a href="#section-app-deployment-flow-how-apps-get-from-intune-to-devices">
+        <span>
+         04
+        </span>
+        <strong>
+         App Deployment Flow How apps get from Intune to devices:
+        </strong>
+       </a>
+       <a href="#section-app-reporting-in-intune-ashpak-monitors-app-deployment-across-the-flee">
+        <span>
+         05
+        </span>
+        <strong>
+         App Reporting in Intune Ashpak monitors app deployment across the fleet:
+        </strong>
+       </a>
+       <a href="#section-ashscripts-app-management-plan">
+        <span>
+         06
+        </span>
+        <strong>
+         AshScript's App Management Plan
+        </strong>
+       </a>
+       <a href="#section-current-state-after-lesson-61">
+        <span>
+         07
+        </span>
+        <strong>
+         Current State After Lesson 6.1
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in-lesson-61">
+        <span>
+         08
+        </span>
+        <strong>
+         Key Concepts to Lock In; Lesson 6.1
+        </strong>
+       </a>
+       <a href="#section-app-types-win32-for-windows-lob-managed-play-for-android-vpp-for-ios">
+        <span>
+         09
+        </span>
+        <strong>
+         App types Win32 for Windows LOB, Managed Play for Android, VPP for iOS
+        </strong>
+       </a>
+       <a href="#section-lesson-62-deploying-microsoft-365-apps-ashpak-pushes-word-excel-outloo">
+        <span>
+         10
+        </span>
+        <strong>
+         Lesson 6.2; Deploying Microsoft 365 Apps; Ashpak pushes Word, Excel, Outlook and Teams to 800 laptops silently ;
+        </strong>
+       </a>
+       <a href="#section-microsoft-365-apps-in-intune-the-special-treatment">
+        <span>
+         11
+        </span>
+        <strong>
+         Microsoft 365 Apps in Intune; The Special Treatment
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 6.1; App Management Fundamentals" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-6">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        The Scene Monday morning. Phase 6. Ashpak arrives to find a spreadsheet on his desk from Riya. Subject line: "App Audit; Action Required." He opens it:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="0">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT APP AUDIT; CURRENT STATE
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Total unique apps found across fleet: 94
+           </div>
+           <div class="diagram-item">
+            Apps IT knows about and approves: 31
+           </div>
+           <div class="diagram-item">
+            Apps IT has never heard of: 63
+           </div>
+           <div class="diagram-item">
+            Apps with active software licences: 12
+           </div>
+           <div class="diagram-item">
+            Licence compliance status: Unknown
+           </div>
+           <div class="diagram-item">
+            Apps installed on devices they
+           </div>
+           <div class="diagram-item">
+            shouldn't be on: 23
+           </div>
+           <div class="diagram-item">
+            Users who installed apps themselves
+           </div>
+           <div class="diagram-item">
+            without IT approval: 341
+           </div>
+           <div class="diagram-item">
+            Personal apps found on corporate
+           </div>
+           <div class="diagram-item">
+            devices: 47 types
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        At the bottom, Riya has written in red pen:
+       </p>
+       <blockquote class="quote">
+        "We are paying for 300 Microsoft 365 licences that are assigned manually, one by one. Copilot licences are assigned to people who left the company. We have no idea what's running on our devices. Fix this."
+       </blockquote>
+       <p>
+        Ashpak puts the spreadsheet down.
+       </p>
+       <blockquote class="quote">
+        "App management. This is the messiest part of any Intune deployment. Let's build it properly."
+       </blockquote>
+       <p>
+        What Is App Management in Intune? Intune app management covers the complete lifecycle of every application on every managed device:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="1">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           APP MANAGEMENT LIFECYCLE
+          </div>
+         </div>
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           DISCOVER DEPLOY PROTECT
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           What apps Push apps Control what
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            should run? silently to apps can do
+           </div>
+           <div class="diagram-item">
+            What apps groups with company
+           </div>
+           <div class="diagram-item">
+            are running? Required vs data (MAM)
+           </div>
+           <div class="diagram-item">
+            Available
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           LICENCE UPDATE RETIRE
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Track app Push updates Remove apps
+           </div>
+           <div class="diagram-item">
+            licences automatically selectively
+           </div>
+           <div class="diagram-item">
+            VPP/volume Version Wipe company
+           </div>
+           <div class="diagram-item">
+            purchasing control data only
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        App Types in Intune Intune supports many different app types. Understanding which type to use for which scenario is the foundation of app management:
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            APP TYPE
+           </th>
+           <th scope="col">
+            USE CASE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr class="table-section-row">
+           <td class="table-section-cell" colspan="2">
+            WINDOWS
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Microsoft 365 Apps
+            <br/>
+            (suite)
+           </td>
+           <td>
+            Deploy M365 suite (Word, Excel,
+            <br/>
+            Outlook, Teams); most common
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Win32 app (.intunewin)
+           </td>
+           <td>
+            Traditional .exe or .msi wrapped
+            <br/>
+            for Intune; most flexible
+            <br/>
+            Custom line-of-business apps
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Microsoft Store app
+            <br/>
+            (new)
+           </td>
+           <td>
+            Apps from Microsoft Store
+            <br/>
+            Modern WinGet-based deployment
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MSIX / AppX
+           </td>
+           <td>
+            Modern Windows app packages
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Web app
+           </td>
+           <td>
+            Shortcut/link deployed as app
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Windows app (Win32)
+           </td>
+           <td>
+            Line-of-business .exe/.msi
+           </td>
+          </tr>
+          <tr class="table-section-row">
+           <td class="table-section-cell" colspan="2">
+            macOS
+           </td>
+          </tr>
+          <tr>
+           <td>
+            macOS app (.pkg)
+           </td>
+           <td>
+            Standard macOS package
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Microsoft 365 Apps
+           </td>
+           <td>
+            M365 suite for Mac
+           </td>
+          </tr>
+          <tr>
+           <td>
+            macOS DMG app
+           </td>
+           <td>
+            DMG-packaged apps
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Web app
+           </td>
+           <td>
+            Shortcut deployed as app
+           </td>
+          </tr>
+          <tr class="table-section-row">
+           <td class="table-section-cell" colspan="2">
+            iOS / iPadOS
+           </td>
+          </tr>
+          <tr>
+           <td>
+            iOS store app
+           </td>
+           <td>
+            App Store apps (user pays or free)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            iOS VPP app
+           </td>
+           <td>
+            Volume Purchase Program; bulk
+            <br/>
+            purchased apps, IT owns licences
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Line-of-business
+           </td>
+           <td>
+            Custom .ipa apps not in App Store
+           </td>
+          </tr>
+          <tr class="table-section-row">
+           <td class="table-section-cell" colspan="2">
+            ANDROID
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Managed Google Play
+            <br/>
+            app
+           </td>
+           <td>
+            Recommended: Primary for Android Enterprise
+            <br/>
+            IT-approved apps from managed store
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Android LOB
+           </td>
+           <td>
+            Custom .apk apps
+           </td>
+          </tr>
+          <tr class="table-section-row">
+           <td class="table-section-cell" colspan="2">
+            ALL PLATFORMS
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Web app
+            <br/>
+            Built-in app
+           </td>
+           <td>
+            Browser-accessible web apps
+            <br/>
+            Platform native apps (e.g. Camera)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-assignment-types-required-vs-available-vs-uninstall-every-app-in-intun">
+       <h2>
+        Assignment Types: Required vs Available vs Uninstall Every app in Intune can be assigned in three ways:
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            ASSIGNMENT TYPE
+           </th>
+           <th scope="col">
+            BEHAVIOUR
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Required
+           </td>
+           <td>
+            App installs automatically
+            <br/>
+            User cannot remove it
+            <br/>
+            Reinstalls if deleted
+            <br/>
+            Use for: mandatory work apps
+            <br/>
+            (Outlook, Teams, Intune agent)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Available for enrolled
+            <br/>
+            devices
+           </td>
+           <td>
+            App appears in Company Portal
+            <br/>
+            User chooses to install it
+            <br/>
+            User can remove it
+            <br/>
+            Use for: optional productivity
+            <br/>
+            apps (Adobe Reader, Zoom)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Uninstall
+           </td>
+           <td>
+            App is actively removed
+            <br/>
+            from the device
+            <br/>
+            Use for: removing deprecated
+            <br/>
+            apps, end-of-life software
+            <br/>
+            (IE11, old AnyConnect version)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-the-same-app-can-have-multiple-assignment-types-for-different-groups">
+       <h2>
+        The same app can have multiple assignment types for different groups:
+       </h2>
+       <p>
+        1 Microsoft Teams: 2 Required &rarr; INTUNE-DEV-WINDOWS-CORPORATE 3 (all corporate Windows laptops) 4 Available &rarr; INTUNE-DEV-WINDOWS-BYOD 5 (BYOD users can install if they want) 6 Uninstall &rarr; INTUNE-GRP-Contractors-Offboarded 7 (remove from contractor devices at offboarding)
+       </p>
+       <p>
+        App Categories; AshScript's Classification Before building the app catalogue, Ashpak classifies every app in the audit spreadsheet:
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            CATEGORY
+           </th>
+           <th scope="col">
+            EXAMPLES / POLICY
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            CORE; Required
+            <br/>
+            All managed devices
+           </td>
+           <td>
+            Outlook, Teams, Edge,
+            <br/>
+            Company Portal, Defende
+            <br/>
+            Assignment: Required
+           </td>
+          </tr>
+          <tr>
+           <td>
+            PRODUCTIVITY; Required
+            <br/>
+            Relevant device groups
+           </td>
+           <td>
+            Microsoft 365 Apps (Word, Excel)
+            <br/>
+            OneDrive, SharePoint app
+            <br/>
+            Assignment: Required to group
+           </td>
+          </tr>
+          <tr>
+           <td>
+            ROLE-SPECIFIC ;
+            <br/>
+            Required to role group
+           </td>
+           <td>
+            CRM app (Sales only)
+            <br/>
+            AutoCAD (Design only)
+            <br/>
+            Power BI Desktop (Analytics)
+            <br/>
+            Assignment: Required to role
+           </td>
+          </tr>
+          <tr>
+           <td>
+            OPTIONAL; Available
+            <br/>
+            All enrolled devices
+           </td>
+           <td>
+            Adobe Reader, Zoom, Slack,
+            <br/>
+            VLC Media Playe
+            <br/>
+            Assignment: Available
+           </td>
+          </tr>
+          <tr>
+           <td>
+            BLOCKED; Uninstall
+            <br/>
+            Corporate devices
+           </td>
+           <td>
+            Personal gaming apps,
+            <br/>
+            unapproved consumer apps
+            <br/>
+            Assignment: Uninstall from
+            <br/>
+            corporate device groups
+           </td>
+          </tr>
+          <tr>
+           <td>
+            UNKNOWN; Review
+           </td>
+           <td>
+            63 apps from the audit
+            <br/>
+            IT review: approve or block
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-app-deployment-flow-how-apps-get-from-intune-to-devices">
+       <h2>
+        App Deployment Flow How apps get from Intune to devices:
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="2">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           APP DEPLOYMENT FLOW
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            ▼
+           </div>
+           <div class="diagram-item">
+            Intune shows: Installed / Failed &times;
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        The Company Portal; User's App Store The Company Portal app is the user-facing interface for Intune app management. It serves two purposes:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="3">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           COMPANY PORTAL; TWO ROLES
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ROLE 1: DEVICE COMPLIANCE DASHBOARD
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Shows device compliance status
+           </div>
+           <div class="diagram-item">
+            Lists compliance issues with fix instructions
+           </div>
+           <div class="diagram-item">
+            User can trigger manual sync
+           </div>
+           <div class="diagram-item">
+            Shows which profiles are applied
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ROLE 2: OPTIONAL APP CATALOGUE
+          </div>
+          <div class="diagram-item">
+           &bull; Shows all "Available" apps assigned to user
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            &bull; User clicks Install
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            app installs silently
+           </span>
+          </div>
+          <div class="diagram-item">
+           &bull; Self-service; no IT involvement needed
+          </div>
+          <div class="diagram-item">
+           &bull; IT controls which apps appear here
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Company Portal must be deployed to all devices:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Apps &rarr; All apps 3 &boxur;&boxh;&boxh; [Search: Company Portal] 4 &rarr; Microsoft Intune Company Portal 5 &rarr; Assign 6 Required: INTUNE-DEV-ALL 7 (every enrolled device 8 gets Company Portal)
+       </p>
+      </section>
+      <section class="lesson-section" id="section-app-reporting-in-intune-ashpak-monitors-app-deployment-across-the-flee">
+       <h2>
+        App Reporting in Intune Ashpak monitors app deployment across the fleet:
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="4">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Apps
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Monitor
+           </span>
+          </div>
+          <div class="diagram-item">
+           App install status
+          </div>
+          <div class="diagram-item">
+           App: Microsoft Teams
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Installed: 812
+           </div>
+           <div class="diagram-item">
+            Not installed: 35 &times;
+           </div>
+           <div class="diagram-item">
+            Pending: 0
+           </div>
+           <div class="diagram-item">
+            Failed: 0
+           </div>
+           <div class="diagram-item">
+            Not applicable: 0
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Apps &rarr; Monitor 3 &boxur;&boxh;&boxh; Discovered apps 4 (Shows every app found on every 5 managed device; not just IT-deployed) 6 7 App Devices Version 8 Microsoft Teams 812 24.x.x 9 Google Chrome 634 120.x 10 VLC Media Player 203 3.x 11 Steam 47 &larr; flag this 12 TikTok 23 &larr; flag this 13 WhatsApp Business 156 &larr; review
+       </p>
+       <p>
+        Discovered apps is the answer to Riya's audit finding. Intune automatically inventories every app on every managed device. Ashpak uses this report to identify unapproved apps and create uninstall assignments for them.
+       </p>
+       <p>
+        App Protection Policies (MAM); Preview App Protection Policies (APP); also called MAM policies; are the data protection layer for apps. They're covered fully in Lesson 6.6, but Ashpak introduces the concept now:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="5">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           WITHOUT APP PROTECTION POLICY:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           User opens Outlook on their phone
+          </div>
+          <div class="diagram-item">
+           &rarr; Reads company email
+          </div>
+          <div class="diagram-item">
+           &rarr; Copies email text
+          </div>
+          <div class="diagram-item">
+           &rarr; Pastes into personal WhatsApp
+          </div>
+          <div class="diagram-item">
+           &rarr; Company data leaked &times;
+          </div>
+          <div class="diagram-item">
+           WITH APP PROTECTION POLICY:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           User opens Outlook on their phone
+          </div>
+          <div class="diagram-item">
+           &rarr; Reads company email
+          </div>
+          <div class="diagram-item">
+           &rarr; Tries to copy email text
+          </div>
+          <div class="diagram-item">
+           &rarr; APP blocks copy to clipboard
+          </div>
+          <div class="diagram-item">
+           (or restricts paste to work apps only)
+          </div>
+          <div class="diagram-item">
+           &rarr; Cannot paste into WhatsApp &times;
+          </div>
+          <div class="diagram-item">
+           &rarr; Company data stays in managed apps
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        App Protection Policies work with or without device enrollment; which is why the CA-CORP- CompliantOrMAM-BYOD policy from Lesson 5.6 works for unmanaged devices.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-app-management-plan">
+       <h2>
+        AshScript's App Management Plan
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            LESSON
+           </th>
+           <th scope="col">
+            WHAT ASHPAK BUILDS
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            6.2 Microsoft 365 Apps
+           </td>
+           <td>
+            Deploy M365 suite to all
+            <br/>
+            Windows + macOS devices
+           </td>
+          </tr>
+          <tr>
+           <td>
+            6.3 Android Apps
+           </td>
+           <td>
+            Managed Google Play setup
+            <br/>
+            Required + available apps
+            <br/>
+            for all Android modes
+           </td>
+          </tr>
+          <tr>
+           <td>
+            6.4 iOS Apps
+           </td>
+           <td>
+            Apple VPP setup
+            <br/>
+            Volume-purchased apps
+            <br/>
+            Required + available for iOS
+           </td>
+          </tr>
+          <tr>
+           <td>
+            6.5 Windows Apps
+           </td>
+           <td>
+            Win32 app packaging
+            <br/>
+            LOB app deployment
+            <br/>
+            Dependencies + supersedence
+           </td>
+          </tr>
+          <tr>
+           <td>
+            6.6 App Protection
+            <br/>
+            Policies
+           </td>
+           <td>
+            MAM policies for all platforms
+            <br/>
+            Data protection within apps
+            <br/>
+            BYOD + enrolled device
+           </td>
+          </tr>
+          <tr>
+           <td>
+            6.7 Selective Wipe
+           </td>
+           <td>
+            Remove company data on demand
+            <br/>
+            App retirement process
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-current-state-after-lesson-61">
+       <h2>
+        Current State After Lesson 6.1
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="6">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Microsoft 365 Apps deployment (Lesson 6.2)
+           </div>
+           <div class="diagram-item">
+            Android app management (Lesson 6.3)
+           </div>
+           <div class="diagram-item">
+            iOS app management (Lesson 6.4)
+           </div>
+           <div class="diagram-item">
+            Windows app packaging (Lesson 6.5)
+           </div>
+           <div class="diagram-item">
+            App Protection Policies (Lesson 6.6)
+           </div>
+           <div class="diagram-item">
+            Selective wipe (Lesson 6.7)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in-lesson-61">
+       <h2>
+        Key Concepts to Lock In: Lesson 6.1
+       </h2>
+       <p>
+        Concept Remember This
+       </p>
+       <p>
+        Required assignment Auto-installs silently; user cannot remove
+       </p>
+       <p>
+        Available assignment Appears in Company Portal; user chooses
+       </p>
+       <p>
+        Uninstall assignment Actively removes app from device
+       </p>
+       <p>
+        Same app, multiple assignments Different groups get different assignment types
+       </p>
+       <p>
+        Discovered apps Intune inventories ALL apps; not just IT-deployed
+       </p>
+       <p>
+        Concept Remember This
+       </p>
+       <p>
+        Company Portal dual role Compliance dashboard + optional app catalogue
+       </p>
+      </section>
+      <section class="lesson-section" id="section-app-types-win32-for-windows-lob-managed-play-for-android-vpp-for-ios">
+       <h3>
+        App types Win32 for Windows LOB, Managed Play for Android, VPP for iOS
+       </h3>
+       <p>
+        MAM preview Data protection within apps; works with/without enrollment
+       </p>
+       <p>
+        Now continuing directly to Lesson 6.2...
+       </p>
+      </section>
+      <section class="lesson-section" id="section-lesson-62-deploying-microsoft-365-apps-ashpak-pushes-word-excel-outloo">
+       <h2>
+        Lesson 6.2: Deploying Microsoft 365 Apps: Ashpak pushes Word, Excel, Outlook and Teams to 800 laptops silently :
+       </h2>
+       <p>
+        The Scene Monday late morning. The app audit spreadsheet is still on Ashpak's screen. He filters to the most critical gap:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="7">
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            App: Microsoft 365 Apps (Word/Excel/Outlook/Teams)
+           </div>
+           <div class="diagram-item">
+            Corporate Windows devices without M365: 127
+           </div>
+           <div class="diagram-item">
+            macOS devices without M365: 31
+           </div>
+           <div class="diagram-item">
+            Devices running outdated M365 version: 203
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Total gap: 361 devices missing or outdated M365
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        127 Windows laptops don't have the full Microsoft 365 suite. Users are working with older Office versions, some even Office 2016. 31 MacBooks are in the same state. 203 more devices have M365 but haven't updated in months; security vulnerabilities, feature gaps, compatibility issues. Riya's note from the audit: "We pay for M365 E3 licences for everyone. Every laptop should have the apps. Why don't they?" Because nobody deployed them centrally. Each employee either had Office pre-installed from the manufacturer, downloaded it themselves, or went without. No standardisation. No version control. No central management. Ashpak is about to change that.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-microsoft-365-apps-in-intune-the-special-treatment">
+       <h2>
+        Microsoft 365 Apps in Intune: The Special Treatment
+       </h2>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../5-6-compliance-conditional-access-integration/">
+         <span class="story-path-number">
+          5.6
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Compliance + Conditional Access Integration
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          6.1
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          App Management Fundamentals
+         </strong>
+         <small>
+          App Management
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../6-2-deploying-microsoft-365-apps/">
+         <span class="story-path-number">
+          6.2
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Deploying Microsoft 365 Apps
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-6">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/lesson-toc.js">
+  </script>
+ </body>
+</html>

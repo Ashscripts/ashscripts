@@ -1,11 +1,1261 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Intune Built-In Reports and Dashboards · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/><title>Lesson 8.1: Intune Built-In Reports and Dashboards · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase8-lesson" style="--lesson-accent:#a46b4c"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 8</span>/<span>8.1</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 8; MONITORING, REPORTING &amp; TROUBLESHOOTING</div><h1>Intune Built-In Reports and Dashboards</h1><p class="lesson-subtitle">Ashpak builds the visibility layer that keeps AshScript’s fleet healthy</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-8"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 8</small><strong>Phase 8; Monitoring, Reporting &amp; Troubleshooting</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">8.1 Intune Built-In Reports and Dashboards</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-8">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-intunes-reporting-architecture-intune-has-evolved-its-reporting-signif"><span>02</span><strong>Intune's Reporting Architecture Intune has evolved its reporting significantly. There are now three reporting layers:</strong></a><a href="#section-layer-1-the-intune-home-dashboard"><span>03</span><strong>Layer 1; The Intune Home Dashboard</strong></a><a href="#section-layer-2-built-in-reports-the-full-map"><span>04</span><strong>Layer 2; Built-In Reports: The Full Map</strong></a><a href="#section-answering-kabirs-request-non-compliant-device-report"><span>05</span><strong>Answering Kabir's Request; Non-Compliant Device Report</strong></a><a href="#section-answering-the-finance-team-app-licence-report"><span>06</span><strong>Answering the Finance Team; App Licence Report</strong></a><a href="#section-encryption-report-for-the-board"><span>07</span><strong>Encryption Report; For the Board</strong></a><a href="#section-app-install-status-report"><span>08</span><strong>App Install Status Report</strong></a><a href="#section-device-health-report-answering-riya-to-answer-riyas-board-request-ashp"><span>09</span><strong>Device Health Report; Answering Riya To answer Riya's board request, Ashpak pulls the comprehensive device health report:</strong></a><a href="#section-current-state-after-lesson-81"><span>10</span><strong>Current State After Lesson 8.1</strong></a><a href="#section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor"><span>11</span><strong>Lesson 8.2; Custom Reports and Data Export; Ashpak builds the board report and scheduled exports ;</strong></a><a href="#section-intune-report-builder-custom-reports"><span>12</span><strong>Intune Report Builder; Custom Reports</strong></a></nav></aside>
-<article aria-label="Lesson 8.1; Intune Built-In Reports and Dashboards" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-8">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>The Scene Monday morning. Phase 8. The last phase. Ashpak arrives to find three messages waiting: From Riya (CEO):</p><blockquote class="quote">"Board meeting Thursday. I need a one-page summary: how many devices are managed, how many are compliant, what threats we've had, what apps are deployed. Can you give me numbers?"</blockquote><p>From Kabir (IT Manager):</p><blockquote class="quote">"Two users called this morning; their laptops show as non-compliant but they don't know why. Can we get a report that shows non-compliant devices AND the specific reason for each one?"</blockquote><p>From the Finance team:</p><blockquote class="quote">"Our DocuSign licences; we think we're running low. Can you check how many we've used?"</blockquote><p>Three completely different reporting needs. One morning. Ashpak opens the Intune portal.</p><blockquote class="quote">"This is what Phase 8 is about. The devices are managed. The security is in place. Now we need to see it all clearly; and prove it."</blockquote></section><section class="lesson-section" id="section-intunes-reporting-architecture-intune-has-evolved-its-reporting-signif"><h2>Intune's Reporting Architecture Intune has evolved its reporting significantly. There are now three reporting layers:</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="0"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">INTUNE REPORTING LAYERS</div></div><div class="diagram-group"><div class="diagram-group-title">LAYER 1: SUMMARY DASHBOARDS</div><div class="diagram-items"><div class="diagram-item">Quick overview cards on the home page</div><div class="diagram-item">High-level counts and trends</div><div class="diagram-item">Refreshes regularly</div><div class="diagram-item">Best for: daily health check</div></div></div><div class="diagram-group"><div class="diagram-group-title">LAYER 2: BUILT-IN REPORTS</div><div class="diagram-item">Pre-built detailed reports</div><div class="diagram-item">Filter, sort, export to CSV</div><div class="diagram-flow"><span class="diagram-chip">Located under: Devices</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Monitor</span></div><div class="diagram-item">Reports menu</div><div class="diagram-item">Best for: specific investigations,</div><div class="diagram-item">regular operational reporting</div></div><div class="diagram-group"><div class="diagram-group-title">LAYER 3: CUSTOM REPORTS (Report Builder)</div><div class="diagram-items"><div class="diagram-item">Build custom reports with chosen columns</div><div class="diagram-item">Schedule for regular delivery</div><div class="diagram-item">Export to CSV / Power BI</div><div class="diagram-item">Best for: board reports, audit evidence,</div><div class="diagram-item">tailored operational views</div></div></div></div></figure></section><section class="lesson-section" id="section-layer-1-the-intune-home-dashboard"><h2>Layer 1: The Intune Home Dashboard</h2><div class="lesson-table-wrap"><table class="lesson-table dashboard-table"><thead><tr><th scope="col">Category</th><th scope="col">Metric</th><th scope="col">Value</th></tr></thead><tbody><tr><td>Enrolled devices</td><td>Total</td><td class="table-value">847</td></tr><tr><td>Enrolled devices</td><td>Windows</td><td class="table-value">800</td></tr><tr><td>Enrolled devices</td><td>macOS</td><td class="table-value">150</td></tr><tr><td>Enrolled devices</td><td>iOS</td><td class="table-value">200</td></tr><tr><td>Enrolled devices</td><td>Android</td><td class="table-value">250+</td></tr><tr><td>Compliance</td><td>Compliant</td><td class="table-value">1331</td></tr><tr><td>Compliance</td><td>Non-compliant</td><td class="table-value">316</td></tr><tr><td>Compliance</td><td>In grace</td><td class="table-value">22</td></tr><tr><td>Configuration profiles</td><td>Success</td><td class="table-value">98.2%</td></tr><tr><td>Configuration profiles</td><td>Error</td><td class="table-value">1.8%</td></tr><tr><td>App install status</td><td>Installed</td><td class="table-value">94%</td></tr><tr><td>App install status</td><td>Failed</td><td class="table-value">2%</td></tr><tr><td>App install status</td><td>Pending</td><td class="table-value">4%</td></tr><tr><td>MDE integration</td><td>Onboarded</td><td class="table-value">839</td></tr><tr><td>MDE integration</td><td>Active alerts</td><td class="table-value">0</td></tr><tr><td>MDE integration</td><td>Risk</td><td class="table-value">Clear</td></tr><tr><td>Service health</td><td>All services</td><td class="table-value">Operational</td></tr></tbody></table></div></section><section class="lesson-section" id="section-layer-2-built-in-reports-the-full-map"><h2>Layer 2: Built-In Reports: The Full Map</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="1"><div class="diagram-group"><div class="diagram-items"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-item">Reports</div><div class="diagram-item">REPORTS CATEGORIES:</div></div></div><div class="diagram-group"><div class="diagram-group-title">Device Management</div><div class="diagram-items"><div class="diagram-item">→ All devices report</div><div class="diagram-item">→ Device enrollment failures</div><div class="diagram-item">→ Device inventory</div><div class="diagram-item">Compliance</div><div class="diagram-item">→ Device compliance</div><div class="diagram-item">→ Non-compliant devices</div><div class="diagram-item">→ Setting compliance</div><div class="diagram-item">Configuration</div><div class="diagram-item">→ Assignment failures</div><div class="diagram-item">→ Device configuration</div><div class="diagram-item">Apps</div><div class="diagram-item">→ App install status</div><div class="diagram-item">→ Discovered apps</div><div class="diagram-item">→ App protection status</div><div class="diagram-item">→ App licences (VPP)</div><div class="diagram-item">Endpoint Security</div><div class="diagram-item">→ Encryption report</div><div class="diagram-item">→ Firewall status</div><div class="diagram-item">→ Antivirus agent status</div><div class="diagram-item">Endpoint Analytics</div><div class="diagram-item">→ Startup performance</div><div class="diagram-item">→ Recommended software</div><div class="diagram-item">→ Work from anywhere</div><div class="diagram-item">Microsoft Defender</div><div class="diagram-item">→ Threat protection</div><div class="diagram-item">→ Device risk</div></div></div></div></figure></section><section class="lesson-section" id="section-answering-kabirs-request-non-compliant-device-report"><h2>Answering Kabir's Request: Non-Compliant Device Report</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="2"><div class="diagram-group"><div class="diagram-items"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-item">Reports</div><div class="diagram-item">Device compliance</div><div class="diagram-item">→ Non-compliant devices</div><div class="diagram-item">COLUMNS SHOWN:</div><div class="diagram-table-row"><span class="diagram-table-cell is-key">Device name</span><span class="diagram-table-cell">User</span><span class="diagram-table-cell">OS</span><span class="diagram-table-cell">Version</span></div><div class="diagram-table-row"><span class="diagram-table-cell is-key">Compliance state</span><span class="diagram-table-cell">Last check-in</span></div><div class="diagram-item">Non-compliance reason(s)</div><div class="diagram-item">CURRENT OUTPUT:</div></div></div><div class="diagram-group"><div class="diagram-group-title">Device User Reason</div><div class="diagram-item">316 total non-compliant devices</div><div class="diagram-item">→ Export to CSV (for Kabir)</div></div></div></figure><p>Filtering to see each failure reason:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="3"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Reports</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Device compliance</span></div><div class="diagram-item">→ Setting compliance</div><div class="diagram-item">VIEW: Which SETTINGS are failing most?</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Setting Compliant Non-compliant Error</div><div class="diagram-item">BitLocker required 689 111 0</div><div class="diagram-item">Firewall required 778 22 0</div><div class="diagram-item">Antivirus up-to-date 801 -1 0</div><div class="diagram-item">OS minimum version 769 31 0</div><div class="diagram-item">Secure Boot 792 8 0</div><div class="diagram-item">MDE risk: Medium 842 5 0</div></div></div><div class="diagram-group"><div class="diagram-item">TOP ISSUE: BitLocker; 111 devices</div><div class="diagram-item">ACTION: Check if BitLocker profile</div><div class="diagram-item">deployed and TPM ready on these</div><div class="diagram-flow"><span class="diagram-chip">devices</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">investigate + fix</span></div></div></div></figure></section><section class="lesson-section" id="section-answering-the-finance-team-app-licence-report"><h2>Answering the Finance Team: App Licence Report</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="4"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Apps</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">iOS/iPadOS VPP apps</span></div><div class="diagram-item">→ [Select token: AshScript-ABM-Token]</div><div class="diagram-item">→ Licence summary</div><div class="diagram-item">VPP LICENCE UTILISATION:</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">App Purchased Used Available Used%</div><div class="diagram-item">Microsoft Outlook 500 197 303 39%</div><div class="diagram-item">Microsoft Teams 500 197 303 39%</div><div class="diagram-item">Cisco AnyConnect 200 198 2 99% Warning:</div><div class="diagram-item">DocuSign 30 29 1 97% Warning:</div><div class="diagram-item">Adobe Lightroom 20 18 2 90% Warning:</div></div></div><div class="diagram-group"><div class="diagram-group-title">Warning: ACTION REQUIRED:</div><div class="diagram-items"><div class="diagram-item">AnyConnect: 2 remaining; purchase 50 more</div><div class="diagram-item">DocuSign: 1 remaining; purchase 10 more</div><div class="diagram-item">Lightroom: 2 remaining; purchase 5 more</div></div></div></div></figure></section><section class="lesson-section" id="section-encryption-report-for-the-board"><h2>Encryption Report: For the Board</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="5"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Reports</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Endpoint security</span></div><div class="diagram-item">→ Encryption report</div><div class="diagram-item">ENCRYPTION STATUS; ALL PLATFORMS:</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Platform Encrypted Not Encrypted Not Applicable</div><div class="diagram-item">Windows 789 11 0</div><div class="diagram-item">(BitLocker) (98.6%) (1.4%)</div><div class="diagram-item">macOS 144 6 0</div><div class="diagram-item">(FileVault) (96%) (4%)</div><div class="diagram-item">iOS 200 0 0</div><div class="diagram-item">(Always (100%)</div><div class="diagram-item">encrypted</div><div class="diagram-item">by Apple)</div><div class="diagram-item">Android 250 0 0</div><div class="diagram-item">(Always (100%)</div><div class="diagram-item">encrypted)</div></div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">OVERALL: 1,383/1,400 enrolled devices encrypted</div><div class="diagram-item">RATE: 98.8%</div><div class="diagram-item">NOT ENCRYPTED DEVICES; ACTION NEEDED:</div><div class="diagram-item">Windows (11): Check BitLocker profiles</div><div class="diagram-item">macOS (6): Check FileVault user prompts</div></div></div></div></figure><p>Endpoint Analytics; Device Performance Endpoint Analytics provides performance data about device health and user experience:</p><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Reports → Endpoint Analytics 3 4 STARTUP PERFORMANCE: 5 Average startup time: 87 seconds 6 Organisation baseline: 76 seconds 7 Warning: Slower than baseline by 14% 8 9 Worst performing devices: 10 ASHPC-FINANCE-09: 4m 12s (aging hardware) 11 ASHPC-SALES-23: 3m 47s (HDD not SSD) 12 ASHPC-DEV-03: 2m 58s (too many startup apps) 13 14 WORK FROM ANYWHERE SCORE: 15 Cloud management: 100% (all enrolled) 16 Cloud identity: 98% 17 Cloud provisioning: 94% 18 Overall score: 43/100 19 ← Lower than expected 20 Main gap: Endpoint analytics agent 21 not reporting from all devices</p><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Reports → Endpoint Analytics 3 → Recommended software 4 5 RECOMMENDATION: 6 "Windows 10 devices without Windows 11: 7 386 devices eligible for upgrade 8 Estimated score improvement: +12 points 9 Action: Schedule Windows 11 upgrade wave"</p></section><section class="lesson-section" id="section-app-install-status-report"><h2>App Install Status Report</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="6"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Reports</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Apps</span></div><div class="diagram-item">→ App install status</div><div class="diagram-item">FILTER: Installation failures only</div><div class="diagram-item">App Failed Devices Error</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Adobe Acrobat 4 0x87D1041C</div><div class="diagram-item">(detection mismatch)</div><div class="diagram-item">Google Chrome 1 0x87D00325</div><div class="diagram-item">(network timeout)</div><div class="diagram-item">AutoCAD 2024 0 ;</div><div class="diagram-item">Microsoft 365 2 0x87D1041C</div><div class="diagram-item">(disk space)</div></div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Total failures: 7 devices</div><div class="diagram-item">All have documented fix paths</div></div></div></div></figure></section><section class="lesson-section" id="section-device-health-report-answering-riya-to-answer-riyas-board-request-ashp"><h2>Device Health Report: Answering Riya To answer Riya's board request, Ashpak pulls the comprehensive device health report:</h2><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Reports → Device Management 3 → All devices 4 5 FULL EXPORT (CSV): 6 847 rows; one per device</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="7"><div class="diagram-group"><div class="diagram-group-title">Columns:</div><div class="diagram-items"><div class="diagram-item">Total managed devices: 847</div><div class="diagram-item">Windows: 800 (94.5%)</div><div class="diagram-item">macOS: 150 (17.7%)</div><div class="diagram-item">iOS: 200 (23.6%)</div><div class="diagram-item">Android: 250 (29.5%)</div><div class="diagram-item">Corporate owned: 680 (80.3%)</div><div class="diagram-item">Personal (BYOD): 167 (19.7%)</div><div class="diagram-item">Compliant devices: 1331 / all users (84.1%)</div><div class="diagram-item">Encrypted devices: 1383 / 1400 (98.8%)</div><div class="diagram-item">MDE onboarded: 839 / 847 (99.1%)</div><div class="diagram-item">Apps deployed: 47 unique apps</div><div class="diagram-item">Active threats: 0 unresolved</div></div></div></div></figure><p>Why total users (1331) exceeds devices (847)? Compliance is measured per user-device pair. A user with 2 devices (laptop + phone) has 2 compliance evaluations. The compliance count reflects unique user-device pairs, not just physical devices.</p></section><section class="lesson-section" id="section-current-state-after-lesson-81"><h2>Current State After Lesson 8.1</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="8"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT</div><div class="diagram-items"><div class="diagram-item">Custom reports + data export (Lesson 8.2)</div><div class="diagram-item">Alerts + monitoring (Lesson 8.3)</div><div class="diagram-item">Day-to-day operational workflows (Lesson 8.4)</div><div class="diagram-item">Weekly operations checklist (Lesson 8.5)</div></div></div></div></figure></section><section class="lesson-section" id="section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor"><h2>Lesson 8.2: Custom Reports and Data Export: Ashpak builds the board report and scheduled exports :</h2><p>The Scene Monday afternoon. Built-in reports answered the immediate questions. But Riya doesn't want to log into the Intune portal every Thursday before the board meeting. She wants a clean, structured report delivered to her inbox automatically. Ashpak has two tools for this: Intune Report Builder; custom column selection, saved reports Microsoft Graph API + Power BI; scheduled exports, rich visualisations</p></section><section class="lesson-section" id="section-intune-report-builder-custom-reports"><h2>Intune Report Builder: Custom Reports</h2><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Reports 3 └── Report builder (preview) 4 → + New report 5 6 STEP 1: Choose data source 7 Category: Devices 8 Data: All devices with compliance 9 (combines device inventory + compliance state) 10 11 STEP 2: Choose columns 12 Selected columns (drag to order): 13 Device name 14 User principal name 15 OS 16 OS version 17 Ownership (Corporate/Personal) 18 Enrollment date 19 Last check-in 20 Compliance state 21 Encryption state</p></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../7-7-microsoft-tunnel-vpn-for-managed-devices/"><span class="story-path-number">7.7</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Microsoft Tunnel: VPN for Managed Devices</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">8.1</span><span class="story-path-label">YOU ARE HERE</span><strong>Intune Built-In Reports and Dashboards</strong><small>Monitoring, Reporting &amp; Troubleshooting</small></div><a class="story-path-step story-path-next" href="../8-2-custom-reports-and-data-export/"><span class="story-path-number">8.2</span><span class="story-path-label">NEXT CHAPTER</span><strong>Custom Reports and Data Export</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-8">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script><script defer="" src="../../assets/js/lesson-toc.js"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Intune Built-In Reports and Dashboards &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/>
+  <title>
+   Lesson 8.1: Intune Built-In Reports and Dashboards &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 8
+      </span>
+      /
+      <span>
+       8.1
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 8; MONITORING, REPORTING &amp; TROUBLESHOOTING
+     </div>
+     <h1>
+      Intune Built-In Reports and Dashboards
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds the visibility layer that keeps AshScript&rsquo;s fleet healthy
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-8">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 8
+        </small>
+        <strong>
+         Phase 8; Monitoring, Reporting &amp; Troubleshooting
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       8.1 Intune Built-In Reports and Dashboards
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-8">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-intunes-reporting-architecture-intune-has-evolved-its-reporting-signif">
+        <span>
+         02
+        </span>
+        <strong>
+         Intune's Reporting Architecture Intune has evolved its reporting significantly. There are now three reporting layers:
+        </strong>
+       </a>
+       <a href="#section-layer-1-the-intune-home-dashboard">
+        <span>
+         03
+        </span>
+        <strong>
+         Layer 1; The Intune Home Dashboard
+        </strong>
+       </a>
+       <a href="#section-layer-2-built-in-reports-the-full-map">
+        <span>
+         04
+        </span>
+        <strong>
+         Layer 2; Built-In Reports: The Full Map
+        </strong>
+       </a>
+       <a href="#section-answering-kabirs-request-non-compliant-device-report">
+        <span>
+         05
+        </span>
+        <strong>
+         Answering Kabir's Request; Non-Compliant Device Report
+        </strong>
+       </a>
+       <a href="#section-answering-the-finance-team-app-licence-report">
+        <span>
+         06
+        </span>
+        <strong>
+         Answering the Finance Team; App Licence Report
+        </strong>
+       </a>
+       <a href="#section-encryption-report-for-the-board">
+        <span>
+         07
+        </span>
+        <strong>
+         Encryption Report; For the Board
+        </strong>
+       </a>
+       <a href="#section-app-install-status-report">
+        <span>
+         08
+        </span>
+        <strong>
+         App Install Status Report
+        </strong>
+       </a>
+       <a href="#section-device-health-report-answering-riya-to-answer-riyas-board-request-ashp">
+        <span>
+         09
+        </span>
+        <strong>
+         Device Health Report; Answering Riya To answer Riya's board request, Ashpak pulls the comprehensive device health report:
+        </strong>
+       </a>
+       <a href="#section-current-state-after-lesson-81">
+        <span>
+         10
+        </span>
+        <strong>
+         Current State After Lesson 8.1
+        </strong>
+       </a>
+       <a href="#section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor">
+        <span>
+         11
+        </span>
+        <strong>
+         Lesson 8.2; Custom Reports and Data Export; Ashpak builds the board report and scheduled exports ;
+        </strong>
+       </a>
+       <a href="#section-intune-report-builder-custom-reports">
+        <span>
+         12
+        </span>
+        <strong>
+         Intune Report Builder; Custom Reports
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 8.1; Intune Built-In Reports and Dashboards" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-8">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        The Scene Monday morning. Phase 8. The last phase. Ashpak arrives to find three messages waiting: From Riya (CEO):
+       </p>
+       <blockquote class="quote">
+        "Board meeting Thursday. I need a one-page summary: how many devices are managed, how many are compliant, what threats we've had, what apps are deployed. Can you give me numbers?"
+       </blockquote>
+       <p>
+        From Kabir (IT Manager):
+       </p>
+       <blockquote class="quote">
+        "Two users called this morning; their laptops show as non-compliant but they don't know why. Can we get a report that shows non-compliant devices AND the specific reason for each one?"
+       </blockquote>
+       <p>
+        From the Finance team:
+       </p>
+       <blockquote class="quote">
+        "Our DocuSign licences; we think we're running low. Can you check how many we've used?"
+       </blockquote>
+       <p>
+        Three completely different reporting needs. One morning. Ashpak opens the Intune portal.
+       </p>
+       <blockquote class="quote">
+        "This is what Phase 8 is about. The devices are managed. The security is in place. Now we need to see it all clearly; and prove it."
+       </blockquote>
+      </section>
+      <section class="lesson-section" id="section-intunes-reporting-architecture-intune-has-evolved-its-reporting-signif">
+       <h2>
+        Intune's Reporting Architecture Intune has evolved its reporting significantly. There are now three reporting layers:
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="0">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           INTUNE REPORTING LAYERS
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           LAYER 1: SUMMARY DASHBOARDS
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Quick overview cards on the home page
+           </div>
+           <div class="diagram-item">
+            High-level counts and trends
+           </div>
+           <div class="diagram-item">
+            Refreshes regularly
+           </div>
+           <div class="diagram-item">
+            Best for: daily health check
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           LAYER 2: BUILT-IN REPORTS
+          </div>
+          <div class="diagram-item">
+           Pre-built detailed reports
+          </div>
+          <div class="diagram-item">
+           Filter, sort, export to CSV
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Located under: Devices
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Monitor
+           </span>
+          </div>
+          <div class="diagram-item">
+           Reports menu
+          </div>
+          <div class="diagram-item">
+           Best for: specific investigations,
+          </div>
+          <div class="diagram-item">
+           regular operational reporting
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           LAYER 3: CUSTOM REPORTS (Report Builder)
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Build custom reports with chosen columns
+           </div>
+           <div class="diagram-item">
+            Schedule for regular delivery
+           </div>
+           <div class="diagram-item">
+            Export to CSV / Power BI
+           </div>
+           <div class="diagram-item">
+            Best for: board reports, audit evidence,
+           </div>
+           <div class="diagram-item">
+            tailored operational views
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-layer-1-the-intune-home-dashboard">
+       <h2>
+        Layer 1: The Intune Home Dashboard
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table dashboard-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Category
+           </th>
+           <th scope="col">
+            Metric
+           </th>
+           <th scope="col">
+            Value
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Enrolled devices
+           </td>
+           <td>
+            Total
+           </td>
+           <td class="table-value">
+            847
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrolled devices
+           </td>
+           <td>
+            Windows
+           </td>
+           <td class="table-value">
+            800
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrolled devices
+           </td>
+           <td>
+            macOS
+           </td>
+           <td class="table-value">
+            150
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrolled devices
+           </td>
+           <td>
+            iOS
+           </td>
+           <td class="table-value">
+            200
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrolled devices
+           </td>
+           <td>
+            Android
+           </td>
+           <td class="table-value">
+            250+
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Compliance
+           </td>
+           <td>
+            Compliant
+           </td>
+           <td class="table-value">
+            1331
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Compliance
+           </td>
+           <td>
+            Non-compliant
+           </td>
+           <td class="table-value">
+            316
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Compliance
+           </td>
+           <td>
+            In grace
+           </td>
+           <td class="table-value">
+            22
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Configuration profiles
+           </td>
+           <td>
+            Success
+           </td>
+           <td class="table-value">
+            98.2%
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Configuration profiles
+           </td>
+           <td>
+            Error
+           </td>
+           <td class="table-value">
+            1.8%
+           </td>
+          </tr>
+          <tr>
+           <td>
+            App install status
+           </td>
+           <td>
+            Installed
+           </td>
+           <td class="table-value">
+            94%
+           </td>
+          </tr>
+          <tr>
+           <td>
+            App install status
+           </td>
+           <td>
+            Failed
+           </td>
+           <td class="table-value">
+            2%
+           </td>
+          </tr>
+          <tr>
+           <td>
+            App install status
+           </td>
+           <td>
+            Pending
+           </td>
+           <td class="table-value">
+            4%
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MDE integration
+           </td>
+           <td>
+            Onboarded
+           </td>
+           <td class="table-value">
+            839
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MDE integration
+           </td>
+           <td>
+            Active alerts
+           </td>
+           <td class="table-value">
+            0
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MDE integration
+           </td>
+           <td>
+            Risk
+           </td>
+           <td class="table-value">
+            Clear
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Service health
+           </td>
+           <td>
+            All services
+           </td>
+           <td class="table-value">
+            Operational
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-layer-2-built-in-reports-the-full-map">
+       <h2>
+        Layer 2: Built-In Reports: The Full Map
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="1">
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+             intune.microsoft.com
+            </a>
+           </div>
+           <div class="diagram-item">
+            Reports
+           </div>
+           <div class="diagram-item">
+            REPORTS CATEGORIES:
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Device Management
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            &rarr; All devices report
+           </div>
+           <div class="diagram-item">
+            &rarr; Device enrollment failures
+           </div>
+           <div class="diagram-item">
+            &rarr; Device inventory
+           </div>
+           <div class="diagram-item">
+            Compliance
+           </div>
+           <div class="diagram-item">
+            &rarr; Device compliance
+           </div>
+           <div class="diagram-item">
+            &rarr; Non-compliant devices
+           </div>
+           <div class="diagram-item">
+            &rarr; Setting compliance
+           </div>
+           <div class="diagram-item">
+            Configuration
+           </div>
+           <div class="diagram-item">
+            &rarr; Assignment failures
+           </div>
+           <div class="diagram-item">
+            &rarr; Device configuration
+           </div>
+           <div class="diagram-item">
+            Apps
+           </div>
+           <div class="diagram-item">
+            &rarr; App install status
+           </div>
+           <div class="diagram-item">
+            &rarr; Discovered apps
+           </div>
+           <div class="diagram-item">
+            &rarr; App protection status
+           </div>
+           <div class="diagram-item">
+            &rarr; App licences (VPP)
+           </div>
+           <div class="diagram-item">
+            Endpoint Security
+           </div>
+           <div class="diagram-item">
+            &rarr; Encryption report
+           </div>
+           <div class="diagram-item">
+            &rarr; Firewall status
+           </div>
+           <div class="diagram-item">
+            &rarr; Antivirus agent status
+           </div>
+           <div class="diagram-item">
+            Endpoint Analytics
+           </div>
+           <div class="diagram-item">
+            &rarr; Startup performance
+           </div>
+           <div class="diagram-item">
+            &rarr; Recommended software
+           </div>
+           <div class="diagram-item">
+            &rarr; Work from anywhere
+           </div>
+           <div class="diagram-item">
+            Microsoft Defender
+           </div>
+           <div class="diagram-item">
+            &rarr; Threat protection
+           </div>
+           <div class="diagram-item">
+            &rarr; Device risk
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-answering-kabirs-request-non-compliant-device-report">
+       <h2>
+        Answering Kabir's Request: Non-Compliant Device Report
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="2">
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+             intune.microsoft.com
+            </a>
+           </div>
+           <div class="diagram-item">
+            Reports
+           </div>
+           <div class="diagram-item">
+            Device compliance
+           </div>
+           <div class="diagram-item">
+            &rarr; Non-compliant devices
+           </div>
+           <div class="diagram-item">
+            COLUMNS SHOWN:
+           </div>
+           <div class="diagram-table-row">
+            <span class="diagram-table-cell is-key">
+             Device name
+            </span>
+            <span class="diagram-table-cell">
+             User
+            </span>
+            <span class="diagram-table-cell">
+             OS
+            </span>
+            <span class="diagram-table-cell">
+             Version
+            </span>
+           </div>
+           <div class="diagram-table-row">
+            <span class="diagram-table-cell is-key">
+             Compliance state
+            </span>
+            <span class="diagram-table-cell">
+             Last check-in
+            </span>
+           </div>
+           <div class="diagram-item">
+            Non-compliance reason(s)
+           </div>
+           <div class="diagram-item">
+            CURRENT OUTPUT:
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Device User Reason
+          </div>
+          <div class="diagram-item">
+           316 total non-compliant devices
+          </div>
+          <div class="diagram-item">
+           &rarr; Export to CSV (for Kabir)
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Filtering to see each failure reason:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="3">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Reports
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Device compliance
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; Setting compliance
+          </div>
+          <div class="diagram-item">
+           VIEW: Which SETTINGS are failing most?
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Setting Compliant Non-compliant Error
+           </div>
+           <div class="diagram-item">
+            BitLocker required 689 111 0
+           </div>
+           <div class="diagram-item">
+            Firewall required 778 22 0
+           </div>
+           <div class="diagram-item">
+            Antivirus up-to-date 801 -1 0
+           </div>
+           <div class="diagram-item">
+            OS minimum version 769 31 0
+           </div>
+           <div class="diagram-item">
+            Secure Boot 792 8 0
+           </div>
+           <div class="diagram-item">
+            MDE risk: Medium 842 5 0
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-item">
+           TOP ISSUE: BitLocker; 111 devices
+          </div>
+          <div class="diagram-item">
+           ACTION: Check if BitLocker profile
+          </div>
+          <div class="diagram-item">
+           deployed and TPM ready on these
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            devices
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            investigate + fix
+           </span>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-answering-the-finance-team-app-licence-report">
+       <h2>
+        Answering the Finance Team: App Licence Report
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="4">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Apps
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            iOS/iPadOS VPP apps
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; [Select token: AshScript-ABM-Token]
+          </div>
+          <div class="diagram-item">
+           &rarr; Licence summary
+          </div>
+          <div class="diagram-item">
+           VPP LICENCE UTILISATION:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            App Purchased Used Available Used%
+           </div>
+           <div class="diagram-item">
+            Microsoft Outlook 500 197 303 39%
+           </div>
+           <div class="diagram-item">
+            Microsoft Teams 500 197 303 39%
+           </div>
+           <div class="diagram-item">
+            Cisco AnyConnect 200 198 2 99% Warning:
+           </div>
+           <div class="diagram-item">
+            DocuSign 30 29 1 97% Warning:
+           </div>
+           <div class="diagram-item">
+            Adobe Lightroom 20 18 2 90% Warning:
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Warning: ACTION REQUIRED:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            AnyConnect: 2 remaining; purchase 50 more
+           </div>
+           <div class="diagram-item">
+            DocuSign: 1 remaining; purchase 10 more
+           </div>
+           <div class="diagram-item">
+            Lightroom: 2 remaining; purchase 5 more
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-encryption-report-for-the-board">
+       <h2>
+        Encryption Report: For the Board
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="5">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Reports
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Endpoint security
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; Encryption report
+          </div>
+          <div class="diagram-item">
+           ENCRYPTION STATUS; ALL PLATFORMS:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Platform Encrypted Not Encrypted Not Applicable
+           </div>
+           <div class="diagram-item">
+            Windows 789 11 0
+           </div>
+           <div class="diagram-item">
+            (BitLocker) (98.6%) (1.4%)
+           </div>
+           <div class="diagram-item">
+            macOS 144 6 0
+           </div>
+           <div class="diagram-item">
+            (FileVault) (96%) (4%)
+           </div>
+           <div class="diagram-item">
+            iOS 200 0 0
+           </div>
+           <div class="diagram-item">
+            (Always (100%)
+           </div>
+           <div class="diagram-item">
+            encrypted
+           </div>
+           <div class="diagram-item">
+            by Apple)
+           </div>
+           <div class="diagram-item">
+            Android 250 0 0
+           </div>
+           <div class="diagram-item">
+            (Always (100%)
+           </div>
+           <div class="diagram-item">
+            encrypted)
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            OVERALL: 1,383/1,400 enrolled devices encrypted
+           </div>
+           <div class="diagram-item">
+            RATE: 98.8%
+           </div>
+           <div class="diagram-item">
+            NOT ENCRYPTED DEVICES; ACTION NEEDED:
+           </div>
+           <div class="diagram-item">
+            Windows (11): Check BitLocker profiles
+           </div>
+           <div class="diagram-item">
+            macOS (6): Check FileVault user prompts
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Endpoint Analytics; Device Performance Endpoint Analytics provides performance data about device health and user experience:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Reports &rarr; Endpoint Analytics 3 4 STARTUP PERFORMANCE: 5 Average startup time: 87 seconds 6 Organisation baseline: 76 seconds 7 Warning: Slower than baseline by 14% 8 9 Worst performing devices: 10 ASHPC-FINANCE-09: 4m 12s (aging hardware) 11 ASHPC-SALES-23: 3m 47s (HDD not SSD) 12 ASHPC-DEV-03: 2m 58s (too many startup apps) 13 14 WORK FROM ANYWHERE SCORE: 15 Cloud management: 100% (all enrolled) 16 Cloud identity: 98% 17 Cloud provisioning: 94% 18 Overall score: 43/100 19 &larr; Lower than expected 20 Main gap: Endpoint analytics agent 21 not reporting from all devices
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Reports &rarr; Endpoint Analytics 3 &rarr; Recommended software 4 5 RECOMMENDATION: 6 "Windows 10 devices without Windows 11: 7 386 devices eligible for upgrade 8 Estimated score improvement: +12 points 9 Action: Schedule Windows 11 upgrade wave"
+       </p>
+      </section>
+      <section class="lesson-section" id="section-app-install-status-report">
+       <h2>
+        App Install Status Report
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="6">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Reports
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Apps
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; App install status
+          </div>
+          <div class="diagram-item">
+           FILTER: Installation failures only
+          </div>
+          <div class="diagram-item">
+           App Failed Devices Error
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Adobe Acrobat 4 0x87D1041C
+           </div>
+           <div class="diagram-item">
+            (detection mismatch)
+           </div>
+           <div class="diagram-item">
+            Google Chrome 1 0x87D00325
+           </div>
+           <div class="diagram-item">
+            (network timeout)
+           </div>
+           <div class="diagram-item">
+            AutoCAD 2024 0 ;
+           </div>
+           <div class="diagram-item">
+            Microsoft 365 2 0x87D1041C
+           </div>
+           <div class="diagram-item">
+            (disk space)
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Total failures: 7 devices
+           </div>
+           <div class="diagram-item">
+            All have documented fix paths
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-device-health-report-answering-riya-to-answer-riyas-board-request-ashp">
+       <h2>
+        Device Health Report: Answering Riya To answer Riya's board request, Ashpak pulls the comprehensive device health report:
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Reports &rarr; Device Management 3 &rarr; All devices 4 5 FULL EXPORT (CSV): 6 847 rows; one per device
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="7">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Columns:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Total managed devices: 847
+           </div>
+           <div class="diagram-item">
+            Windows: 800 (94.5%)
+           </div>
+           <div class="diagram-item">
+            macOS: 150 (17.7%)
+           </div>
+           <div class="diagram-item">
+            iOS: 200 (23.6%)
+           </div>
+           <div class="diagram-item">
+            Android: 250 (29.5%)
+           </div>
+           <div class="diagram-item">
+            Corporate owned: 680 (80.3%)
+           </div>
+           <div class="diagram-item">
+            Personal (BYOD): 167 (19.7%)
+           </div>
+           <div class="diagram-item">
+            Compliant devices: 1331 / all users (84.1%)
+           </div>
+           <div class="diagram-item">
+            Encrypted devices: 1383 / 1400 (98.8%)
+           </div>
+           <div class="diagram-item">
+            MDE onboarded: 839 / 847 (99.1%)
+           </div>
+           <div class="diagram-item">
+            Apps deployed: 47 unique apps
+           </div>
+           <div class="diagram-item">
+            Active threats: 0 unresolved
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Why total users (1331) exceeds devices (847)? Compliance is measured per user-device pair. A user with 2 devices (laptop + phone) has 2 compliance evaluations. The compliance count reflects unique user-device pairs, not just physical devices.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-current-state-after-lesson-81">
+       <h2>
+        Current State After Lesson 8.1
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="8">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Custom reports + data export (Lesson 8.2)
+           </div>
+           <div class="diagram-item">
+            Alerts + monitoring (Lesson 8.3)
+           </div>
+           <div class="diagram-item">
+            Day-to-day operational workflows (Lesson 8.4)
+           </div>
+           <div class="diagram-item">
+            Weekly operations checklist (Lesson 8.5)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor">
+       <h2>
+        Lesson 8.2: Custom Reports and Data Export: Ashpak builds the board report and scheduled exports :
+       </h2>
+       <p>
+        The Scene Monday afternoon. Built-in reports answered the immediate questions. But Riya doesn't want to log into the Intune portal every Thursday before the board meeting. She wants a clean, structured report delivered to her inbox automatically. Ashpak has two tools for this: Intune Report Builder; custom column selection, saved reports Microsoft Graph API + Power BI; scheduled exports, rich visualisations
+       </p>
+      </section>
+      <section class="lesson-section" id="section-intune-report-builder-custom-reports">
+       <h2>
+        Intune Report Builder: Custom Reports
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Reports 3 &boxur;&boxh;&boxh; Report builder (preview) 4 &rarr; + New report 5 6 STEP 1: Choose data source 7 Category: Devices 8 Data: All devices with compliance 9 (combines device inventory + compliance state) 10 11 STEP 2: Choose columns 12 Selected columns (drag to order): 13 Device name 14 User principal name 15 OS 16 OS version 17 Ownership (Corporate/Personal) 18 Enrollment date 19 Last check-in 20 Compliance state 21 Encryption state
+       </p>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../7-7-microsoft-tunnel-vpn-for-managed-devices/">
+         <span class="story-path-number">
+          7.7
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Microsoft Tunnel: VPN for Managed Devices
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          8.1
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Intune Built-In Reports and Dashboards
+         </strong>
+         <small>
+          Monitoring, Reporting &amp; Troubleshooting
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../8-2-custom-reports-and-data-export/">
+         <span class="story-path-number">
+          8.2
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Custom Reports and Data Export
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-8">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/lesson-toc.js">
+  </script>
+ </body>
+</html>

@@ -1,387 +1,498 @@
 <!DOCTYPE html>
-
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width,initial-scale=1" name="viewport" />
-    <meta
-      content="What is Microsoft Intune? (MDM vs MAM) · ashscript Intune tutorials"
-      name="description"
-    />
-    <meta content="#030503" name="theme-color" />
-    <link
-      href="../../assets/images/ashscript-favicon.png?v=3"
-      rel="icon"
-      sizes="64x64"
-      type="image/png"
-    />
-    <link
-      href="../../assets/images/ashscript-favicon.ico?v=3"
-      rel="shortcut icon"
-    />
-    <link
-      href="../../assets/images/ashscript-favicon.png?v=3"
-      rel="apple-touch-icon"
-    />
-    <title>Lesson 1.1: "What is Microsoft Intune?" · ashscript</title>
-    <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet" />
-  </head>
-  <body class="phase1-lesson" style="--lesson-accent:#ff4d4f">
-    <header class="site-header">
-      <div class="container nav">
-        <a aria-label="ashscript home" class="brand" href="../../"
-          ><span class="brand-mark"></span
-          ><span
-            >ashscript<span style="color:var(--lime)">.</span
-            ><small
-              >Application Packaging &amp; Endpoint Automation</small
-            ></span
-          ></a
-        >
-        <button
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-          class="menu-toggle"
-          data-menu-toggle=""
-        >
-          MENU
-        </button>
-        <nav aria-label="Primary navigation" class="nav-links" data-nav="">
-          <a href="../../">Scripts</a>
-          <details class="nav-dropdown" data-nav-dropdown="">
-            <summary>
-              Intune<span aria-hidden="true" class="nav-caret"></span>
-            </summary>
-            <div class="nav-submenu">
-              <a aria-current="page" href="../../intune/"
-                ><span class="submenu-kicker">LEARN</span
-                ><strong>Intune tutorials</strong></a
-              >
-            </div>
-          </details>
-          <a href="../../who-am-i/">Who Am I</a>
-        </nav>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="What is Microsoft Intune? (MDM vs MAM) &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=3" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=3" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=3" rel="apple-touch-icon"/>
+  <title>
+   Lesson 1.1: "What is Microsoft Intune?" &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase1-lesson" style="--lesson-accent:#ff4d4f">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown" data-nav-dropdown="">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a aria-current="page" href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
       </div>
-    </header>
-    <main>
-      <section class="page-hero intune-lesson-hero">
-        <div class="container">
-          <div class="breadcrumb">
-            <a href="../../">Home</a>/<a href="../../intune/"
-              >Intune Tutorials</a
-            >/<span>Phase 1</span>/<span>1.1</span>
-          </div>
-          <div class="lesson-hero-kicker">
-            <span class="lesson-hero-dot"></span>PHASE 1; THE FOUNDATION
-          </div>
-          <h1>"What is Microsoft Intune?"</h1>
-          <p class="lesson-subtitle">
-            The day Ashpak walks into his manager's office
-          </p>
-        </div>
-      </section>
-      <section class="section lesson-reader">
-        <div class="container lesson-reader-layout">
-          <aside class="lesson-sidebar">
-            <div class="toc-label">COURSE NAVIGATION</div>
-            <a class="lesson-phase-link" href="../#phase-1"
-              ><span aria-hidden="true" class="lesson-phase-dot"></span
-              ><span class="lesson-phase-copy"
-                ><small>PHASE 1</small
-                ><strong>Phase 1 · The Foundation</strong></span
-              ></a
-            >
-            <div class="toc-label" style="margin-top:8px">CURRENT LESSON</div>
-            <div class="lesson-index">
-              1.1 What is Microsoft Intune? (MDM vs MAM)
-            </div>
-            <a class="phase-back learning-modules-btn" href="../#phase-1"
-              >Learning Modules</a
-            >
-            <div class="toc-label" style="margin-top:6px">ON THIS LESSON</div>
-            <nav aria-label="On this lesson" class="lesson-toc">
-              <a href="#section-the-scene"
-                ><span>01</span><strong>The Scene</strong></a
-              ><a href="#section-so-what-is-microsoft-intune"
-                ><span>02</span
-                ><strong>So; What IS Microsoft Intune?</strong></a
-              ><a href="#section-1-mobile-device-management-mdm"
-                ><span>03</span
-                ><strong>1. Mobile Device Management (MDM)</strong></a
-              ><a href="#section-2-mobile-application-management-mam"
-                ><span>04</span
-                ><strong>2. Mobile Application Management (MAM)</strong></a
-              ><a href="#section-the-one-line-summary"
-                ><span>05</span><strong>The One-Line Summary</strong></a
-              ><a href="#section-where-does-intune-live"
-                ><span>06</span><strong>Where Does Intune Live?</strong></a
-              ><a href="#section-your-first-portal-visit"
-                ><span>07</span><strong>Your First Portal Visit</strong></a
-              >
-            </nav>
-          </aside>
-          <article
-            aria-label='Lesson 1.1; "What is Microsoft Intune?"'
-            class="lesson-content"
-          >
-            <div class="lesson-toolbar">
-              <a class="btn btn-ghost learning-modules-btn" href="../#phase-1"
-                >Learning Modules</a
-              >
-            </div>
-            <section class="lesson-section" id="section-the-scene">
-              <h2>The Scene</h2>
-              <p class="">
-                It's a Monday morning at AshScript. Ashpak, a senior IT
-                engineer, is staring at his screen juggling three problems
-                simultaneously:
-              </p>
-              <div class="bullet-cluster">
-                <ul class="bullet-group">
-                  <li>
-                    A laptop was stolen from a travelling employee; the hard
-                    drive has sensitive client code on it, and there's no way to
-                    remotely wipe it
-                  </li>
-                  <li>
-                    A new employee starts tomorrow; it'll take the IT team half
-                    a day to manually configure their laptop
-                  </li>
-                  <li>
-                    An employee is asking if they can use their personal iPhone
-                    to check work email; IT has no answer
-                  </li>
-                </ul>
-              </div>
-              <p class="">
-                Ashpak types two words into Google: "Microsoft Intune"
-              </p>
-            </section>
-            <section
-              class="lesson-section"
-              id="section-so-what-is-microsoft-intune"
-            >
-              <h2>So: What IS Microsoft Intune?</h2>
-              <p class="">
-                Think of Intune as your remote control for every device in your
-                company; whether that device is sitting in your office, at
-                someone's home, on a plane, or anywhere in the world.
-              </p>
-              <p class="">
-                More formally, Intune is a cloud-based service from Microsoft
-                that does two big things:
-              </p>
-              <figure class="lesson-figure" id="mdm-mam-diagram">
-                <img
-                  alt="MDM vs MAM comparison"
-                  decoding="async"
-                  loading="lazy"
-                  src="../../assets/images/intune/lesson-1-1-mdm-vs-mam.svg"
-                />
-                <figcaption>
-                  MDM vs MAM; management scope and device ownership
-                </figcaption>
-              </figure>
-            </section>
-            <section
-              class="lesson-section"
-              id="section-1-mobile-device-management-mdm"
-            >
-              <h2>1. Mobile Device Management (MDM)</h2>
-              <div class="quote">
-                "I own this device. I control it completely."
-              </div>
-              <p class="">
-                This is for company-owned devices. When a device is enrolled in
-                MDM:
-              </p>
-              <div class="bullet-cluster">
-                <ul class="bullet-group">
-                  <li>
-                    You can push settings to it (Wi-Fi passwords, VPN, email
-                    config)
-                  </li>
-                  <li>
-                    You can enforce rules (screen must lock after 5 minutes,
-                    encryption must be on)
-                  </li>
-                  <li>
-                    You can deploy apps silently, without the user doing
-                    anything
-                  </li>
-                  <li>You can remotely wipe it if it's lost or stolen</li>
-                  <li>
-                    You can see its status; is it healthy? Is it compliant?
-                  </li>
-                </ul>
-              </div>
-              <p class="">
-                AshScript example: Those 1,000 domain-joined laptops? Once
-                enrolled in MDM, Ashpak can wipe the stolen laptop from the
-                Intune portal in seconds, from anywhere.
-              </p>
-            </section>
-            <section
-              class="lesson-section"
-              id="section-2-mobile-application-management-mam"
-            >
-              <h2>2. Mobile Application Management (MAM)</h2>
-              <div class="quote">
-                "I don't own this device. But I DO own the company data on it."
-              </div>
-              <p class="">
-                This is for personal (BYOD) devices. The employee keeps full
-                control of their phone; Intune only manages the work apps and
-                data, not the entire device.
-              </p>
-              <div class="bullet-cluster">
-                <ul class="bullet-group">
-                  <li>
-                    Company email and files are containerized; isolated from
-                    personal apps
-                  </li>
-                  <li>
-                    If the employee leaves the company, only the work data is
-                    wiped; personal photos stay untouched
-                  </li>
-                  <li>
-                    No enrollment needed; the employee never gives IT control of
-                    their personal device
-                  </li>
-                </ul>
-              </div>
-              <p class="">
-                AshScript example: That employee who wants to check work email
-                on their iPhone? MAM lets them do it safely. Intune wraps the
-                Outlook app in a protective bubble; company data can't be copied
-                to personal apps.
-              </p>
-            </section>
-            <section class="lesson-section" id="section-the-one-line-summary">
-              <h2>The One-Line Summary</h2>
-              <div class="callout-accent">
-                MDM = Manage the whole device. MAM = Manage just the work data
-                on the device.
-              </div>
-            </section>
-            <section class="lesson-section" id="section-where-does-intune-live">
-              <h2>Where Does Intune Live?</h2>
-              <p class="">
-                Intune is not a box you install. It's a cloud service; part of
-                Microsoft's cloud family. Here's how it connects:
-              </p>
-              <figure class="lesson-figure">
-                <img
-                  alt="Where Does Intune Live?"
-                  loading="lazy"
-                  src="../../assets/images/intune/lesson-1-1-intune-lives.svg"
-                />
-                <figcaption>Where Does Intune Live?</figcaption>
-              </figure>
-              <p class="">
-                You can't use Intune without Entra ID; every device and user in
-                Intune is ultimately an identity in Entra ID. They work as a
-                pair, and we'll explore this deeply in Phase 2.
-              </p>
-            </section>
-            <section
-              class="lesson-section"
-              id="section-your-first-portal-visit"
-            >
-              <h2>Your First Portal Visit</h2>
-              <p class="">
-                Here's where to go right now to see the Intune admin center;
-                even before AshScript has set anything up, you can explore the
-                interface:
-              </p>
-              <p class="">
-                Navigate to:
-                <a
-                  class="lesson-url"
-                  href="https://intune.microsoft.com/"
-                  rel="noopener"
-                  target="_blank"
-                  >https://intune.microsoft.com</a
-                >
-              </p>
-              <p class="">
-                If you don't have a tenant yet, you can sign up for a free
-                30-day Microsoft Intune trial at
-                <a
-                  class="lesson-url"
-                  href="https://www.microsoft.com/en-us/security/business/microsoft-intune"
-                  rel="noopener"
-                  target="_blank"
-                  >microsoft.com/intune</a
-                >
-                ; this gives you a sandbox to follow along every step of the
-                way.
-              </p>
-              <p class="">What you'll see on the Home dashboard:</p>
-              <div class="bullet-cluster">
-                <ul class="bullet-group">
-                  <li>Devices; your enrolled device inventory</li>
-                  <li>Apps; everything you're deploying</li>
-                  <li>Endpoint Security; compliance and protection</li>
-                  <li>Reports; health and status of your environment</li>
-                  <li>
-                    Tenant Administration; your settings and configuration
-                  </li>
-                </ul>
-              </div>
-            </section>
-            <nav aria-label="Lesson story navigation" class="story-path">
-              <div class="story-path-head">
-                <span class="story-path-kicker">STORY PATH</span
-                ><strong class="story-path-title"
-                  >Continue Ashpak's Intune journey</strong
-                >
-              </div>
-              <div class="story-path-rail">
-                <a class="story-path-step story-path-prev" href="../#phase-1"
-                  ><span class="story-path-number">P1</span
-                  ><span class="story-path-label">PHASE OPENING</span
-                  ><strong>Phase 1 · The Foundation</strong
-                  ><small>Return to the beginning of this phase</small></a
-                >
-                <div
-                  aria-current="page"
-                  class="story-path-step story-path-current"
-                >
-                  <span class="story-path-number">1.1</span
-                  ><span class="story-path-label">YOU ARE HERE</span
-                  ><strong>What is Microsoft Intune? (MDM vs MAM)</strong
-                  ><small>The Foundation</small>
-                </div>
-                <a
-                  class="story-path-step story-path-next"
-                  href="../1-2-how-intune-fits-the-microsoft-ecosystem/"
-                  ><span class="story-path-number">1.2</span
-                  ><span class="story-path-label">NEXT CHAPTER</span
-                  ><strong>How Intune Fits the Microsoft Ecosystem</strong
-                  ><small>Continue the story</small></a
-                >
-              </div>
-              <a class="story-path-modules" href="../#phase-1"
-                >Learning Modules</a
-              >
-            </nav>
-          </article>
-        </div>
-      </section>
-    </main>
-    <footer class="footer">
-      <div class="container footer-grid">
-        <small
-          ><span data-year=""></span>ashscript. Static GitHub Pages site.</small
-        >
-        <div>
-          <a href="../../">Scripts</a
-          ><a href="../../intune/">Intune Tutorials</a
-          ><a href="../../who-am-i/">Who Am I</a>
-        </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 1
+      </span>
+      /
+      <span>
+       1.1
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 1; THE FOUNDATION
+     </div>
+     <h1>
+      "What is Microsoft Intune?"
+     </h1>
+     <p class="lesson-subtitle">
+      The day Ashpak walks into his manager's office
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
       </div>
-    </footer>
-    <script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
-  </body>
+      <a class="lesson-phase-link" href="../#phase-1">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 1
+        </small>
+        <strong>
+         Phase 1 &middot; The Foundation
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       1.1 What is Microsoft Intune? (MDM vs MAM)
+      </div>
+      <a class="phase-back learning-modules-btn" href="../#phase-1">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-so-what-is-microsoft-intune">
+        <span>
+         02
+        </span>
+        <strong>
+         So; What IS Microsoft Intune?
+        </strong>
+       </a>
+       <a href="#section-1-mobile-device-management-mdm">
+        <span>
+         03
+        </span>
+        <strong>
+         1. Mobile Device Management (MDM)
+        </strong>
+       </a>
+       <a href="#section-2-mobile-application-management-mam">
+        <span>
+         04
+        </span>
+        <strong>
+         2. Mobile Application Management (MAM)
+        </strong>
+       </a>
+       <a href="#section-the-one-line-summary">
+        <span>
+         05
+        </span>
+        <strong>
+         The One-Line Summary
+        </strong>
+       </a>
+       <a href="#section-where-does-intune-live">
+        <span>
+         06
+        </span>
+        <strong>
+         Where Does Intune Live?
+        </strong>
+       </a>
+       <a href="#section-your-first-portal-visit">
+        <span>
+         07
+        </span>
+        <strong>
+         Your First Portal Visit
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label='Lesson 1.1; "What is Microsoft Intune?"' class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../#phase-1">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        It's a Monday morning at AshScript. Ashpak, a senior IT engineer, is staring at his screen juggling three problems simultaneously:
+       </p>
+       <div class="bullet-cluster">
+        <ul class="bullet-group">
+         <li>
+          A laptop was stolen from a travelling employee; the hard drive has sensitive client code on it, and there's no way to remotely wipe it
+         </li>
+         <li>
+          A new employee starts tomorrow; it'll take the IT team half a day to manually configure their laptop
+         </li>
+         <li>
+          An employee is asking if they can use their personal iPhone to check work email; IT has no answer
+         </li>
+        </ul>
+       </div>
+       <p>
+        Ashpak types two words into Google: "Microsoft Intune"
+       </p>
+      </section>
+      <section class="lesson-section" id="section-so-what-is-microsoft-intune">
+       <h2>
+        So: What IS Microsoft Intune?
+       </h2>
+       <p>
+        Think of Intune as your remote control for every device in your company; whether that device is sitting in your office, at someone's home, on a plane, or anywhere in the world.
+       </p>
+       <p>
+        More formally, Intune is a cloud-based service from Microsoft that does two big things:
+       </p>
+       <figure class="lesson-figure" id="mdm-mam-diagram">
+        <img alt="MDM vs MAM comparison" decoding="async" loading="lazy" src="../../assets/images/intune/lesson-1-1-mdm-vs-mam.svg"/>
+        <figcaption>
+         MDM vs MAM; management scope and device ownership
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-1-mobile-device-management-mdm">
+       <h2>
+        1. Mobile Device Management (MDM)
+       </h2>
+       <div class="quote">
+        "I own this device. I control it completely."
+       </div>
+       <p>
+        This is for company-owned devices. When a device is enrolled in MDM:
+       </p>
+       <div class="bullet-cluster">
+        <ul class="bullet-group">
+         <li>
+          You can push settings to it (Wi-Fi passwords, VPN, email config)
+         </li>
+         <li>
+          You can enforce rules (screen must lock after 5 minutes, encryption must be on)
+         </li>
+         <li>
+          You can deploy apps silently, without the user doing anything
+         </li>
+         <li>
+          You can remotely wipe it if it's lost or stolen
+         </li>
+         <li>
+          You can see its status; is it healthy? Is it compliant?
+         </li>
+        </ul>
+       </div>
+       <p>
+        AshScript example: Those 1,000 domain-joined laptops? Once enrolled in MDM, Ashpak can wipe the stolen laptop from the Intune portal in seconds, from anywhere.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-2-mobile-application-management-mam">
+       <h2>
+        2. Mobile Application Management (MAM)
+       </h2>
+       <div class="quote">
+        "I don't own this device. But I DO own the company data on it."
+       </div>
+       <p>
+        This is for personal (BYOD) devices. The employee keeps full control of their phone; Intune only manages the work apps and data, not the entire device.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="bullet-group">
+         <li>
+          Company email and files are containerized; isolated from personal apps
+         </li>
+         <li>
+          If the employee leaves the company, only the work data is wiped; personal photos stay untouched
+         </li>
+         <li>
+          No enrollment needed; the employee never gives IT control of their personal device
+         </li>
+        </ul>
+       </div>
+       <p>
+        AshScript example: That employee who wants to check work email on their iPhone? MAM lets them do it safely. Intune wraps the Outlook app in a protective bubble; company data can't be copied to personal apps.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-the-one-line-summary">
+       <h2>
+        The One-Line Summary
+       </h2>
+       <div class="callout-accent">
+        MDM = Manage the whole device. MAM = Manage just the work data on the device.
+       </div>
+      </section>
+      <section class="lesson-section" id="section-where-does-intune-live">
+       <h2>
+        Where Does Intune Live?
+       </h2>
+       <p>
+        Intune is not a box you install. It's a cloud service; part of Microsoft's cloud family. Here's how it connects:
+       </p>
+       <figure class="lesson-figure">
+        <img alt="Where Does Intune Live?" loading="lazy" src="../../assets/images/intune/lesson-1-1-intune-lives.svg"/>
+        <figcaption>
+         Where Does Intune Live?
+        </figcaption>
+       </figure>
+       <p>
+        You can't use Intune without Entra ID; every device and user in Intune is ultimately an identity in Entra ID. They work as a pair, and we'll explore this deeply in Phase 2.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-your-first-portal-visit">
+       <h2>
+        Your First Portal Visit
+       </h2>
+       <p>
+        Here's where to go right now to see the Intune admin center; even before AshScript has set anything up, you can explore the interface:
+       </p>
+       <p>
+        Navigate to:
+        <a class="lesson-url" href="https://intune.microsoft.com/" rel="noopener" target="_blank">
+         https://intune.microsoft.com
+        </a>
+       </p>
+       <p>
+        If you don't have a tenant yet, you can sign up for a free 30-day Microsoft Intune trial at
+        <a class="lesson-url" href="https://www.microsoft.com/en-us/security/business/microsoft-intune" rel="noopener" target="_blank">
+         microsoft.com/intune
+        </a>
+        ; this gives you a sandbox to follow along every step of the way.
+       </p>
+       <p>
+        What you'll see on the Home dashboard:
+       </p>
+       <div class="bullet-cluster">
+        <ul class="bullet-group">
+         <li>
+          Devices; your enrolled device inventory
+         </li>
+         <li>
+          Apps; everything you're deploying
+         </li>
+         <li>
+          Endpoint Security; compliance and protection
+         </li>
+         <li>
+          Reports; health and status of your environment
+         </li>
+         <li>
+          Tenant Administration; your settings and configuration
+         </li>
+        </ul>
+       </div>
+       <section aria-label="Intune Portal Example Snaps" class="lesson-screenshot-section">
+        <h3>
+         Intune Portal Example Screenshots
+        </h3>
+        <p class="lesson-image-note">
+         Each screenshot is shown at the full lesson width. Select a screenshot to open a larger view.
+        </p>
+        <div class="lesson-screenshot-gallery lesson-screenshot-gallery-stack">
+         <figure class="lesson-figure lesson-screenshot">
+          <a class="lesson-screenshot-frame" href="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-1portal-visit.png" data-image-viewer aria-label="Open Portal example 1 at full size">
+           <img alt="Intune admin center home dashboard example" loading="lazy" src="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-1portal-visit.png"/>
+          </a>
+          <figcaption>
+           <span class="lesson-screenshot-index">01</span>
+           <span>Intune admin center home dashboard</span>
+          </figcaption>
+         </figure>
+         <figure class="lesson-figure lesson-screenshot">
+          <a class="lesson-screenshot-frame" href="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-2portal-visit.png" data-image-viewer aria-label="Open Portal example 2 at full size">
+           <img alt="Intune Devices overview example" loading="lazy" src="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-2portal-visit.png"/>
+          </a>
+          <figcaption>
+           <span class="lesson-screenshot-index">02</span>
+           <span>Intune Devices overview</span>
+          </figcaption>
+         </figure>
+         <figure class="lesson-figure lesson-screenshot">
+          <a class="lesson-screenshot-frame" href="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-3portal-visit.png" data-image-viewer aria-label="Open Portal example 3 at full size">
+           <img alt="Intune Apps overview example" loading="lazy" src="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-3portal-visit.png"/>
+          </a>
+          <figcaption>
+           <span class="lesson-screenshot-index">03</span>
+           <span>Intune Apps overview</span>
+          </figcaption>
+         </figure>
+         <figure class="lesson-figure lesson-screenshot">
+          <a class="lesson-screenshot-frame" href="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-4-portal-visit.png" data-image-viewer aria-label="Open Portal example 4 at full size">
+           <img alt="Intune Endpoint Security overview example" loading="lazy" src="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-4-portal-visit.png"/>
+          </a>
+          <figcaption>
+           <span class="lesson-screenshot-index">04</span>
+           <span>Intune Endpoint Security overview</span>
+          </figcaption>
+         </figure>
+         <figure class="lesson-figure lesson-screenshot">
+          <a class="lesson-screenshot-frame" href="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-5-portal-visit.png" data-image-viewer aria-label="Open Portal example 5 at full size">
+           <img alt="Intune Tenant Administration overview example" loading="lazy" src="../../assets/images/intune/phase1/1-1-what-is-microsoft-intune-mdm-vs-mam-5-portal-visit.png"/>
+          </a>
+          <figcaption>
+           <span class="lesson-screenshot-index">05</span>
+           <span>Intune Tenant Administration overview</span>
+          </figcaption>
+         </figure>
+        </div>
+       </section>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../#phase-1">
+         <span class="story-path-number">
+          P1
+         </span>
+         <span class="story-path-label">
+          PHASE OPENING
+         </span>
+         <strong>
+          Phase 1 &middot; The Foundation
+         </strong>
+         <small>
+          Return to the beginning of this phase
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          1.1
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          What is Microsoft Intune? (MDM vs MAM)
+         </strong>
+         <small>
+          The Foundation
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../1-2-how-intune-fits-the-microsoft-ecosystem/">
+         <span class="story-path-number">
+          1.2
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          How Intune Fits the Microsoft Ecosystem
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-1">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+ </body>
 </html>

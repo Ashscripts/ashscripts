@@ -1,11 +1,1150 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Android App Deployment: Managed Google Play · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/><title>Lesson 6.3: Android App Deployment: Managed Google Play · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase6-lesson" style="--lesson-accent:#a78bfa"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 6</span>/<span>6.3</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 6; APP MANAGEMENT</div><h1>Android App Deployment: Managed Google Play</h1><p class="lesson-subtitle">Ashpak builds a private app store for 250 corporate Android phones</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-6"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 6</small><strong>Phase 6 · App Management</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">6.3 Android App Deployment: Managed Google Play</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-6">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-step-3-deploy-apps-to-corporate-android-devices-core-apps-required-for"><span>02</span><strong>Step 3; Deploy Apps to Corporate Android Devices Core Apps; Required for All Corporate Androids</strong></a><a href="#section-step-6-kiosk-device-app-deployment-for-the-20-warehouse-scanners-only-"><span>03</span><strong>Step 6; Kiosk Device App Deployment For the 20 warehouse scanners, only the inventory app should run:</strong></a><a href="#section-android-app-deployment-monitoring"><span>04</span><strong>Android App Deployment Monitoring</strong></a><a href="#section-troubleshooting-android-app-deployment"><span>05</span><strong>Troubleshooting Android App Deployment</strong></a><a href="#section-issue-1-app-shows-pending-for-days"><span>06</span><strong>Issue 1; App Shows "Pending" for Days</strong></a><a href="#section-issue-2-private-apk-install-fails"><span>07</span><strong>Issue 2; Private APK Install Fails</strong></a><a href="#section-issue-3-work-profile-app-not-appearing"><span>08</span><strong>Issue 3; Work Profile App Not Appearing</strong></a><a href="#section-current-state-after-lesson-63"><span>09</span><strong>Current State After Lesson 6.3</strong></a><a href="#section-lesson-64-ios-app-deployment-apple-vpp-ashpak-licences-purchases-and-d"><span>10</span><strong>Lesson 6.4; iOS App Deployment: Apple VPP; Ashpak licences, purchases, and deploys apps to 200 iPhones at scale ;</strong></a></nav></aside>
-<article aria-label="Lesson 6.3; Android App Deployment: Managed Google Play" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-6">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>The Scene Tuesday morning. Ashpak opens the Android device list. 250 corporate Samsung phones. The consumer Google Play Store is blocked (from Lesson 4.6 restriction profiles). Which means right now, users can't install anything at all. His phone buzzes. It's a message from the Sales Director:</p><blockquote class="quote">"Ashpak; my team's phones don't have Outlook. They can't check email. They can't open the CRM. Half the team is using their personal phones to check work email. This is unacceptable."</blockquote><p>Ashpak checks the enrollment status. The phones are enrolled. Configuration profiles applied. Compliance: passing. But zero apps deployed. He looks at the 20 warehouse scanners. Zero apps. The inventory app isn't installed. Warehouse staff can't scan anything. He looks at the 30 COPE executive phones. No Outlook. No Teams. 300 enrolled BYOD Android devices. Work profile exists but no work apps in it.</p><blockquote class="quote">"Every Android device. Zero apps. Today we fix that."</blockquote><p>He navigates to the Managed Google Play setup in Intune.</p><p>Managed Google Play; The Corporate Android App Store Managed Google Play (MGP) is Google's enterprise app store; a version of the Google Play Store that IT controls completely:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">CONSUMER PLAY STORE</th><th scope="col">MANAGED GOOGLE PLAY</th></tr></thead><tbody><tr><td>Open to everyone<br/>Any app available<br/>User installs manually<br/>User can remove any app<br/>Personal Google account<br/>No IT visibility<br/>No volume purchasing<br/>Personal data mixed</td><td>IT-controlled catalogue<br/>Only IT-approved apps<br/>IT pushes silently<br/>Required apps can't be<br/>removed by use<br/>Managed Google account<br/>Full IT visibility<br/>Bulk licensing available<br/>Work/personal separation</td></tr></tbody></table></div><p>Step 1; Connect Intune to Managed Google Play Before deploying any Android apps, Ashpak must link Intune to Managed Google Play:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="0"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Devices</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Android</span></div><div class="diagram-item">Android enrollment</div><div class="diagram-item">Managed Google Play</div><div class="diagram-item">STATUS CHECK:</div><div class="diagram-item">First visit: Shows "Not connected"</div><div class="diagram-item">Need to connect tenant to Google Play</div><div class="diagram-item">MANAGED GOOGLE PLAY SETUP</div></div><div class="diagram-group"><div class="diagram-group-title">Step 1: Click "I agree; Launch Google Play"</div><div class="diagram-items"><div class="diagram-item">→ Opens Google's enterprise setup</div><div class="diagram-item">Step 2: Sign in with AshScript's Google account</div><div class="diagram-item">(IT service account:</div><div class="diagram-item">intune-android@ashscript.com)</div><div class="diagram-item">Step 3: Register AshScript as enterprise</div><div class="diagram-item">Organisation name: AshScript</div><div class="diagram-item">Contact email: ashpak.it@ashscript.com</div><div class="diagram-item">→ Get started</div><div class="diagram-item">Step 4: Complete enterprise registration</div><div class="diagram-item">→ Google generates Enterprise ID</div><div class="diagram-item">Step 5: Return to Intune</div><div class="diagram-item">→ Connection confirmed</div><div class="diagram-item">Status: Connected to Managed</div><div class="diagram-item">Google Play</div></div></div></div></figure><p>Enterprise binding is permanent. Once an enterprise account is bound to Intune, all enrolled Android Enterprise devices are associated with it. If you accidentally bind to the wrong Google account, you need to factory reset all affected devices to rebind. Always use a dedicated IT service account; never a personal Google account.</p><p>Step 2; Approve Apps in Managed Google Play Before Intune can deploy an Android app, it must be approved in the Managed Google Play store. This is the IT vetting step:</p><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Apps → All apps 3 └── + Add 4 App type: Managed Google Play app 5 → Select 6 → Opens Managed Google Play store 7 within Intune portal</p><p>Approving Microsoft Outlook:</p><p>1 In the Managed Google Play store panel: 2 Search: "Microsoft Outlook" 3 → Microsoft Outlook 4 → Approve 5 6 APPROVAL DIALOG: 7 "Microsoft Outlook requests access to:" 8 Camera 9 Contacts 10 Calendar 11 Storage 12 Microphone 13 14 Keep approved when app requests 15 new permissions: 16 ● Keep approved (recommended) 17 (don't re-prompt IT when app updates 18 request new permissions) 19 20 → Approve</p><p>Repeat for each required app:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="1"><div class="diagram-group"><div class="diagram-group-title">APPS ASHPAK APPROVES IN MANAGED GOOGLE PLAY:</div><div class="diagram-items"><div class="diagram-item">Microsoft Outlook</div><div class="diagram-item">Microsoft Teams</div><div class="diagram-item">Microsoft Edge</div><div class="diagram-item">Microsoft OneDrive</div><div class="diagram-item">Microsoft Authenticator</div><div class="diagram-item">Microsoft Intune (Company Portal)</div><div class="diagram-item">Cisco AnyConnect (VPN client)</div><div class="diagram-item">AshScript CRM (custom/private app)</div><div class="diagram-item">Adobe Acrobat Reader</div><div class="diagram-item">Microsoft Defender (Endpoint)</div><div class="diagram-item">Zebra Workforce Connect (warehouse app)</div></div></div></div></figure></section><section class="lesson-section" id="section-step-3-deploy-apps-to-corporate-android-devices-core-apps-required-for"><h2>Step 3: Deploy Apps to Corporate Android Devices Core Apps: Required for All Corporate Androids</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="2"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Apps</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">All apps</span></div><div class="diagram-item">Microsoft Outlook (Android)</div><div class="diagram-flow"><span class="diagram-chip">Properties</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Assignments</span></div><div class="diagram-item">→ + Add group</div></div><div class="diagram-group"><div class="diagram-group-title">Required:</div><div class="diagram-flow"><span class="diagram-chip">INTUNE-DEV-ANDROID-CORP</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Sales phones</span></div><div class="diagram-flow"><span class="diagram-chip">INTUNE-DEV-ANDROID-COPE</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Executive phones</span></div></div><div class="diagram-group"><div class="diagram-group-title">Available (enrolled devices):</div><div class="diagram-flow"><span class="diagram-chip">INTUNE-DEV-ANDROID-BYOD</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">BYOD work profile</span></div><div class="diagram-item">(user can install</div><div class="diagram-item">from work profile</div><div class="diagram-item">Play Store)</div><div class="diagram-item">→ Save</div></div></div></figure><p>Repeat for all core apps:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">APP</th><th scope="col">REQUIRED TO</th></tr></thead><tbody><tr><td>Microsoft Outlook<br/>Microsoft Teams<br/>Microsoft Edge<br/>Microsoft OneDrive<br/>Microsoft Authenticato<br/>Company Portal<br/>Cisco AnyConnect<br/>Microsoft Defende</td><td>ANDROID-CORP + COPE + BYOD<br/>ANDROID-CORP + COPE + BYOD<br/>ANDROID-CORP + COPE<br/>ANDROID-CORP + COPE<br/>ANDROID-CORP + COPE + BYOD<br/>ANDROID-CORP + COPE + BYOD<br/>ANDROID-CORP + COPE<br/>ANDROID-CORP + COPE</td></tr><tr><td>AshScript CRM<br/>Zebra Inventory App</td><td>ANDROID-CORP (Sales only)<br/>ANDROID-KIOSK (scanners only)</td></tr></tbody></table></div><p>Step 4; Deploying a Private/Custom App AshScript has a custom CRM app built in-house. It's not on the public Play Store. Ashpak uploads it as a private Managed Google Play app:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="3"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">PRIVATE APP UPLOAD TO MANAGED GOOGLE PLAY</div></div><div class="diagram-group"><div class="diagram-group-title">Two methods:</div><div class="diagram-items"><div class="diagram-item">METHOD 1: Upload via Intune portal</div><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Apps</div><div class="diagram-item">→ + Add → Managed Google Play app</div><div class="diagram-item">→ Private apps tab</div><div class="diagram-item">→ + Create</div><div class="diagram-item">Title: AshScript CRM</div><div class="diagram-item">APK: [Upload ashscript-crm-v2.4.apk]</div><div class="diagram-item">Icon: [Upload CRM icon .png]</div><div class="diagram-item">→ Publish</div><div class="diagram-item">METHOD 2: Upload via Google Play Console</div><div class="diagram-item"><a class="lesson-url" href="https://play.google.com/console" rel="noopener noreferrer" target="_blank">play.google.com/console</a></div><div class="diagram-item">→ [AshScript enterprise account]</div><div class="diagram-item">→ Private apps → Create app</div><div class="diagram-item">(More control; versioning,</div><div class="diagram-item">release tracks, testing)</div></div></div></div></figure><p>Private apps vs public apps: Public apps (Outlook, Teams) are approved from the public catalogue; Google hosts them, updates are handled by Google. Private apps are uploaded by IT; IT controls the version, updates require a new APK upload, and the app is invisible to anyone outside AshScript's managed Play store.</p><p>Step 5; Managed Google Play for Work Profiles (BYOD) For BYOD devices, apps deploy into the work profile only; the personal Play Store remains unchanged:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="4"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">BYOD WORK PROFILE APP EXPERIENCE</div></div><div class="diagram-group"><div class="diagram-group-title">Personal profile: Work profile:</div><div class="diagram-items"><div class="diagram-item">WhatsApp (personal) Outlook (work)</div><div class="diagram-item">Instagram (personal) Teams (work)</div><div class="diagram-item">Personal games OneDrive (work)</div><div class="diagram-item">No IT visibility Full IT visibility</div></div></div><div class="diagram-group"><div class="diagram-group-title">User sees two Play Store icons:</div><div class="diagram-items"><div class="diagram-item">Play Store (personal)</div><div class="diagram-item">Play Store with briefcase icon (work)</div><div class="diagram-item">Work apps appear with a briefcase badge</div><div class="diagram-item">Personal apps have no badge</div></div></div></div></figure></section><section class="lesson-section" id="section-step-6-kiosk-device-app-deployment-for-the-20-warehouse-scanners-only-"><h2>Step 6: Kiosk Device App Deployment For the 20 warehouse scanners, only the inventory app should run:</h2><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Apps → All apps 3 └── Zebra Workforce Connect 4 → Assignments 5 Required: INTUNE-DEV-ANDROID-KIOSK</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="5"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">KIOSK APP DEPLOYMENT FLOW:</div></div><div class="diagram-group"><div class="diagram-group-title">Device enrolls as Dedicated (Kiosk)</div><div class="diagram-items"><div class="diagram-item">↓</div><div class="diagram-item">Intune pushes kiosk restriction profile:</div><div class="diagram-item">Single-app kiosk: com.zebra.workforce.connect</div><div class="diagram-item">↓</div><div class="diagram-item">Intune deploys Zebra app as Required</div><div class="diagram-item">↓</div><div class="diagram-item">Device boots → Only Zebra app accessible</div><div class="diagram-item">↓</div><div class="diagram-item">Warehouse staff can ONLY use the inventory app</div><div class="diagram-item">↓</div><div class="diagram-item">Everything else: locked</div></div></div></div></figure><p>Managed Google Play; App Configuration Beyond deployment, Ashpak can pre-configure apps using Managed Configurations; Android Enterprise's equivalent of Intune App Configuration Policies: Pre-configuring Outlook for corporate Android:</p><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Apps → App configuration policies 3 └── + Add 4 Managed devices 5 Platform: Android Enterprise 6 Profile type: All profile types 7 Target app: Microsoft Outlook 8 9 Name: AND-APPCONFIG-Outlook-Corporate</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SETTING</th><th scope="col">VALUE</th></tr></thead><tbody><tr><td>com.microsoft.outlook.<br/>EmailAddressUPN</td><td>{{userprincipalname}}</td></tr><tr><td>com.microsoft.outlook.<br/>EmailAccountName</td><td>AshScript Email</td></tr><tr><td>com.microsoft.outlook.<br/>Office365Domain</td><td>ashscript.com</td></tr><tr><td>SaveContactsToAddressBook</td><td>True</td></tr><tr><td>ExternalRecipientWarning</td><td>True</td></tr><tr><td>org.me.lock.require<br/>(Require Outlook PIN)</td><td>True<br/>(Outlook-level PIN<br/>before email opens)</td></tr></tbody></table></div></section><section class="lesson-section" id="section-android-app-deployment-monitoring"><h2>Android App Deployment Monitoring</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="6"><div class="diagram-group"><div class="diagram-items"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-item">Apps → Monitor → App install status</div><div class="diagram-item">Filter: Platform = Android Enterprise</div><div class="diagram-item">APP INSTALLED PENDING FAILED</div><div class="diagram-item">Microsoft Outlook 247 3 0</div><div class="diagram-item">Microsoft Teams 247 3 0</div><div class="diagram-item">AshScript CRM 198 2 0</div><div class="diagram-item">(Sales only; 200 devices)</div><div class="diagram-item">Zebra Inventory 20 0 0</div></div></div><div class="diagram-group"><div class="diagram-group-title">ALL 250 CORPORATE ANDROIDS:</div><div class="diagram-items"><div class="diagram-item">Core apps: Deploying</div><div class="diagram-item">CRM: Sales group only</div><div class="diagram-item">Kiosk app: All 20 scanners</div></div></div></div></figure></section><section class="lesson-section" id="section-troubleshooting-android-app-deployment"><h2>Troubleshooting Android App Deployment</h2></section><section class="lesson-section" id="section-issue-1-app-shows-pending-for-days"><h3>Issue 1: App Shows "Pending" for Days</h3><p>1 SYMPTOM: App assignment shows "Pending" 2 on Android device for 24+ hours 3 4 COMMON CAUSES: 5 × Device not syncing with Intune 6 × Managed Google Play not connected 7 (new tenant; binding not complete) 8 × App not approved in MGP 9 (most common mistake) 10 × Device Wi-Fi issue 11 12 DIAGNOSIS: 13 On device: Company Portal → Sync 14 Check approval: 15 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Apps → [app] 16 Is it showing as "Managed Google Play 17 app"? Or "Not approved"? 18 19 FIX: 20 Re-approve app in MGP store: 21 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Apps → + Add 22 → Managed Google Play app 23 → Search and approve the app again 24 Force device sync</p></section><section class="lesson-section" id="section-issue-2-private-apk-install-fails"><h3>Issue 2: Private APK Install Fails</h3><p>1 SYMPTOM: Private AshScript CRM app fails 2 to install on devices 3 Error: "Installation failed" 4 5 COMMON CAUSES: 6 × APK targets too-old Android API level 7 (Google requires minimum API level 30 8 for new apps) 9 × APK signing certificate mismatch 10 (updating app with different signing key 11 than previous version) 12 × APK too large; upload timeout 13 14 DIAGNOSIS: 15 Device event log: 16 Settings → Apps → CRM → App details 17 → Check error message on device 18 19 In Intune:</p><p>20 Apps → AshScript CRM 21 → Device install status → Failed devices 22 → Error code shown 23 24 FIX (API level): 25 Rebuild APK targeting API 30+ 26 Coordinate with dev team 27 28 FIX (signing): 29 Use same signing certificate as original 30 If lost: new package name needed 31 (users get new install not update)</p></section><section class="lesson-section" id="section-issue-3-work-profile-app-not-appearing"><h3>Issue 3: Work Profile App Not Appearing</h3><p>1 SYMPTOM: BYOD user says Outlook not appearing 2 in work profile Play Store 3 Despite being assigned as Available 4 5 CAUSE: Work profile not fully set up 6 OR app assigned to wrong group 7 8 DIAGNOSIS: 9 Check device group membership: 10 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Devices 11 → [device] → Group membership 12 Is INTUNE-DEV-ANDROID-BYOD listed? 13 14 Check user vs device assignment: 15 Apps → Outlook → Assignments 16 Is Available assigned to correct 17 group type? 18 (User group vs device group matters 19 for work profile devices) 20 21 FIX: 22 Ensure assignment uses USER group 23 for work profile devices: 24 Available: INTUNE-USR-ALL 25 (User-based assignment ensures work 26 profile receives the app) 27 Force device sync</p></section><section class="lesson-section" id="section-current-state-after-lesson-63"><h2>Current State After Lesson 6.3</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="7"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT</div><div class="diagram-items"><div class="diagram-item">iOS app management (Lesson 6.4)</div><div class="diagram-item">Windows Win32 apps (Lesson 6.5)</div><div class="diagram-item">App Protection Policies (Lesson 6.6)</div><div class="diagram-item">Selective wipe (Lesson 6.7)</div></div></div></div></figure></section><section class="lesson-section" id="section-lesson-64-ios-app-deployment-apple-vpp-ashpak-licences-purchases-and-d"><h2>Lesson 6.4: iOS App Deployment: Apple VPP: Ashpak licences, purchases, and deploys apps to 200 iPhones at scale :</h2><p>The Scene Tuesday afternoon. Android apps are deploying. Ashpak turns to iOS. 200 corporate iPhones. 300 BYOD enrolled iPhones. He pulls up the iOS app requirements:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="8"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">IOS APP REQUIREMENTS; ASHSCRIPT</div></div><div class="diagram-group"><div class="diagram-group-title">Required on all corporate iPhones:</div><div class="diagram-items"><div class="diagram-item">Microsoft Outlook</div><div class="diagram-item">Microsoft Teams</div><div class="diagram-item">Microsoft Authenticator</div><div class="diagram-item">Cisco AnyConnect</div><div class="diagram-item">Microsoft Defender</div><div class="diagram-item">AshScript CRM (in-house app)</div><div class="diagram-item">Available to all enrolled iPhones:</div><div class="diagram-item">Adobe Acrobat Reader</div><div class="diagram-item">Microsoft OneDrive</div></div></div></div></figure></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../6-2-deploying-microsoft-365-apps/"><span class="story-path-number">6.2</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Deploying Microsoft 365 Apps</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">6.3</span><span class="story-path-label">YOU ARE HERE</span><strong>Android App Deployment: Managed Google Play</strong><small>App Management</small></div><a class="story-path-step story-path-next" href="../6-4-ios-app-deployment-apple-vpp/"><span class="story-path-number">6.4</span><span class="story-path-label">NEXT CHAPTER</span><strong>iOS App Deployment: Apple VPP</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-6">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script><script defer="" src="../../assets/js/lesson-toc.js"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Android App Deployment: Managed Google Play &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/>
+  <title>
+   Lesson 6.3: Android App Deployment: Managed Google Play &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 6
+      </span>
+      /
+      <span>
+       6.3
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 6; APP MANAGEMENT
+     </div>
+     <h1>
+      Android App Deployment: Managed Google Play
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds a private app store for 250 corporate Android phones
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-6">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 6
+        </small>
+        <strong>
+         Phase 6 &middot; App Management
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       6.3 Android App Deployment: Managed Google Play
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-6">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-step-3-deploy-apps-to-corporate-android-devices-core-apps-required-for">
+        <span>
+         02
+        </span>
+        <strong>
+         Step 3; Deploy Apps to Corporate Android Devices Core Apps; Required for All Corporate Androids
+        </strong>
+       </a>
+       <a href="#section-step-6-kiosk-device-app-deployment-for-the-20-warehouse-scanners-only-">
+        <span>
+         03
+        </span>
+        <strong>
+         Step 6; Kiosk Device App Deployment For the 20 warehouse scanners, only the inventory app should run:
+        </strong>
+       </a>
+       <a href="#section-android-app-deployment-monitoring">
+        <span>
+         04
+        </span>
+        <strong>
+         Android App Deployment Monitoring
+        </strong>
+       </a>
+       <a href="#section-troubleshooting-android-app-deployment">
+        <span>
+         05
+        </span>
+        <strong>
+         Troubleshooting Android App Deployment
+        </strong>
+       </a>
+       <a href="#section-issue-1-app-shows-pending-for-days">
+        <span>
+         06
+        </span>
+        <strong>
+         Issue 1; App Shows "Pending" for Days
+        </strong>
+       </a>
+       <a href="#section-issue-2-private-apk-install-fails">
+        <span>
+         07
+        </span>
+        <strong>
+         Issue 2; Private APK Install Fails
+        </strong>
+       </a>
+       <a href="#section-issue-3-work-profile-app-not-appearing">
+        <span>
+         08
+        </span>
+        <strong>
+         Issue 3; Work Profile App Not Appearing
+        </strong>
+       </a>
+       <a href="#section-current-state-after-lesson-63">
+        <span>
+         09
+        </span>
+        <strong>
+         Current State After Lesson 6.3
+        </strong>
+       </a>
+       <a href="#section-lesson-64-ios-app-deployment-apple-vpp-ashpak-licences-purchases-and-d">
+        <span>
+         10
+        </span>
+        <strong>
+         Lesson 6.4; iOS App Deployment: Apple VPP; Ashpak licences, purchases, and deploys apps to 200 iPhones at scale ;
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 6.3; Android App Deployment: Managed Google Play" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-6">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        The Scene Tuesday morning. Ashpak opens the Android device list. 250 corporate Samsung phones. The consumer Google Play Store is blocked (from Lesson 4.6 restriction profiles). Which means right now, users can't install anything at all. His phone buzzes. It's a message from the Sales Director:
+       </p>
+       <blockquote class="quote">
+        "Ashpak; my team's phones don't have Outlook. They can't check email. They can't open the CRM. Half the team is using their personal phones to check work email. This is unacceptable."
+       </blockquote>
+       <p>
+        Ashpak checks the enrollment status. The phones are enrolled. Configuration profiles applied. Compliance: passing. But zero apps deployed. He looks at the 20 warehouse scanners. Zero apps. The inventory app isn't installed. Warehouse staff can't scan anything. He looks at the 30 COPE executive phones. No Outlook. No Teams. 300 enrolled BYOD Android devices. Work profile exists but no work apps in it.
+       </p>
+       <blockquote class="quote">
+        "Every Android device. Zero apps. Today we fix that."
+       </blockquote>
+       <p>
+        He navigates to the Managed Google Play setup in Intune.
+       </p>
+       <p>
+        Managed Google Play; The Corporate Android App Store Managed Google Play (MGP) is Google's enterprise app store; a version of the Google Play Store that IT controls completely:
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            CONSUMER PLAY STORE
+           </th>
+           <th scope="col">
+            MANAGED GOOGLE PLAY
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Open to everyone
+            <br/>
+            Any app available
+            <br/>
+            User installs manually
+            <br/>
+            User can remove any app
+            <br/>
+            Personal Google account
+            <br/>
+            No IT visibility
+            <br/>
+            No volume purchasing
+            <br/>
+            Personal data mixed
+           </td>
+           <td>
+            IT-controlled catalogue
+            <br/>
+            Only IT-approved apps
+            <br/>
+            IT pushes silently
+            <br/>
+            Required apps can't be
+            <br/>
+            removed by use
+            <br/>
+            Managed Google account
+            <br/>
+            Full IT visibility
+            <br/>
+            Bulk licensing available
+            <br/>
+            Work/personal separation
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        Step 1; Connect Intune to Managed Google Play Before deploying any Android apps, Ashpak must link Intune to Managed Google Play:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="0">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Devices
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Android
+           </span>
+          </div>
+          <div class="diagram-item">
+           Android enrollment
+          </div>
+          <div class="diagram-item">
+           Managed Google Play
+          </div>
+          <div class="diagram-item">
+           STATUS CHECK:
+          </div>
+          <div class="diagram-item">
+           First visit: Shows "Not connected"
+          </div>
+          <div class="diagram-item">
+           Need to connect tenant to Google Play
+          </div>
+          <div class="diagram-item">
+           MANAGED GOOGLE PLAY SETUP
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Step 1: Click "I agree; Launch Google Play"
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            &rarr; Opens Google's enterprise setup
+           </div>
+           <div class="diagram-item">
+            Step 2: Sign in with AshScript's Google account
+           </div>
+           <div class="diagram-item">
+            (IT service account:
+           </div>
+           <div class="diagram-item">
+            intune-android@ashscript.com)
+           </div>
+           <div class="diagram-item">
+            Step 3: Register AshScript as enterprise
+           </div>
+           <div class="diagram-item">
+            Organisation name: AshScript
+           </div>
+           <div class="diagram-item">
+            Contact email: ashpak.it@ashscript.com
+           </div>
+           <div class="diagram-item">
+            &rarr; Get started
+           </div>
+           <div class="diagram-item">
+            Step 4: Complete enterprise registration
+           </div>
+           <div class="diagram-item">
+            &rarr; Google generates Enterprise ID
+           </div>
+           <div class="diagram-item">
+            Step 5: Return to Intune
+           </div>
+           <div class="diagram-item">
+            &rarr; Connection confirmed
+           </div>
+           <div class="diagram-item">
+            Status: Connected to Managed
+           </div>
+           <div class="diagram-item">
+            Google Play
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Enterprise binding is permanent. Once an enterprise account is bound to Intune, all enrolled Android Enterprise devices are associated with it. If you accidentally bind to the wrong Google account, you need to factory reset all affected devices to rebind. Always use a dedicated IT service account; never a personal Google account.
+       </p>
+       <p>
+        Step 2; Approve Apps in Managed Google Play Before Intune can deploy an Android app, it must be approved in the Managed Google Play store. This is the IT vetting step:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Apps &rarr; All apps 3 &boxur;&boxh;&boxh; + Add 4 App type: Managed Google Play app 5 &rarr; Select 6 &rarr; Opens Managed Google Play store 7 within Intune portal
+       </p>
+       <p>
+        Approving Microsoft Outlook:
+       </p>
+       <p>
+        1 In the Managed Google Play store panel: 2 Search: "Microsoft Outlook" 3 &rarr; Microsoft Outlook 4 &rarr; Approve 5 6 APPROVAL DIALOG: 7 "Microsoft Outlook requests access to:" 8 Camera 9 Contacts 10 Calendar 11 Storage 12 Microphone 13 14 Keep approved when app requests 15 new permissions: 16 ● Keep approved (recommended) 17 (don't re-prompt IT when app updates 18 request new permissions) 19 20 &rarr; Approve
+       </p>
+       <p>
+        Repeat for each required app:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="1">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           APPS ASHPAK APPROVES IN MANAGED GOOGLE PLAY:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Microsoft Outlook
+           </div>
+           <div class="diagram-item">
+            Microsoft Teams
+           </div>
+           <div class="diagram-item">
+            Microsoft Edge
+           </div>
+           <div class="diagram-item">
+            Microsoft OneDrive
+           </div>
+           <div class="diagram-item">
+            Microsoft Authenticator
+           </div>
+           <div class="diagram-item">
+            Microsoft Intune (Company Portal)
+           </div>
+           <div class="diagram-item">
+            Cisco AnyConnect (VPN client)
+           </div>
+           <div class="diagram-item">
+            AshScript CRM (custom/private app)
+           </div>
+           <div class="diagram-item">
+            Adobe Acrobat Reader
+           </div>
+           <div class="diagram-item">
+            Microsoft Defender (Endpoint)
+           </div>
+           <div class="diagram-item">
+            Zebra Workforce Connect (warehouse app)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-step-3-deploy-apps-to-corporate-android-devices-core-apps-required-for">
+       <h2>
+        Step 3: Deploy Apps to Corporate Android Devices Core Apps: Required for All Corporate Androids
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="2">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Apps
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            All apps
+           </span>
+          </div>
+          <div class="diagram-item">
+           Microsoft Outlook (Android)
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Properties
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Assignments
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; + Add group
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Required:
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            INTUNE-DEV-ANDROID-CORP
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Sales phones
+           </span>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            INTUNE-DEV-ANDROID-COPE
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Executive phones
+           </span>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Available (enrolled devices):
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            INTUNE-DEV-ANDROID-BYOD
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            BYOD work profile
+           </span>
+          </div>
+          <div class="diagram-item">
+           (user can install
+          </div>
+          <div class="diagram-item">
+           from work profile
+          </div>
+          <div class="diagram-item">
+           Play Store)
+          </div>
+          <div class="diagram-item">
+           &rarr; Save
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Repeat for all core apps:
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            APP
+           </th>
+           <th scope="col">
+            REQUIRED TO
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Microsoft Outlook
+            <br/>
+            Microsoft Teams
+            <br/>
+            Microsoft Edge
+            <br/>
+            Microsoft OneDrive
+            <br/>
+            Microsoft Authenticato
+            <br/>
+            Company Portal
+            <br/>
+            Cisco AnyConnect
+            <br/>
+            Microsoft Defende
+           </td>
+           <td>
+            ANDROID-CORP + COPE + BYOD
+            <br/>
+            ANDROID-CORP + COPE + BYOD
+            <br/>
+            ANDROID-CORP + COPE
+            <br/>
+            ANDROID-CORP + COPE
+            <br/>
+            ANDROID-CORP + COPE + BYOD
+            <br/>
+            ANDROID-CORP + COPE + BYOD
+            <br/>
+            ANDROID-CORP + COPE
+            <br/>
+            ANDROID-CORP + COPE
+           </td>
+          </tr>
+          <tr>
+           <td>
+            AshScript CRM
+            <br/>
+            Zebra Inventory App
+           </td>
+           <td>
+            ANDROID-CORP (Sales only)
+            <br/>
+            ANDROID-KIOSK (scanners only)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        Step 4; Deploying a Private/Custom App AshScript has a custom CRM app built in-house. It's not on the public Play Store. Ashpak uploads it as a private Managed Google Play app:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="3">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           PRIVATE APP UPLOAD TO MANAGED GOOGLE PLAY
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Two methods:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            METHOD 1: Upload via Intune portal
+           </div>
+           <div class="diagram-item">
+            <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+             intune.microsoft.com
+            </a>
+            &rarr; Apps
+           </div>
+           <div class="diagram-item">
+            &rarr; + Add &rarr; Managed Google Play app
+           </div>
+           <div class="diagram-item">
+            &rarr; Private apps tab
+           </div>
+           <div class="diagram-item">
+            &rarr; + Create
+           </div>
+           <div class="diagram-item">
+            Title: AshScript CRM
+           </div>
+           <div class="diagram-item">
+            APK: [Upload ashscript-crm-v2.4.apk]
+           </div>
+           <div class="diagram-item">
+            Icon: [Upload CRM icon .png]
+           </div>
+           <div class="diagram-item">
+            &rarr; Publish
+           </div>
+           <div class="diagram-item">
+            METHOD 2: Upload via Google Play Console
+           </div>
+           <div class="diagram-item">
+            <a class="lesson-url" href="https://play.google.com/console" rel="noopener noreferrer" target="_blank">
+             play.google.com/console
+            </a>
+           </div>
+           <div class="diagram-item">
+            &rarr; [AshScript enterprise account]
+           </div>
+           <div class="diagram-item">
+            &rarr; Private apps &rarr; Create app
+           </div>
+           <div class="diagram-item">
+            (More control; versioning,
+           </div>
+           <div class="diagram-item">
+            release tracks, testing)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Private apps vs public apps: Public apps (Outlook, Teams) are approved from the public catalogue; Google hosts them, updates are handled by Google. Private apps are uploaded by IT; IT controls the version, updates require a new APK upload, and the app is invisible to anyone outside AshScript's managed Play store.
+       </p>
+       <p>
+        Step 5; Managed Google Play for Work Profiles (BYOD) For BYOD devices, apps deploy into the work profile only; the personal Play Store remains unchanged:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="4">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           BYOD WORK PROFILE APP EXPERIENCE
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Personal profile: Work profile:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            WhatsApp (personal) Outlook (work)
+           </div>
+           <div class="diagram-item">
+            Instagram (personal) Teams (work)
+           </div>
+           <div class="diagram-item">
+            Personal games OneDrive (work)
+           </div>
+           <div class="diagram-item">
+            No IT visibility Full IT visibility
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           User sees two Play Store icons:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Play Store (personal)
+           </div>
+           <div class="diagram-item">
+            Play Store with briefcase icon (work)
+           </div>
+           <div class="diagram-item">
+            Work apps appear with a briefcase badge
+           </div>
+           <div class="diagram-item">
+            Personal apps have no badge
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-step-6-kiosk-device-app-deployment-for-the-20-warehouse-scanners-only-">
+       <h2>
+        Step 6: Kiosk Device App Deployment For the 20 warehouse scanners, only the inventory app should run:
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Apps &rarr; All apps 3 &boxur;&boxh;&boxh; Zebra Workforce Connect 4 &rarr; Assignments 5 Required: INTUNE-DEV-ANDROID-KIOSK
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="5">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           KIOSK APP DEPLOYMENT FLOW:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Device enrolls as Dedicated (Kiosk)
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            &darr;
+           </div>
+           <div class="diagram-item">
+            Intune pushes kiosk restriction profile:
+           </div>
+           <div class="diagram-item">
+            Single-app kiosk: com.zebra.workforce.connect
+           </div>
+           <div class="diagram-item">
+            &darr;
+           </div>
+           <div class="diagram-item">
+            Intune deploys Zebra app as Required
+           </div>
+           <div class="diagram-item">
+            &darr;
+           </div>
+           <div class="diagram-item">
+            Device boots &rarr; Only Zebra app accessible
+           </div>
+           <div class="diagram-item">
+            &darr;
+           </div>
+           <div class="diagram-item">
+            Warehouse staff can ONLY use the inventory app
+           </div>
+           <div class="diagram-item">
+            &darr;
+           </div>
+           <div class="diagram-item">
+            Everything else: locked
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        Managed Google Play; App Configuration Beyond deployment, Ashpak can pre-configure apps using Managed Configurations; Android Enterprise's equivalent of Intune App Configuration Policies: Pre-configuring Outlook for corporate Android:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Apps &rarr; App configuration policies 3 &boxur;&boxh;&boxh; + Add 4 Managed devices 5 Platform: Android Enterprise 6 Profile type: All profile types 7 Target app: Microsoft Outlook 8 9 Name: AND-APPCONFIG-Outlook-Corporate
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SETTING
+           </th>
+           <th scope="col">
+            VALUE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            com.microsoft.outlook.
+            <br/>
+            EmailAddressUPN
+           </td>
+           <td>
+            {{userprincipalname}}
+           </td>
+          </tr>
+          <tr>
+           <td>
+            com.microsoft.outlook.
+            <br/>
+            EmailAccountName
+           </td>
+           <td>
+            AshScript Email
+           </td>
+          </tr>
+          <tr>
+           <td>
+            com.microsoft.outlook.
+            <br/>
+            Office365Domain
+           </td>
+           <td>
+            ashscript.com
+           </td>
+          </tr>
+          <tr>
+           <td>
+            SaveContactsToAddressBook
+           </td>
+           <td>
+            True
+           </td>
+          </tr>
+          <tr>
+           <td>
+            ExternalRecipientWarning
+           </td>
+           <td>
+            True
+           </td>
+          </tr>
+          <tr>
+           <td>
+            org.me.lock.require
+            <br/>
+            (Require Outlook PIN)
+           </td>
+           <td>
+            True
+            <br/>
+            (Outlook-level PIN
+            <br/>
+            before email opens)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-android-app-deployment-monitoring">
+       <h2>
+        Android App Deployment Monitoring
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="6">
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+             intune.microsoft.com
+            </a>
+           </div>
+           <div class="diagram-item">
+            Apps &rarr; Monitor &rarr; App install status
+           </div>
+           <div class="diagram-item">
+            Filter: Platform = Android Enterprise
+           </div>
+           <div class="diagram-item">
+            APP INSTALLED PENDING FAILED
+           </div>
+           <div class="diagram-item">
+            Microsoft Outlook 247 3 0
+           </div>
+           <div class="diagram-item">
+            Microsoft Teams 247 3 0
+           </div>
+           <div class="diagram-item">
+            AshScript CRM 198 2 0
+           </div>
+           <div class="diagram-item">
+            (Sales only; 200 devices)
+           </div>
+           <div class="diagram-item">
+            Zebra Inventory 20 0 0
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ALL 250 CORPORATE ANDROIDS:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Core apps: Deploying
+           </div>
+           <div class="diagram-item">
+            CRM: Sales group only
+           </div>
+           <div class="diagram-item">
+            Kiosk app: All 20 scanners
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-troubleshooting-android-app-deployment">
+       <h2>
+        Troubleshooting Android App Deployment
+       </h2>
+      </section>
+      <section class="lesson-section" id="section-issue-1-app-shows-pending-for-days">
+       <h3>
+        Issue 1: App Shows "Pending" for Days
+       </h3>
+       <p>
+        1 SYMPTOM: App assignment shows "Pending" 2 on Android device for 24+ hours 3 4 COMMON CAUSES: 5 &times; Device not syncing with Intune 6 &times; Managed Google Play not connected 7 (new tenant; binding not complete) 8 &times; App not approved in MGP 9 (most common mistake) 10 &times; Device Wi-Fi issue 11 12 DIAGNOSIS: 13 On device: Company Portal &rarr; Sync 14 Check approval: 15
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        &rarr; Apps &rarr; [app] 16 Is it showing as "Managed Google Play 17 app"? Or "Not approved"? 18 19 FIX: 20 Re-approve app in MGP store: 21
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        &rarr; Apps &rarr; + Add 22 &rarr; Managed Google Play app 23 &rarr; Search and approve the app again 24 Force device sync
+       </p>
+      </section>
+      <section class="lesson-section" id="section-issue-2-private-apk-install-fails">
+       <h3>
+        Issue 2: Private APK Install Fails
+       </h3>
+       <p>
+        1 SYMPTOM: Private AshScript CRM app fails 2 to install on devices 3 Error: "Installation failed" 4 5 COMMON CAUSES: 6 &times; APK targets too-old Android API level 7 (Google requires minimum API level 30 8 for new apps) 9 &times; APK signing certificate mismatch 10 (updating app with different signing key 11 than previous version) 12 &times; APK too large; upload timeout 13 14 DIAGNOSIS: 15 Device event log: 16 Settings &rarr; Apps &rarr; CRM &rarr; App details 17 &rarr; Check error message on device 18 19 In Intune:
+       </p>
+       <p>
+        20 Apps &rarr; AshScript CRM 21 &rarr; Device install status &rarr; Failed devices 22 &rarr; Error code shown 23 24 FIX (API level): 25 Rebuild APK targeting API 30+ 26 Coordinate with dev team 27 28 FIX (signing): 29 Use same signing certificate as original 30 If lost: new package name needed 31 (users get new install not update)
+       </p>
+      </section>
+      <section class="lesson-section" id="section-issue-3-work-profile-app-not-appearing">
+       <h3>
+        Issue 3: Work Profile App Not Appearing
+       </h3>
+       <p>
+        1 SYMPTOM: BYOD user says Outlook not appearing 2 in work profile Play Store 3 Despite being assigned as Available 4 5 CAUSE: Work profile not fully set up 6 OR app assigned to wrong group 7 8 DIAGNOSIS: 9 Check device group membership: 10
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        &rarr; Devices 11 &rarr; [device] &rarr; Group membership 12 Is INTUNE-DEV-ANDROID-BYOD listed? 13 14 Check user vs device assignment: 15 Apps &rarr; Outlook &rarr; Assignments 16 Is Available assigned to correct 17 group type? 18 (User group vs device group matters 19 for work profile devices) 20 21 FIX: 22 Ensure assignment uses USER group 23 for work profile devices: 24 Available: INTUNE-USR-ALL 25 (User-based assignment ensures work 26 profile receives the app) 27 Force device sync
+       </p>
+      </section>
+      <section class="lesson-section" id="section-current-state-after-lesson-63">
+       <h2>
+        Current State After Lesson 6.3
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="7">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            iOS app management (Lesson 6.4)
+           </div>
+           <div class="diagram-item">
+            Windows Win32 apps (Lesson 6.5)
+           </div>
+           <div class="diagram-item">
+            App Protection Policies (Lesson 6.6)
+           </div>
+           <div class="diagram-item">
+            Selective wipe (Lesson 6.7)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-lesson-64-ios-app-deployment-apple-vpp-ashpak-licences-purchases-and-d">
+       <h2>
+        Lesson 6.4: iOS App Deployment: Apple VPP: Ashpak licences, purchases, and deploys apps to 200 iPhones at scale :
+       </h2>
+       <p>
+        The Scene Tuesday afternoon. Android apps are deploying. Ashpak turns to iOS. 200 corporate iPhones. 300 BYOD enrolled iPhones. He pulls up the iOS app requirements:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="8">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           IOS APP REQUIREMENTS; ASHSCRIPT
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Required on all corporate iPhones:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Microsoft Outlook
+           </div>
+           <div class="diagram-item">
+            Microsoft Teams
+           </div>
+           <div class="diagram-item">
+            Microsoft Authenticator
+           </div>
+           <div class="diagram-item">
+            Cisco AnyConnect
+           </div>
+           <div class="diagram-item">
+            Microsoft Defender
+           </div>
+           <div class="diagram-item">
+            AshScript CRM (in-house app)
+           </div>
+           <div class="diagram-item">
+            Available to all enrolled iPhones:
+           </div>
+           <div class="diagram-item">
+            Adobe Acrobat Reader
+           </div>
+           <div class="diagram-item">
+            Microsoft OneDrive
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../6-2-deploying-microsoft-365-apps/">
+         <span class="story-path-number">
+          6.2
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Deploying Microsoft 365 Apps
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          6.3
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Android App Deployment: Managed Google Play
+         </strong>
+         <small>
+          App Management
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../6-4-ios-app-deployment-apple-vpp/">
+         <span class="story-path-number">
+          6.4
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          iOS App Deployment: Apple VPP
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-6">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/lesson-toc.js">
+  </script>
+ </body>
+</html>

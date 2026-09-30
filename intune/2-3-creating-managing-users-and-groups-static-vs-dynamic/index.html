@@ -1,87 +1,1689 @@
 <!DOCTYPE html>
-
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Creating &amp; Managing Users and Groups · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=5" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=5" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=5" rel="apple-touch-icon"/>
-<title>Lesson 2.3: Creating &amp; Managing Users and Groups · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase2-lesson" style="--lesson-accent:#ff9f1c">
-<header class="site-header"><div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a aria-current="page" href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav>
-</div></header><main>
-<section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 2</span>/<span>2.3</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 2; IDENTITY IS EVERYTHING</div><h1>Creating &amp; Managing Users and Groups</h1><p class="lesson-subtitle">Ashpak builds the engine that powers everything</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout">
-<aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div>
-<a class="lesson-phase-link" href="../../intune/#phase-2"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 2</small><strong>Phase 2 · Identity is Everything</strong></span></a>
-<div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">2.3 Creating &amp; Managing Users and Groups</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-2">Learning Modules</a>
-<div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-why-groups-are-so-critical-in-intune"><span>02</span><strong>Why Groups Are So Critical in Intune</strong></a><a href="#section-group-design-principles-before-you-create-anything"><span>03</span><strong>Group Design Principles; Before You Create Anything</strong></a><a href="#section-ashscript-s-complete-group-architecture"><span>04</span><strong>AshScript's Complete Group Architecture</strong></a><a href="#section-creating-groups-complete-walkthrough"><span>05</span><strong>Creating Groups; Complete Walkthrough</strong></a><a href="#section-creating-dynamic-device-groups"><span>06</span><strong>Creating Dynamic Device Groups</strong></a><a href="#section-full-dynamic-device-group-reference"><span>07</span><strong>Full Dynamic Device Group Reference</strong></a><a href="#section-creating-dynamic-user-groups"><span>08</span><strong>Creating Dynamic User Groups</strong></a><a href="#section-full-dynamic-user-group-reference"><span>09</span><strong>Full Dynamic User Group Reference</strong></a><a href="#section-creating-static-groups"><span>10</span><strong>Creating Static Groups</strong></a><a href="#section-advanced-multi-rule-dynamic-groups"><span>11</span><strong>Advanced: Multi-Rule Dynamic Groups</strong></a><a href="#section-managing-individual-users"><span>12</span><strong>Managing Individual Users</strong></a><a href="#section-monitoring-group-membership"><span>13</span><strong>Monitoring Group Membership</strong></a><a href="#section-how-groups-power-intune-the-complete-picture"><span>14</span><strong>How Groups Power Intune; The Complete Picture</strong></a><a href="#section-ashscript-s-current-state-after-lesson-2-3"><span>15</span><strong>AshScript's Current State After Lesson 2.3</strong></a><a href="#section-key-concepts-to-lock-in"><span>16</span><strong>Key Concepts to Lock In</strong></a></nav></aside>
-<article aria-label="Lesson 2.3; Creating &amp; Managing Users and Groups" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-2">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>It's 9 AM. Ashpak opens the Entra ID portal. He can see all 1,000 AshScript employees are now synced from on-premises AD. Passwords work. Users can sign in. But then Riya calls:</p>
-<blockquote class="quote">"Ashpak, I need you to deploy a Wi-Fi profile to all Windows laptops, a VPN app to the Sales team only, a compliance policy to all corporate devices, and a special restrictive policy to the Executive team. Oh; and nothing should touch our 20 test devices until we've verified it works."</blockquote>
-<p>Ashpak writes it all down. Then he looks at his Entra ID groups panel. The 47 groups that synced from on-prem AD are a mess; named things like GRP_USR_SALES_01 and SG-IT-DEPT-MUMBAI . They were built for GPO targeting years ago. They won't work cleanly for Intune.</p>
-<p>He opens a blank document and starts designing AshScript's cloud group architecture from scratch.</p>
-<blockquote class="quote">"Groups are the nervous system of Intune," he writes at the top. "Everything flows through them. Design them right."</blockquote></section><section class="lesson-section" id="section-why-groups-are-so-critical-in-intune"><h2>Why Groups Are So Critical in Intune</h2><p>Let's be absolutely clear about this before we build anything:</p>
-<p>In Intune, you cannot assign a policy, app, or profile directly to an individual device or user (well, technically you can to one user, but it doesn't scale). Everything gets assigned to groups. This means your group design determines your entire Intune architecture. Bad groups = wrong policies hitting wrong devices = chaos. Good groups = precise targeting = a system that manages itself.</p><figure class="lesson-figure"><img alt="Group targeting flow" loading="lazy" src="../../assets/images/intune/lesson-2-3-targeting-flow.svg"/><figcaption>Policy / app / profile → group → users and devices.</figcaption></figure></section><section class="lesson-section" id="section-group-design-principles-before-you-create-anything"><h2>Group Design Principles: Before You Create Anything</h2><p>Ashpak follows five principles when designing AshScript's group structure:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="diagram-kv"><span class="diagram-k">PRINCIPLE 1</span><strong>Dynamic over Static</strong></div><div class="flow-node">Prefer dynamic groups wherever possible.</div><div class="flow-node">Manual maintenance = human error.</div><div class="flow-node">Automation = consistency.</div><div class="diagram-kv"><span class="diagram-k">PRINCIPLE 2</span><strong>Platform-based device groups</strong></div><div class="flow-node">Always have groups per OS platform.</div><div class="flow-node">Windows policies can't go to macOS devices.</div><div class="flow-node">Separate them from day one.</div><div class="diagram-kv"><span class="diagram-k">PRINCIPLE 3</span><strong>Ownership-based device groups</strong></div><div class="flow-node">Corporate devices get full MDM.</div><div class="flow-node">Personal devices get MAM only.</div><div class="flow-node">Always separate by ownership.</div><div class="diagram-kv"><span class="diagram-k">PRINCIPLE 4</span><strong>Department-based user groups</strong></div><div class="flow-node">Policies often differ by department.</div><div class="flow-node">Sales needs VPN. Finance needs extra encryption.</div><div class="flow-node">Build department groups dynamically.</div><div class="diagram-kv"><span class="diagram-k">PRINCIPLE 5</span><strong>Always have a Pilot group</strong></div><div class="flow-node">Test EVERY policy on 20 users first.</div><div class="flow-node">Never go straight to production.</div><div class="flow-node">The pilot group is your safety net.</div></div></div></div></section><section class="lesson-section" id="section-ashscript-s-complete-group-architecture"><h2>AshScript's Complete Group Architecture</h2><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">Here is the full group structure Ashpak designs. This is a real-world group architecture you can adapt</div><div class="diagram-kv"><span class="diagram-k">for any company</span><strong></strong></div><div class="flow-node">STATIC DEVICE GROUPS</div><div class="flow-node">INTUNE-DEV-PILOT 20 test devices (mixed)</div><div class="flow-node">INTUNE-DEV-EXECUTIVES Named executive laptops</div><div class="flow-node">INTUNE-DEV-KIOSK Shared/kiosk devices</div><div class="flow-node">USER GROUPS</div><div class="flow-node">DYNAMIC USER GROUPS</div><div class="flow-node">INTUNE-USR-ALL All licensed employees</div><div class="flow-node">INTUNE-USR-IT IT department</div><div class="flow-node">INTUNE-USR-SALES Sales department</div><div class="flow-node">INTUNE-USR-FINANCE Finance department</div><div class="flow-node">INTUNE-USR-HR HR department</div><div class="flow-node">INTUNE-USR-EXECUTIVES Job title = Director+</div><div class="flow-node">INTUNE-USR-MUMBAI Mumbai office</div><div class="flow-node">INTUNE-USR-BYOD Users with personal devices</div><div class="flow-node">STATIC USER GROUPS</div><div class="flow-node">INTUNE-USR-PILOT 20 test users</div><div class="flow-node">INTUNE-USR-EXCLUDED Users excluded from policies</div></div></div></div>
-<p>Naming convention matters. Ashpak prefixes all Intune groups with INTUNE- so they're easy to filter and distinguish from the legacy AD-synced groups. DEV = device group, USR = user group. This makes life much easier when you have hundreds of groups.</p><figure class="lesson-figure"><img alt="AshScript group architecture" loading="lazy" src="../../assets/images/intune/lesson-2-3-group-architecture.svg"/><figcaption>Dynamic and static groups using the INTUNE- naming convention.</figcaption></figure></section><section class="lesson-section" id="section-creating-groups-complete-walkthrough"><h2>Creating Groups: Complete Walkthrough</h2><p>Let's build AshScript's groups step by step in the portal.</p>
-<p>Navigate to Groups</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Identity  Groups  All Groups  + New Group</div></div></div></div></section><section class="lesson-section" id="section-creating-dynamic-device-groups"><h2>Creating Dynamic Device Groups</h2><p>Let's build INTUNE-DEV-WINDOWS together; every Windows device enrolled in Intune automatically joins this group.</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">New Group</div><div class="diagram-note">Group Type: Security</div><div class="diagram-note">Group Name: INTUNE-DEV-WINDOWS</div><div class="diagram-note">Group Description: Dynamic group - all Windows devices enrolled in Intune</div><div class="flow-row"><div class="flow-node flow-node-key">Membership Type: Dynamic Device</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">IMPORTANT</div></div><div class="flow-row"><div class="flow-node flow-node-key">Dynamic device rules: Click "Add dynamic query"  Property: deviceOSType Operator: Equals Value: Windows</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Save"</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Create"</div></div></div></div>
-<p>Now let's build INTUNE-DEV-CORPORATE; all company-owned devices:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">New Group</div><div class="diagram-kv"><span class="diagram-k">Group Type</span><strong>Security</strong></div><div class="diagram-kv"><span class="diagram-k">Group Name</span><strong>INTUNE-DEV-CORPORATE</strong></div><div class="diagram-kv"><span class="diagram-k">Group Description</span><strong>Dynamic group - all corporate owned devices</strong></div><div class="diagram-kv"><span class="diagram-k">Membership Type</span><strong>Dynamic Device</strong></div></div></div></div>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Dynamic device rules: Property: deviceOwnership Operator: Equals Value: Company</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Save"</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Create"</div></div></div></div>
-<p>And INTUNE-DEV-PERSONAL; BYOD devices:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="diagram-kv"><span class="diagram-k">Dynamic device rules</span><strong>Property: deviceOwnership Operator: Equals Value: Personal</strong></div></div></div></div></section><section class="lesson-section" id="section-full-dynamic-device-group-reference"><h2>Full Dynamic Device Group Reference</h2><p>Here are all the rules for AshScript's device groups: Warning: Watch the exact values. Entra ID's dynamic rules are case-sensitive for some properties. MacMDM not macOS . IPhone not iOS . These are the actual string values Microsoft uses internally. Getting these wrong means devices never join the group; a very common beginner mistake.</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Group Name</th><th scope="col">Property</th><th scope="col">Operator</th><th scope="col">Value</th></tr></thead><tbody><tr><td>INTUNE-DEV-ALL</td><td>managementType</td><td>Equals</td><td>MDM</td></tr><tr><td>INTUNE-DEV-WINDOWS</td><td>deviceOSType</td><td>Equals</td><td>Windows</td></tr><tr><td>INTUNE-DEV-MACOS</td><td>deviceOSType</td><td>Equals</td><td>MacMDM</td></tr><tr><td>INTUNE-DEV-ANDROID</td><td>deviceOSType</td><td>Equals</td><td>Android</td></tr><tr><td>INTUNE-DEV-IOS</td><td>deviceOSType</td><td>Equals</td><td>IPhone</td></tr><tr><td>INTUNE-DEV-CORPORATE</td><td>deviceOwnership</td><td>Equals</td><td>Company</td></tr><tr><td>INTUNE-DEV-PERSONAL</td><td>deviceOwnership</td><td>Equals</td><td>Personal</td></tr></tbody></table></div></section><section class="lesson-section" id="section-creating-dynamic-user-groups"><h2>Creating Dynamic User Groups</h2><p>Let's build INTUNE-USR-SALES :</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">New Group</div><div class="diagram-note">Group Type: Security</div><div class="diagram-note">Group Name: INTUNE-USR-SALES</div><div class="diagram-note">Group Description: Dynamic group - Sales department</div><div class="flow-row"><div class="flow-node flow-node-key">Membership Type: Dynamic User</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">IMPORTANT</div></div><div class="flow-row"><div class="flow-node flow-node-key">Dynamic user rules: Property: department Operator: Equals Value: Sales ↑ Must EXACTLY match the Department attribute in Active Directory</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Save"</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Create"</div></div></div></div>
-<p>Real-world gotcha: The value in the dynamic rule must exactly match what's in the user's AD attribute. If AD has Sales but the rule says sales or SALES; it won't match. Before building dynamic groups, Ashpak runs a quick AD audit to check what values are actually in use:</p>
-<div class="diagram-card"><pre><code>powershell</code></pre></div>
-<div class="diagram-card"><div class="diagram-board diagram-board-text"><div class="diagram-tile"># Check all unique Department values in AD</div><div class="diagram-tile">Get-ADUser -Filter * -Properties Department |</div><div class="diagram-tile">Select-Object Department |</div><div class="diagram-tile">Sort-Object Department -Unique |</div><div class="diagram-tile">Where-Object { $_.Department -ne $null }</div><div class="diagram-tile"># Output:</div><div class="diagram-tile"># Department</div><div class="diagram-tile">#</div><div class="diagram-tile"># Finance</div><div class="diagram-tile"># Human Resources</div><div class="diagram-tile"># IT</div><div class="diagram-tile"># Marketing</div><div class="diagram-tile"># Operations</div><div class="diagram-tile"># Sales</div></div></div>
-<p>Now Ashpak knows the exact values to use in his dynamic rules.</p></section><section class="lesson-section" id="section-full-dynamic-user-group-reference"><h2>Full Dynamic User Group Reference</h2><p>Group Name Property Operator Value</p>
-<p>INTUNE-USR-ALL userType Equals Member</p>
-<p>INTUNE-USR-IT department Equals IT</p>
-<p>INTUNE-USR-SALES department Equals Sales</p>
-<p>INTUNE-USR-FINANCE department Equals Finance</p>
-<p>INTUNE-USR-HR department Equals Human Resources</p>
-<p>INTUNE-USR-MUMBAI officeLocation Equals Mumbai</p>
-<p>INTUNE-USR-EXECUTIVES jobTitle Contains Director</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Group Name</th><th scope="col">Property</th><th scope="col">Operator</th><th scope="col">Value</th></tr></thead><tbody><tr><td>INTUNE-USR-ALL</td><td>userType</td><td>Equals</td><td>Member</td></tr><tr><td>INTUNE-USR-IT</td><td>department</td><td>Equals</td><td>IT</td></tr><tr><td>INTUNE-USR-SALES</td><td>department</td><td>Equals</td><td>Sales</td></tr><tr><td>INTUNE-USR-FINANCE</td><td>department</td><td>Equals</td><td>Finance</td></tr><tr><td>INTUNE-USR-HR</td><td>department</td><td>Equals</td><td>Human Resources</td></tr><tr><td>INTUNE-USR-MUMBAI</td><td>officeLocation</td><td>Equals</td><td>Mumbai</td></tr><tr><td>INTUNE-USR-EXECUTIVES</td><td>jobTitle</td><td>Contains</td><td>Director</td></tr></tbody></table></div></section><section class="lesson-section" id="section-creating-static-groups"><h2>Creating Static Groups</h2><p>Static groups are simpler; you create the group and manually add members. Let's create INTUNE-USR-PILOT; the 20 test users:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">New Group</div><div class="diagram-note">Group Type: Security</div><div class="diagram-note">Group Name: INTUNE-USR-PILOT</div><div class="diagram-note">Group Description: Pilot group - 20 users for testing new policies before production</div><div class="flow-row"><div class="flow-node flow-node-key">Membership Type: Assigned</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Static</div></div><div class="flow-row"><div class="flow-node flow-node-key">Members: (Click "No members selected") Search and add 20 users: ashpak@ashscript.com priya@ashscript.com (18 more from various depts)</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">"Create"</div></div></div></div>
-<p>Who goes in the Pilot group? Ashpak picks 20 volunteers from across different departments; a mix of IT-savvy users and regular users, covering all device types. This ensures a representative test before rollout.</p></section><section class="lesson-section" id="section-advanced-multi-rule-dynamic-groups"><h2>Advanced: Multi-Rule Dynamic Groups</h2><p>Sometimes one rule isn't enough. Entra ID supports complex dynamic rules with AND / OR logic. Example; All Senior Managers in Sales:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="diagram-kv"><span class="diagram-k">Rule syntax in the advanced editor</span><strong></strong></div><div class="flow-node">(user.department -eq "Sales") and</div><div class="flow-node">(user.jobTitle -contains "Senior")</div></div></div></div>
-<h3>Example: All Windows AND macOS devices (all laptops):</h3>
-<p>1 (device.deviceOSType -eq "Windows") or 2 (device.deviceOSType -eq "MacMDM")</p>
-<h3>Example: All corporate Windows devices:</h3>
-<p>1 (device.deviceOSType -eq "Windows") and 2 (device.deviceOwnership -eq "Company")</p>
-<p>Where to write advanced rules:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Groups</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Select Group  Dynamic membership rules  "Edit dynamic query"  Switch to: "Advanced rule editor"  Type your expression</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Validate</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Save</div></div></div></div>
-<div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Always click "Validate Rules" before saving. The portal will tell you if your syntax is wrong</li><li>and even show you a preview of matching members.</li></ul></div></section><section class="lesson-section" id="section-managing-individual-users"><h2>Managing Individual Users</h2><p>Beyond groups, Ashpak regularly manages individual users. Here are the most common tasks:</p>
-<p>Creating a Cloud-Only User For accounts that don't exist in on-prem AD (like service accounts):</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Identity</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Users</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">All Users  + New User</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create new user  User principal name: svc.intune@ashscript.com Display name: Intune Service Account Password: Auto-generate + show  Properties tab: Job title: Service Account Department: IT Usage location: India</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">REQUIRED for licence assignment  Assignments tab: Groups: INTUNE-USR-IT Roles: (none for now)</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Review + Create</div></div></div></div>
-<div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Usage Location is mandatory before you can assign a Microsoft 365 licence to a user. It's</li><li>one of the most commonly forgotten fields; and it causes licence assignment failures.</li></ul></div>
-<p>Assigning Licences in Bulk With 1,000 users synced, Ashpak needs to assign M365 E3 licences to everyone. He does this via group-based licensing; the most efficient method:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Identity  Groups  INTUNE-USR-ALL  Licenses</div></div></div></div>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">+ Assignments  Microsoft 365 E3  Select all service plans</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Save</div></div></div></div>
-<p>Group-based licensing is the professional approach. Instead of assigning licences one user at a time, you assign the licence to a group. Everyone in that group automatically gets the licence. New employees added to the group automatically get licenced. Employees who leave are automatically unlicenced when removed from the group.</p>
-<p>Monitor licence assignment status:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Identity</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Groups</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">INTUNE-USR-ALL  Licenses  View assignment errors  Common error: "Usage location not set" Fix: Set usage location on the user</div></div></div></div>
-<p>Bulk Updating Users with PowerShell Ashpak needs to set Usage Location for all 1,000 synced users so licences can be assigned:</p>
-<div class="script-panel"><div class="script-panel-head"><div class="script-panel-meta"><span class="script-panel-kicker">PowerShell</span><strong>Set Usage Location for all users</strong></div><button class="script-copy-btn" data-copy-target="usage-location-script" type="button">Copy script</button></div><pre><code id="usage-location-script"># Connect to Microsoft Graph
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Creating &amp; Managing Users and Groups &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=5" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=5" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=5" rel="apple-touch-icon"/>
+  <title>
+   Lesson 2.3: Creating &amp; Managing Users and Groups &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase2-lesson" style="--lesson-accent:#ff9f1c">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a aria-current="page" href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 2
+      </span>
+      /
+      <span>
+       2.3
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 2; IDENTITY IS EVERYTHING
+     </div>
+     <h1>
+      Creating &amp; Managing Users and Groups
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds the engine that powers everything
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-2">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 2
+        </small>
+        <strong>
+         Phase 2 &middot; Identity is Everything
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       2.3 Creating &amp; Managing Users and Groups
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-2">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-why-groups-are-so-critical-in-intune">
+        <span>
+         02
+        </span>
+        <strong>
+         Why Groups Are So Critical in Intune
+        </strong>
+       </a>
+       <a href="#section-group-design-principles-before-you-create-anything">
+        <span>
+         03
+        </span>
+        <strong>
+         Group Design Principles; Before You Create Anything
+        </strong>
+       </a>
+       <a href="#section-ashscript-s-complete-group-architecture">
+        <span>
+         04
+        </span>
+        <strong>
+         AshScript's Complete Group Architecture
+        </strong>
+       </a>
+       <a href="#section-creating-groups-complete-walkthrough">
+        <span>
+         05
+        </span>
+        <strong>
+         Creating Groups; Complete Walkthrough
+        </strong>
+       </a>
+       <a href="#section-creating-dynamic-device-groups">
+        <span>
+         06
+        </span>
+        <strong>
+         Creating Dynamic Device Groups
+        </strong>
+       </a>
+       <a href="#section-full-dynamic-device-group-reference">
+        <span>
+         07
+        </span>
+        <strong>
+         Full Dynamic Device Group Reference
+        </strong>
+       </a>
+       <a href="#section-creating-dynamic-user-groups">
+        <span>
+         08
+        </span>
+        <strong>
+         Creating Dynamic User Groups
+        </strong>
+       </a>
+       <a href="#section-full-dynamic-user-group-reference">
+        <span>
+         09
+        </span>
+        <strong>
+         Full Dynamic User Group Reference
+        </strong>
+       </a>
+       <a href="#section-creating-static-groups">
+        <span>
+         10
+        </span>
+        <strong>
+         Creating Static Groups
+        </strong>
+       </a>
+       <a href="#section-advanced-multi-rule-dynamic-groups">
+        <span>
+         11
+        </span>
+        <strong>
+         Advanced: Multi-Rule Dynamic Groups
+        </strong>
+       </a>
+       <a href="#section-managing-individual-users">
+        <span>
+         12
+        </span>
+        <strong>
+         Managing Individual Users
+        </strong>
+       </a>
+       <a href="#section-monitoring-group-membership">
+        <span>
+         13
+        </span>
+        <strong>
+         Monitoring Group Membership
+        </strong>
+       </a>
+       <a href="#section-how-groups-power-intune-the-complete-picture">
+        <span>
+         14
+        </span>
+        <strong>
+         How Groups Power Intune; The Complete Picture
+        </strong>
+       </a>
+       <a href="#section-ashscript-s-current-state-after-lesson-2-3">
+        <span>
+         15
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 2.3
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in">
+        <span>
+         16
+        </span>
+        <strong>
+         Key Concepts to Lock In
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 2.3; Creating &amp; Managing Users and Groups" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-2">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        It's 9 AM. Ashpak opens the Entra ID portal. He can see all 1,000 AshScript employees are now synced from on-premises AD. Passwords work. Users can sign in. But then Riya calls:
+       </p>
+       <blockquote class="quote">
+        "Ashpak, I need you to deploy a Wi-Fi profile to all Windows laptops, a VPN app to the Sales team only, a compliance policy to all corporate devices, and a special restrictive policy to the Executive team. Oh; and nothing should touch our 20 test devices until we've verified it works."
+       </blockquote>
+       <p>
+        Ashpak writes it all down. Then he looks at his Entra ID groups panel. The 47 groups that synced from on-prem AD are a mess; named things like GRP_USR_SALES_01 and SG-IT-DEPT-MUMBAI . They were built for GPO targeting years ago. They won't work cleanly for Intune.
+       </p>
+       <p>
+        He opens a blank document and starts designing AshScript's cloud group architecture from scratch.
+       </p>
+       <blockquote class="quote">
+        "Groups are the nervous system of Intune," he writes at the top. "Everything flows through them. Design them right."
+       </blockquote>
+      </section>
+      <section class="lesson-section" id="section-why-groups-are-so-critical-in-intune">
+       <h2>
+        Why Groups Are So Critical in Intune
+       </h2>
+       <p>
+        Let's be absolutely clear about this before we build anything:
+       </p>
+       <p>
+        In Intune, you cannot assign a policy, app, or profile directly to an individual device or user (well, technically you can to one user, but it doesn't scale). Everything gets assigned to groups. This means your group design determines your entire Intune architecture. Bad groups = wrong policies hitting wrong devices = chaos. Good groups = precise targeting = a system that manages itself.
+       </p>
+       <figure class="lesson-figure">
+        <img alt="Group targeting flow" loading="lazy" src="../../assets/images/intune/lesson-2-3-targeting-flow.svg"/>
+        <figcaption>
+         Policy / app / profile &rarr; group &rarr; users and devices.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-group-design-principles-before-you-create-anything">
+       <h2>
+        Group Design Principles: Before You Create Anything
+       </h2>
+       <p>
+        Ashpak follows five principles when designing AshScript's group structure:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            PRINCIPLE 1
+           </span>
+           <strong>
+            Dynamic over Static
+           </strong>
+          </div>
+          <div class="flow-node">
+           Prefer dynamic groups wherever possible.
+          </div>
+          <div class="flow-node">
+           Manual maintenance = human error.
+          </div>
+          <div class="flow-node">
+           Automation = consistency.
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            PRINCIPLE 2
+           </span>
+           <strong>
+            Platform-based device groups
+           </strong>
+          </div>
+          <div class="flow-node">
+           Always have groups per OS platform.
+          </div>
+          <div class="flow-node">
+           Windows policies can't go to macOS devices.
+          </div>
+          <div class="flow-node">
+           Separate them from day one.
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            PRINCIPLE 3
+           </span>
+           <strong>
+            Ownership-based device groups
+           </strong>
+          </div>
+          <div class="flow-node">
+           Corporate devices get full MDM.
+          </div>
+          <div class="flow-node">
+           Personal devices get MAM only.
+          </div>
+          <div class="flow-node">
+           Always separate by ownership.
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            PRINCIPLE 4
+           </span>
+           <strong>
+            Department-based user groups
+           </strong>
+          </div>
+          <div class="flow-node">
+           Policies often differ by department.
+          </div>
+          <div class="flow-node">
+           Sales needs VPN. Finance needs extra encryption.
+          </div>
+          <div class="flow-node">
+           Build department groups dynamically.
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            PRINCIPLE 5
+           </span>
+           <strong>
+            Always have a Pilot group
+           </strong>
+          </div>
+          <div class="flow-node">
+           Test EVERY policy on 20 users first.
+          </div>
+          <div class="flow-node">
+           Never go straight to production.
+          </div>
+          <div class="flow-node">
+           The pilot group is your safety net.
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscript-s-complete-group-architecture">
+       <h2>
+        AshScript's Complete Group Architecture
+       </h2>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           Here is the full group structure Ashpak designs. This is a real-world group architecture you can adapt
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            for any company
+           </span>
+           <strong>
+           </strong>
+          </div>
+          <div class="flow-node">
+           STATIC DEVICE GROUPS
+          </div>
+          <div class="flow-node">
+           INTUNE-DEV-PILOT 20 test devices (mixed)
+          </div>
+          <div class="flow-node">
+           INTUNE-DEV-EXECUTIVES Named executive laptops
+          </div>
+          <div class="flow-node">
+           INTUNE-DEV-KIOSK Shared/kiosk devices
+          </div>
+          <div class="flow-node">
+           USER GROUPS
+          </div>
+          <div class="flow-node">
+           DYNAMIC USER GROUPS
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-ALL All licensed employees
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-IT IT department
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-SALES Sales department
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-FINANCE Finance department
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-HR HR department
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-EXECUTIVES Job title = Director+
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-MUMBAI Mumbai office
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-BYOD Users with personal devices
+          </div>
+          <div class="flow-node">
+           STATIC USER GROUPS
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-PILOT 20 test users
+          </div>
+          <div class="flow-node">
+           INTUNE-USR-EXCLUDED Users excluded from policies
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Naming convention matters. Ashpak prefixes all Intune groups with INTUNE- so they're easy to filter and distinguish from the legacy AD-synced groups. DEV = device group, USR = user group. This makes life much easier when you have hundreds of groups.
+       </p>
+       <figure class="lesson-figure">
+        <img alt="AshScript group architecture" loading="lazy" src="../../assets/images/intune/lesson-2-3-group-architecture.svg"/>
+        <figcaption>
+         Dynamic and static groups using the INTUNE- naming convention.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-creating-groups-complete-walkthrough">
+       <h2>
+        Creating Groups: Complete Walkthrough
+       </h2>
+       <p>
+        Let's build AshScript's groups step by step in the portal.
+       </p>
+       <p>
+        Navigate to Groups
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Identity  Groups  All Groups  + New Group
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-creating-dynamic-device-groups">
+       <h2>
+        Creating Dynamic Device Groups
+       </h2>
+       <p>
+        Let's build INTUNE-DEV-WINDOWS together; every Windows device enrolled in Intune automatically joins this group.
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          New Group
+         </div>
+         <div class="diagram-note">
+          Group Type: Security
+         </div>
+         <div class="diagram-note">
+          Group Name: INTUNE-DEV-WINDOWS
+         </div>
+         <div class="diagram-note">
+          Group Description: Dynamic group - all Windows devices enrolled in Intune
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Membership Type: Dynamic Device
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           IMPORTANT
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Dynamic device rules: Click "Add dynamic query"  Property: deviceOSType Operator: Equals Value: Windows
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Save"
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Create"
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Now let's build INTUNE-DEV-CORPORATE; all company-owned devices:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           New Group
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Group Type
+           </span>
+           <strong>
+            Security
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Group Name
+           </span>
+           <strong>
+            INTUNE-DEV-CORPORATE
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Group Description
+           </span>
+           <strong>
+            Dynamic group - all corporate owned devices
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Membership Type
+           </span>
+           <strong>
+            Dynamic Device
+           </strong>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Dynamic device rules: Property: deviceOwnership Operator: Equals Value: Company
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Save"
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Create"
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        And INTUNE-DEV-PERSONAL; BYOD devices:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Dynamic device rules
+           </span>
+           <strong>
+            Property: deviceOwnership Operator: Equals Value: Personal
+           </strong>
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-full-dynamic-device-group-reference">
+       <h2>
+        Full Dynamic Device Group Reference
+       </h2>
+       <p>
+        Here are all the rules for AshScript's device groups: Warning: Watch the exact values. Entra ID's dynamic rules are case-sensitive for some properties. MacMDM not macOS . IPhone not iOS . These are the actual string values Microsoft uses internally. Getting these wrong means devices never join the group; a very common beginner mistake.
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Group Name
+           </th>
+           <th scope="col">
+            Property
+           </th>
+           <th scope="col">
+            Operator
+           </th>
+           <th scope="col">
+            Value
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            INTUNE-DEV-ALL
+           </td>
+           <td>
+            managementType
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            MDM
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-DEV-WINDOWS
+           </td>
+           <td>
+            deviceOSType
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Windows
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-DEV-MACOS
+           </td>
+           <td>
+            deviceOSType
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            MacMDM
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-DEV-ANDROID
+           </td>
+           <td>
+            deviceOSType
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Android
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-DEV-IOS
+           </td>
+           <td>
+            deviceOSType
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            IPhone
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-DEV-CORPORATE
+           </td>
+           <td>
+            deviceOwnership
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Company
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-DEV-PERSONAL
+           </td>
+           <td>
+            deviceOwnership
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Personal
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-creating-dynamic-user-groups">
+       <h2>
+        Creating Dynamic User Groups
+       </h2>
+       <p>
+        Let's build INTUNE-USR-SALES :
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          New Group
+         </div>
+         <div class="diagram-note">
+          Group Type: Security
+         </div>
+         <div class="diagram-note">
+          Group Name: INTUNE-USR-SALES
+         </div>
+         <div class="diagram-note">
+          Group Description: Dynamic group - Sales department
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Membership Type: Dynamic User
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           IMPORTANT
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Dynamic user rules: Property: department Operator: Equals Value: Sales &uarr; Must EXACTLY match the Department attribute in Active Directory
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Save"
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Create"
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Real-world gotcha: The value in the dynamic rule must exactly match what's in the user's AD attribute. If AD has Sales but the rule says sales or SALES; it won't match. Before building dynamic groups, Ashpak runs a quick AD audit to check what values are actually in use:
+       </p>
+       <div class="diagram-card">
+        <pre><code>powershell</code></pre>
+       </div>
+       <div class="diagram-card">
+        <div class="diagram-board diagram-board-text">
+         <div class="diagram-tile">
+          # Check all unique Department values in AD
+         </div>
+         <div class="diagram-tile">
+          Get-ADUser -Filter * -Properties Department |
+         </div>
+         <div class="diagram-tile">
+          Select-Object Department |
+         </div>
+         <div class="diagram-tile">
+          Sort-Object Department -Unique |
+         </div>
+         <div class="diagram-tile">
+          Where-Object { $_.Department -ne $null }
+         </div>
+         <div class="diagram-tile">
+          # Output:
+         </div>
+         <div class="diagram-tile">
+          # Department
+         </div>
+         <div class="diagram-tile">
+          #
+         </div>
+         <div class="diagram-tile">
+          # Finance
+         </div>
+         <div class="diagram-tile">
+          # Human Resources
+         </div>
+         <div class="diagram-tile">
+          # IT
+         </div>
+         <div class="diagram-tile">
+          # Marketing
+         </div>
+         <div class="diagram-tile">
+          # Operations
+         </div>
+         <div class="diagram-tile">
+          # Sales
+         </div>
+        </div>
+       </div>
+       <p>
+        Now Ashpak knows the exact values to use in his dynamic rules.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-full-dynamic-user-group-reference">
+       <h2>
+        Full Dynamic User Group Reference
+       </h2>
+       <p>
+        Group Name Property Operator Value
+       </p>
+       <p>
+        INTUNE-USR-ALL userType Equals Member
+       </p>
+       <p>
+        INTUNE-USR-IT department Equals IT
+       </p>
+       <p>
+        INTUNE-USR-SALES department Equals Sales
+       </p>
+       <p>
+        INTUNE-USR-FINANCE department Equals Finance
+       </p>
+       <p>
+        INTUNE-USR-HR department Equals Human Resources
+       </p>
+       <p>
+        INTUNE-USR-MUMBAI officeLocation Equals Mumbai
+       </p>
+       <p>
+        INTUNE-USR-EXECUTIVES jobTitle Contains Director
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Group Name
+           </th>
+           <th scope="col">
+            Property
+           </th>
+           <th scope="col">
+            Operator
+           </th>
+           <th scope="col">
+            Value
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            INTUNE-USR-ALL
+           </td>
+           <td>
+            userType
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Member
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-USR-IT
+           </td>
+           <td>
+            department
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            IT
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-USR-SALES
+           </td>
+           <td>
+            department
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Sales
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-USR-FINANCE
+           </td>
+           <td>
+            department
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Finance
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-USR-HR
+           </td>
+           <td>
+            department
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Human Resources
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-USR-MUMBAI
+           </td>
+           <td>
+            officeLocation
+           </td>
+           <td>
+            Equals
+           </td>
+           <td>
+            Mumbai
+           </td>
+          </tr>
+          <tr>
+           <td>
+            INTUNE-USR-EXECUTIVES
+           </td>
+           <td>
+            jobTitle
+           </td>
+           <td>
+            Contains
+           </td>
+           <td>
+            Director
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-creating-static-groups">
+       <h2>
+        Creating Static Groups
+       </h2>
+       <p>
+        Static groups are simpler; you create the group and manually add members. Let's create INTUNE-USR-PILOT; the 20 test users:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          New Group
+         </div>
+         <div class="diagram-note">
+          Group Type: Security
+         </div>
+         <div class="diagram-note">
+          Group Name: INTUNE-USR-PILOT
+         </div>
+         <div class="diagram-note">
+          Group Description: Pilot group - 20 users for testing new policies before production
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Membership Type: Assigned
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Static
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Members: (Click "No members selected") Search and add 20 users: ashpak@ashscript.com priya@ashscript.com (18 more from various depts)
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           "Create"
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Who goes in the Pilot group? Ashpak picks 20 volunteers from across different departments; a mix of IT-savvy users and regular users, covering all device types. This ensures a representative test before rollout.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-advanced-multi-rule-dynamic-groups">
+       <h2>
+        Advanced: Multi-Rule Dynamic Groups
+       </h2>
+       <p>
+        Sometimes one rule isn't enough. Entra ID supports complex dynamic rules with AND / OR logic. Example; All Senior Managers in Sales:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Rule syntax in the advanced editor
+           </span>
+           <strong>
+           </strong>
+          </div>
+          <div class="flow-node">
+           (user.department -eq "Sales") and
+          </div>
+          <div class="flow-node">
+           (user.jobTitle -contains "Senior")
+          </div>
+         </div>
+        </div>
+       </div>
+       <h3>
+        Example: All Windows AND macOS devices (all laptops):
+       </h3>
+       <p>
+        1 (device.deviceOSType -eq "Windows") or 2 (device.deviceOSType -eq "MacMDM")
+       </p>
+       <h3>
+        Example: All corporate Windows devices:
+       </h3>
+       <p>
+        1 (device.deviceOSType -eq "Windows") and 2 (device.deviceOwnership -eq "Company")
+       </p>
+       <p>
+        Where to write advanced rules:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Groups
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Select Group  Dynamic membership rules  "Edit dynamic query"  Switch to: "Advanced rule editor"  Type your expression
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Validate
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Save
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Always click "Validate Rules" before saving. The portal will tell you if your syntax is wrong
+         </li>
+         <li>
+          and even show you a preview of matching members.
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-managing-individual-users">
+       <h2>
+        Managing Individual Users
+       </h2>
+       <p>
+        Beyond groups, Ashpak regularly manages individual users. Here are the most common tasks:
+       </p>
+       <p>
+        Creating a Cloud-Only User For accounts that don't exist in on-prem AD (like service accounts):
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Identity
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Users
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           All Users  + New User
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create new user  User principal name: svc.intune@ashscript.com Display name: Intune Service Account Password: Auto-generate + show  Properties tab: Job title: Service Account Department: IT Usage location: India
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           REQUIRED for licence assignment  Assignments tab: Groups: INTUNE-USR-IT Roles: (none for now)
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Review + Create
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Usage Location is mandatory before you can assign a Microsoft 365 licence to a user. It's
+         </li>
+         <li>
+          one of the most commonly forgotten fields; and it causes licence assignment failures.
+         </li>
+        </ul>
+       </div>
+       <p>
+        Assigning Licences in Bulk With 1,000 users synced, Ashpak needs to assign M365 E3 licences to everyone. He does this via group-based licensing; the most efficient method:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Identity  Groups  INTUNE-USR-ALL  Licenses
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           + Assignments  Microsoft 365 E3  Select all service plans
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Save
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Group-based licensing is the professional approach. Instead of assigning licences one user at a time, you assign the licence to a group. Everyone in that group automatically gets the licence. New employees added to the group automatically get licenced. Employees who leave are automatically unlicenced when removed from the group.
+       </p>
+       <p>
+        Monitor licence assignment status:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Identity
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Groups
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           INTUNE-USR-ALL  Licenses  View assignment errors  Common error: "Usage location not set" Fix: Set usage location on the user
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Bulk Updating Users with PowerShell Ashpak needs to set Usage Location for all 1,000 synced users so licences can be assigned:
+       </p>
+       <div class="script-panel">
+        <div class="script-panel-head">
+         <div class="script-panel-meta">
+          <span class="script-panel-kicker">
+           PowerShell
+          </span>
+          <strong>
+           Set Usage Location for all users
+          </strong>
+         </div>
+         <button class="script-copy-btn" data-copy-target="usage-location-script" type="button">
+          Copy script
+         </button>
+        </div>
+        <pre><code id="usage-location-script"># Connect to Microsoft Graph
 Connect-MgGraph -Scopes "User.ReadWrite.All"
 
 # Set Usage Location for all users to India
 Get-MgUser -All | ForEach-Object {
     Update-MgUser -UserId $_.Id -UsageLocation "IN"
     Write-Host "Updated: $($_.UserPrincipalName)"
-}</code></pre></div></section><section class="lesson-section" id="section-monitoring-group-membership"><h2>Monitoring Group Membership</h2><p>Once groups are created, Ashpak regularly checks them:</p>
-<h3>Check Group Members:</h3>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Groups</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Select group  Members tab  See all current members  Check "Last updated" timestamp</div></div></div></div>
-<h3>Check Why a Specific User Is or Isn't in a Group:</h3>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Users</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Select user  Groups tab  See all groups user belongs to  Filter to find specific group</div></div></div></div>
-<h3>Check Dynamic Group Processing Status:</h3>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Groups</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Select dynamic group  Overview  "Dynamic membership processing status" "Update complete"; all good "Processing"; changes being applied × "Error"; rule syntax problem</div></div></div></div></section><section class="lesson-section" id="section-how-groups-power-intune-the-complete-picture"><h2>How Groups Power Intune: The Complete Picture</h2><p>Now Ashpak can see how everything connects. Here's a preview of how the groups he just built will be used in every upcoming phase:</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Phase</th><th scope="col">Group used</th></tr></thead><tbody><tr><td>Phase 3: Enrollment restrictions</td><td>INTUNE-DEV-CORPORATE (only corporate devices enroll)</td></tr><tr><td>Phase 4: Wi-Fi profile for all Windows laptops</td><td>INTUNE-DEV-WINDOWS (auto-targets every Windows PC)</td></tr><tr><td>Phase 4: VPN config for Sales only</td><td>INTUNE-USR-SALES (only Sales users get VPN)</td></tr><tr><td>Phase 5: Compliance policy for all devices</td><td>INTUNE-DEV-ALL (every enrolled device)</td></tr><tr><td>Phase 6: Deploy Teams to all employees</td><td>INTUNE-USR-ALL (all 1,000 employees)</td></tr><tr><td>Phase 7: BitLocker encryption</td><td>INTUNE-DEV-WINDOWS (all Windows devices)</td></tr><tr><td>Testing any new policy</td><td>INTUNE-USR-PILOT (always test here first)</td></tr></tbody></table></div><figure class="lesson-figure"><img alt="How groups power Intune" loading="lazy" src="../../assets/images/intune/lesson-2-3-intune-targeting-map.svg"/><figcaption>Groups connect this identity architecture to later Intune phases.</figcaption></figure></section><section class="lesson-section" id="section-ashscript-s-current-state-after-lesson-2-3"><h2>AshScript's Current State After Lesson 2.3</h2><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">ASHSCRIPT TENANT</div><div class="flow-node">1,000 users synced from on-prem AD</div><div class="flow-node">Usage location set on all users</div><div class="flow-node">M365 E3 licences assigned via group licensing</div><div class="flow-node">7 dynamic device groups created</div><div class="flow-node">8 dynamic user groups created</div><div class="flow-node">3 static special-purpose groups created</div><div class="flow-node">Pilot group populated with 20 test users</div><div class="flow-node">Naming convention established (INTUNE-DEV / USR)</div><div class="flow-node">RBAC roles not yet configured</div><div class="flow-node">MFA and Conditional Access not yet configured</div><div class="flow-node">No devices enrolled yet</div></div></div></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in"><h2>Key Concepts to Lock In</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>Everything targets groups</td><td>Policies, apps, profiles; all assigned to groups</td></tr><tr><td>Dynamic vs Static</td><td>Dynamic = auto-managed, Static = manual</td></tr><tr><td>Case sensitivity</td><td>Dynamic rule values must match AD attribute values exactly</td></tr><tr><td>Naming convention</td><td>Prefix groups (INTUNE-DEV / INTUNE-USR) for easy filtering</td></tr><tr><td>Pilot group</td><td>Always test on 20 users before production rollout</td></tr><tr><td>Group-based licensing</td><td>Assign licences to groups, not individual users</td></tr><tr><td>Usage location</td><td>Must be set before licence assignment works</td></tr><tr><td>Dynamic group delay</td><td>5-15 minutes typically for membership updates</td></tr><tr><td>Advanced rules</td><td>Use AND/OR for complex targeting logic</td></tr><tr><td>Validate rules</td><td>Always validate syntax before saving dynamic rules</td></tr></tbody></table></div></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../2-2-entra-connect-sync-bridging-on-prem-ad-to-the-cloud/"><span class="story-path-number">2.2</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Entra Connect Sync: Bridging On-Prem AD to the Cloud</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">2.3</span><span class="story-path-label">YOU ARE HERE</span><strong>Creating &amp; Managing Users and Groups (Static vs Dynamic)</strong><small>Identity is Everything</small></div><a class="story-path-step story-path-next" href="../2-4-rbac-roles-permissions-in-intune/"><span class="story-path-number">2.4</span><span class="story-path-label">NEXT CHAPTER</span><strong>RBAC: Roles &amp; Permissions in Intune</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-2">Learning Modules</a></nav></article>
-</div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script></body></html>
+}</code></pre>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-monitoring-group-membership">
+       <h2>
+        Monitoring Group Membership
+       </h2>
+       <p>
+        Once groups are created, Ashpak regularly checks them:
+       </p>
+       <h3>
+        Check Group Members:
+       </h3>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Groups
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Select group  Members tab  See all current members  Check "Last updated" timestamp
+          </div>
+         </div>
+        </div>
+       </div>
+       <h3>
+        Check Why a Specific User Is or Isn't in a Group:
+       </h3>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Users
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Select user  Groups tab  See all groups user belongs to  Filter to find specific group
+          </div>
+         </div>
+        </div>
+       </div>
+       <h3>
+        Check Dynamic Group Processing Status:
+       </h3>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Groups
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Select dynamic group  Overview  "Dynamic membership processing status" "Update complete"; all good "Processing"; changes being applied &times; "Error"; rule syntax problem
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-how-groups-power-intune-the-complete-picture">
+       <h2>
+        How Groups Power Intune: The Complete Picture
+       </h2>
+       <p>
+        Now Ashpak can see how everything connects. Here's a preview of how the groups he just built will be used in every upcoming phase:
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Phase
+           </th>
+           <th scope="col">
+            Group used
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Phase 3: Enrollment restrictions
+           </td>
+           <td>
+            INTUNE-DEV-CORPORATE (only corporate devices enroll)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Phase 4: Wi-Fi profile for all Windows laptops
+           </td>
+           <td>
+            INTUNE-DEV-WINDOWS (auto-targets every Windows PC)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Phase 4: VPN config for Sales only
+           </td>
+           <td>
+            INTUNE-USR-SALES (only Sales users get VPN)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Phase 5: Compliance policy for all devices
+           </td>
+           <td>
+            INTUNE-DEV-ALL (every enrolled device)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Phase 6: Deploy Teams to all employees
+           </td>
+           <td>
+            INTUNE-USR-ALL (all 1,000 employees)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Phase 7: BitLocker encryption
+           </td>
+           <td>
+            INTUNE-DEV-WINDOWS (all Windows devices)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Testing any new policy
+           </td>
+           <td>
+            INTUNE-USR-PILOT (always test here first)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <figure class="lesson-figure">
+        <img alt="How groups power Intune" loading="lazy" src="../../assets/images/intune/lesson-2-3-targeting-flow.svg"/>
+        <figcaption>
+         Groups connect this identity architecture to later Intune phases.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-ashscript-s-current-state-after-lesson-2-3">
+       <h2>
+        AshScript's Current State After Lesson 2.3
+       </h2>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="flow-node">
+           1,000 users synced from on-prem AD
+          </div>
+          <div class="flow-node">
+           Usage location set on all users
+          </div>
+          <div class="flow-node">
+           M365 E3 licences assigned via group licensing
+          </div>
+          <div class="flow-node">
+           7 dynamic device groups created
+          </div>
+          <div class="flow-node">
+           8 dynamic user groups created
+          </div>
+          <div class="flow-node">
+           3 static special-purpose groups created
+          </div>
+          <div class="flow-node">
+           Pilot group populated with 20 test users
+          </div>
+          <div class="flow-node">
+           Naming convention established (INTUNE-DEV / USR)
+          </div>
+          <div class="flow-node">
+           RBAC roles not yet configured
+          </div>
+          <div class="flow-node">
+           MFA and Conditional Access not yet configured
+          </div>
+          <div class="flow-node">
+           No devices enrolled yet
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in">
+       <h2>
+        Key Concepts to Lock In
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Everything targets groups
+           </td>
+           <td>
+            Policies, apps, profiles; all assigned to groups
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Dynamic vs Static
+           </td>
+           <td>
+            Dynamic = auto-managed, Static = manual
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Case sensitivity
+           </td>
+           <td>
+            Dynamic rule values must match AD attribute values exactly
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Naming convention
+           </td>
+           <td>
+            Prefix groups (INTUNE-DEV / INTUNE-USR) for easy filtering
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Pilot group
+           </td>
+           <td>
+            Always test on 20 users before production rollout
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Group-based licensing
+           </td>
+           <td>
+            Assign licences to groups, not individual users
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Usage location
+           </td>
+           <td>
+            Must be set before licence assignment works
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Dynamic group delay
+           </td>
+           <td>
+            5-15 minutes typically for membership updates
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Advanced rules
+           </td>
+           <td>
+            Use AND/OR for complex targeting logic
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Validate rules
+           </td>
+           <td>
+            Always validate syntax before saving dynamic rules
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../2-2-entra-connect-sync-bridging-on-prem-ad-to-the-cloud/">
+         <span class="story-path-number">
+          2.2
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Entra Connect Sync: Bridging On-Prem AD to the Cloud
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          2.3
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Creating &amp; Managing Users and Groups (Static vs Dynamic)
+         </strong>
+         <small>
+          Identity is Everything
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../2-4-rbac-roles-permissions-in-intune/">
+         <span class="story-path-number">
+          2.4
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          RBAC: Roles &amp; Permissions in Intune
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-2">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+ </body>
+</html>

@@ -1,58 +1,1414 @@
 <!DOCTYPE html>
-
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="BYOD Enrollment: Personal Devices, MAM vs MDM · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
-<link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
-<title>Lesson 3.6: BYOD Enrollment: Personal Devices, MAM vs MDM · ashscript</title>
-<link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
-</head>
-<body class="phase3-lesson" style="--lesson-accent:#ffd60a">
-<header class="site-header"><div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav="">
-<a href="../../">Scripts</a>
-<details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details>
-<a href="../../who-am-i/">Who Am I</a>
-</nav>
-</div></header>
-<main>
-<section class="page-hero intune-lesson-hero">
-<div class="container">
-<div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 3</span>/<span>3.6</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 3; ENROLLING DEVICES</div>
-<h1>BYOD Enrollment: Personal Devices, MAM vs MDM</h1>
-<p class="lesson-subtitle">Ashpak finds the balance between security and privacy</p>
-</div>
-</section>
-<section class="section lesson-reader">
-<div class="container lesson-reader-layout">
-<aside class="lesson-sidebar">
-<div class="toc-label">COURSE NAVIGATION</div>
-<a class="lesson-phase-link" href="../../intune/#phase-3">
-<span aria-hidden="true" class="lesson-phase-dot"></span>
-<span class="lesson-phase-copy"><small>PHASE 3</small><strong>Phase 3 · Enrolling Devices</strong></span>
-</a>
-<div class="toc-label" style="margin-top:8px">CURRENT LESSON</div>
-<div class="lesson-index">3.6 BYOD Enrollment: Personal Devices, MAM vs MDM</div>
-<a class="phase-back learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a>
-<div class="toc-label" style="margin-top:6px">ON THIS LESSON</div>
-<nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-the-fundamental-byod-problem"><span>02</span><strong>The Fundamental BYOD Problem</strong></a><a href="#section-mdm-vs-mam-understanding-the-difference"><span>03</span><strong>MDM vs MAM; Understanding the Difference</strong></a><a href="#section-app-protection-policies-the-heart-of-mam"><span>04</span><strong>App Protection Policies; The Heart of MAM</strong></a><a href="#section-creating-app-protection-policies"><span>05</span><strong>Creating App Protection Policies</strong></a><a href="#section-policy-1-ios-app-protection-policy-byod"><span>06</span><strong>Policy 1; iOS App Protection Policy (BYOD)</strong></a><a href="#section-policy-2-android-app-protection-policy-byod"><span>07</span><strong>Policy 2; Android App Protection Policy (BYOD)</strong></a><a href="#section-mam-without-enrollment-the-user-experience"><span>08</span><strong>MAM Without Enrollment; The User Experience</strong></a><a href="#section-mam-vs-mdm-vs-mammdm-the-full-comparison"><span>09</span><strong>MAM vs MDM vs MAM+MDM; The Full Comparison</strong></a><a href="#section-ashscripts-byod-decision-framework"><span>10</span><strong>AshScript's BYOD Decision Framework</strong></a><a href="#section-ios-user-enrollment-the-middle-ground"><span>11</span><strong>iOS User Enrollment; The Middle Ground</strong></a><a href="#section-selective-wipe-the-employee-leaves"><span>12</span><strong>Selective Wipe; The Employee Leaves</strong></a><a href="#section-conditional-access-for-mam-only-devices"><span>13</span><strong>Conditional Access for MAM-Only Devices</strong></a><a href="#section-ashscripts-final-byod-strategy"><span>14</span><strong>AshScript's Final BYOD Strategy</strong></a><a href="#section-ashscripts-current-state-after-lesson-36"><span>15</span><strong>AshScript's Current State After Lesson 3.6</strong></a><a href="#section-key-concepts-to-lock-in"><span>16</span><strong>Key Concepts to Lock In</strong></a></nav>
-</aside>
-<article aria-label="Lesson 3.6; BYOD Enrollment: Personal Devices, MAM vs MDM" class="lesson-content">
-<div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Friday morning. Ashpak has just sent an email to all 1,000 AshScript employees explaining the new</p><p>device enrollment program.</p><p>By 10 AM, his inbox has 47 replies. Most are supportive. But three stand out:</p><p>From Rohan (Senior Developer):</p><blockquote class="quote">"I'm not enrolling my personal MacBook in any MDM system. I have client code, personal projects,</blockquote><p>and private files on this machine. I don't care about policy; my personal device stays personal."</p><p>From Fatima (Sales Rep):</p><blockquote class="quote">"I understand the need for security, but I really don't want IT to be able to wipe my personal</blockquote><p>phone. My entire life is on it. Can we find a middle ground?"</p><p>From AshScript Legal (copied to Riya and Ashpak):</p><blockquote class="quote">"Please be advised that enrolling employee personal devices in a full MDM solution may create</blockquote><p>data privacy obligations under applicable law. We recommend reviewing the approach for</p><p>personal devices."</p><p>Riya forwards the legal email to Ashpak with one line:</p><blockquote class="quote">"Sort this out."</blockquote><p>Ashpak closes his inbox, opens a blank document, and starts writing. He's been expecting this. He</p><p>knows exactly what the answer is.</p><p>MAM-only mode. Protect the data. Not the device.</p></section><section class="lesson-section" id="section-the-fundamental-byod-problem"><h2>The Fundamental BYOD Problem</h2><p>The core tension in BYOD is this:</p></section><section class="lesson-section" id="section-mdm-vs-mam-understanding-the-difference"><h2>MDM vs MAM: Understanding the Difference</h2><p>This is one of the most important conceptual distinctions in all of Intune:</p><div class="callout-accent">The key insight: With MAM-only, Intune never touches the device. It only places a policy</div><p>wrapper around specific apps (Outlook, Teams, Edge). Company data inside those apps is</p><p>protected. Everything outside those apps; personal photos, personal email, personal files; is</p><p>completely invisible to IT.</p><figure class="lesson-figure native-diagram"><img alt="BYOD tension between company security and employee privacy." loading="lazy" src="../../assets/images/intune/lesson-3-6-byod-tension.svg"/><figcaption>MAM protects company data without taking over the personal device.</figcaption></figure><div class="table-lead">MDM vs MAM</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">MDM</th><th scope="col">MAM</th></tr></thead><tbody><tr><td>Mobile Device Management</td><td>Mobile Application Management</td></tr><tr><td>Manages the DEVICE</td><td>Manages the APPS (and data within them)</td></tr><tr><td>Requires device enrollment (MDM certificate installed)</td><td>NO enrollment required</td></tr><tr><td>IT controls device settings; Wi-Fi, VPN, passcode</td><td>IT controls only app behaviour; copy/paste, save, screen share</td></tr><tr><td>Can wipe ENTIRE device</td><td>Can wipe only COMPANY DATA inside managed apps</td></tr><tr><td>Can see device inventory (hardware, OS, apps)</td><td>Cannot see device details at all</td></tr><tr><td>Best for: corporate devices</td><td>Best for: BYOD personal devices</td></tr></tbody></table></div></section><section class="lesson-section" id="section-app-protection-policies-the-heart-of-mam"><h2>App Protection Policies: The Heart of MAM</h2><p>App Protection Policies (APP) are the mechanism that makes MAM work. They are policies applied to</p><p>specific apps that control how company data can be used within those apps.</p><div class="table-lead">App Protection Policy controls</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Control area</th><th scope="col">Examples</th></tr></thead><tbody><tr><td>Data movement controls</td><td>Block copy/paste to WhatsApp • block save to personal iCloud • block Dropbox sharing • block screenshots</td></tr><tr><td>Access controls</td><td>Require PIN/biometric • require work account • block jailbroken/rooted • minimum app version</td></tr><tr><td>Selective wipe</td><td>Remove only company data from managed apps • personal data untouched</td></tr></tbody></table></div></section><section class="lesson-section" id="section-creating-app-protection-policies"><h2>Creating App Protection Policies</h2><p>Let's build AshScript's MAM policy for iOS personal devices step by step:</p></section><section class="lesson-section" id="section-policy-1-ios-app-protection-policy-byod"><h3>Policy 1: iOS App Protection Policy (BYOD)</h3><p>Basics:</p><p>Apps tab:</p><p>Data Protection tab; the core settings:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Platform: iOS/iPadOS</div><div class="diagram-tile">Name: AshScript iOS BYOD Protection</div><div class="diagram-tile">Description: Protects company data on personal iPhones</div><div class="diagram-tile">without enrolling the device</div><div class="diagram-tile diagram-tile-heading">Target apps:</div><div class="diagram-tile">Target all Microsoft apps</div><div class="diagram-tile">(Outlook, Teams, Edge, Office, OneDrive, etc.)</div><div class="diagram-tile diagram-tile-heading">Additional apps (manually add):</div><div class="diagram-tile">AshScript CRM app</div><div class="diagram-tile">Adobe Acrobat (if accessing company PDFs)</div></div></figure><p>Access Requirements tab:</p><p>Conditional Launch tab; Automatic protections:</p><p>Assignments:</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Create</li></ul></div></section><section class="lesson-section" id="section-policy-2-android-app-protection-policy-byod"><h3>Policy 2: Android App Protection Policy (BYOD)</h3><p>The Android policy mirrors the iOS one. Create a separate policy:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Assign to: INTUNE-USR-ALL</div><div class="diagram-tile">(Policy applies to all users</div><div class="diagram-tile">on unmanaged/personal iOS devices)</div></div></figure><p>Key Android-specific consideration:</p></section><section class="lesson-section" id="section-mam-without-enrollment-the-user-experience"><h2>MAM Without Enrollment: The User Experience</h2><p>Here's what Rohan (the developer who refused MDM) experiences when he accesses company email</p><p>on his personal MacBook or phone using MAM-only:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Platform: Android</div><div class="diagram-tile">(Same settings as iOS policy above</div><div class="diagram-tile">; Android has identical options)</div><div class="diagram-tile diagram-tile-heading">Android additional settings:</div><div class="diagram-tile">(Android must have screen lock set)</div><div class="diagram-tile diagram-tile-heading">ROHAN'S EXPERIENCE; MAM WITHOUT ENROLLMENT</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Rohan opens Outlook on his personal iPhone</div></div><div class="diagram-tile">(no enrollment; no MDM certificate installed)</div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">Signs in: rohan@ashscript.com</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">App Protection Policy detects:</div></div><div class="diagram-tile">"This user has a policy. Unmanaged device."</div><div class="diagram-tile">"Applying MAM protections..."</div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">Rohan is prompted:</div></div><div class="diagram-tile">"Set a PIN for Outlook access"</div><div class="diagram-tile">→ Sets 6-digit PIN</div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">Rohan can now read company email</div></div><div class="diagram-tile diagram-tile-heading">WHAT ROHAN CAN DO:</div><div class="diagram-tile">Read and send company email</div></div></figure><p>This is the answer Ashpak gives Rohan, Fatima, and Legal. MAM protects company data; nothing</p><p>more, nothing less.</p></section><section class="lesson-section" id="section-mam-vs-mdm-vs-mammdm-the-full-comparison"><h2>MAM vs MDM vs MAM+MDM: The Full Comparison</h2><p>Ashpak creates this table for Riya's briefing:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Access SharePoint files</div><div class="diagram-tile">Use Teams for calls and chat</div><div class="diagram-tile">View company documents</div><div class="diagram-tile diagram-tile-heading">WHAT ROHAN CANNOT DO:</div><div class="diagram-tile">× Copy company email text → paste into WhatsApp</div><div class="diagram-tile">× Save company attachment to iCloud</div><div class="diagram-tile">× Take screenshot of company document</div><div class="diagram-tile">× Open company file in personal Dropbox</div><div class="diagram-tile">× Share company data to personal apps</div><div class="diagram-tile diagram-tile-heading">WHAT IT CAN DO:</div><div class="diagram-tile">Selectively wipe company data from Outlook</div><div class="diagram-tile">(if Rohan leaves or loses phone)</div><div class="diagram-tile diagram-tile-heading">WHAT IT CANNOT DO:</div><div class="diagram-tile">× See Rohan's personal emails</div><div class="diagram-tile">× See his personal photos</div><div class="diagram-tile">× See what apps he has installed</div><div class="diagram-tile">× Wipe his personal data</div><div class="diagram-tile">× Track his location</div></div></figure><div class="table-lead">Management comparison</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Capability</th><th scope="col">MAM only</th><th scope="col">MDM (enrolled)</th></tr></thead><tbody><tr><td>Device inventory</td><td>× No</td><td>Full visibility</td></tr><tr><td>Compliance check</td><td>× No</td><td>Full compliance</td></tr><tr><td>Push Wi-Fi/VPN</td><td>× No</td><td>Yes</td></tr><tr><td>Device wipe</td><td>× No</td><td>Yes (full wipe)</td></tr><tr><td>Selective wipe (company data)</td><td>Company data only</td><td>Company data only</td></tr></tbody></table></div></section><section class="lesson-section" id="section-ashscripts-byod-decision-framework"><h2>AshScript's BYOD Decision Framework</h2><p>Ashpak creates a clear decision framework for every BYOD situation:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">BYOD DEVICE DECISION FRAMEWORK</div><div class="diagram-tile diagram-tile-heading">IS THIS A COMPANY-OWNED DEVICE?</div><div class="diagram-tile">YES → MDM enrollment (previous lessons)</div><div class="diagram-tile">NO → Continue...</div><div class="diagram-tile diagram-tile-heading">WHAT PLATFORM?</div></div></figure></section><section class="lesson-section" id="section-ios-user-enrollment-the-middle-ground"><h2>iOS User Enrollment: The Middle Ground</h2><p>For employees who want to enroll their iPhone but want stronger privacy guarantees than full MDM,</p><p>Apple offers User Enrollment; a privacy-preserving MDM mode:</p><p>Enabling User Enrollment:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">USER ENROLLMENT vs FULL MDM (iOS)</div><div class="diagram-tile diagram-tile-heading">FULL MDM:</div><div class="diagram-tile">• Device completely visible to IT</div><div class="diagram-tile">• IT can see all installed apps</div><div class="diagram-tile">• IT can perform full device wipe</div><div class="diagram-tile">• Lost mode available</div><div class="diagram-tile">• Supervised device capabilities</div><div class="diagram-tile diagram-tile-heading">USER ENROLLMENT:</div><div class="diagram-tile">• IT sees ONLY work-related information</div><div class="diagram-tile">• IT CANNOT see personal apps list</div><div class="diagram-tile">• IT CANNOT perform full device wipe</div><div class="diagram-tile">(selective work data wipe only)</div><div class="diagram-tile">• Creates separate managed Apple ID partition</div><div class="diagram-tile">• IT cannot see hardware identifiers</div><div class="diagram-tile">(IMEI, serial number hidden)</div><div class="diagram-tile">• Best privacy option that still uses MDM</div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Name: AshScript iOS User Enrollment</div><div class="diagram-tile">Enrollment type: User enrollment</div><div class="diagram-tile">→ Assign to BYOD user group</div></div></figure><div class="callout-accent">When to offer User Enrollment: For employees who want the convenience of MDM features</div><p>(Wi-Fi profiles, certificates, VPN) but need strong privacy guarantees about personal data. It's a</p><p>genuine middle ground between full MDM and MAM-only.</p></section><section class="lesson-section" id="section-selective-wipe-the-employee-leaves"><h2>Selective Wipe: The Employee Leaves</h2><p>This is the moment MAM-only proves its value. Fatima leaves AshScript. Her personal phone has</p><p>company Outlook, Teams, and SharePoint data. With MAM-only:</p><p>Fatima's phone is returned to purely personal use. The company's data is gone. Everyone is satisfied.</p></section><section class="lesson-section" id="section-conditional-access-for-mam-only-devices"><h2>Conditional Access for MAM-Only Devices</h2><p>A common concern: "If someone isn't enrolled, can Conditional Access still protect company</p><p>resources?"</p><p>Yes; but differently. Ashpak creates a Conditional Access policy that requires approved apps and</p><p>app protection policies for unmanaged devices:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">SELECTIVE WIPE PROCESS</div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Outlook; Company data present</div><div class="diagram-tile">Teams; Company data present</div><div class="diagram-tile">Edge; Company data present</div><div class="diagram-tile">→ Confirm</div><div class="diagram-tile diagram-tile-heading">RESULT:</div><div class="diagram-tile">All company emails in Outlook: DELETED</div><div class="diagram-tile">All company files in OneDrive: DELETED</div><div class="diagram-tile">Teams messages and files: DELETED</div><div class="diagram-tile">Work account signed out of all apps</div><div class="diagram-tile">× Personal photos: UNTOUCHED</div><div class="diagram-tile">× Personal emails: UNTOUCHED</div><div class="diagram-tile">× Personal apps: UNTOUCHED</div><div class="diagram-tile">× WhatsApp messages: UNTOUCHED</div></div></figure><p>Effect:</p><p>This means even Rohan on his personal MacBook must use managed apps; he can't just point a</p><p>random mail client at company Exchange. The company data is protected even without</p><p>enrollment.</p></section><section class="lesson-section" id="section-ashscripts-final-byod-strategy"><h2>AshScript's Final BYOD Strategy</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a></div><div class="diagram-tile">Name: CA006 - Require APP on Unmanaged Devices</div><div class="diagram-tile diagram-tile-heading">ASSIGNMENTS:</div><div class="diagram-tile">Users: All users</div><div class="diagram-tile">Resources: Office 365</div><div class="diagram-tile diagram-tile-heading">Conditions:</div><div class="diagram-tile">Device platforms: iOS, Android</div><div class="diagram-tile diagram-tile-heading">Filter for devices:</div><div class="diagram-tile">device.isCompliant -ne True AND</div><div class="diagram-tile">device.trustType -ne "ServerAD"</div><div class="diagram-tile">(targets unmanaged/non-compliant devices)</div><div class="diagram-tile diagram-tile-heading">ACCESS CONTROLS:</div><div class="diagram-tile diagram-tile-heading">Grant:</div><div class="diagram-tile">Require approved client app</div><div class="diagram-tile">Require app protection policy</div><div class="diagram-tile">(Require ALL selected controls)</div><div class="diagram-tile">STATE: On</div><div class="diagram-tile diagram-tile-heading">MANAGED ENROLLED DEVICE:</div><div class="diagram-tile">→ Passes compliance check → Full access</div><div class="diagram-tile diagram-tile-heading">UNMANAGED PERSONAL DEVICE:</div><div class="diagram-tile">→ Must use Outlook/Teams/Edge (approved apps)</div><div class="diagram-tile">→ Must have App Protection Policy applied</div><div class="diagram-tile">→ Cannot use browser to access company data</div><div class="diagram-tile">(browser isn't a managed app)</div><div class="diagram-tile">→ Cannot use third-party email clients</div></div></figure><div class="table-lead">AshScript final BYOD strategy</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Scenario</th><th scope="col">Solution</th><th scope="col">Protection level</th></tr></thead><tbody><tr><td>Personal Android (willing)</td><td>Android Work Profile MDM</td><td>Strong; full work profile management; personal side private</td></tr><tr><td>Personal Android (not willing to MDM)</td><td>MAM-only App Protection Policy</td><td>Good; app-level data protection, no device visibility</td></tr><tr><td>Personal iPhone (privacy concerned)</td><td>iOS User Enrollment</td><td>Strong; privacy-first MDM, work data separate</td></tr><tr><td>Personal iPhone (no enrollment)</td><td>MAM-only App Protection</td><td>Good; app-level only</td></tr><tr><td>Personal Mac (willing)</td><td>Company Portal macOS enrollment</td><td>Strong; full macOS management</td></tr><tr><td>Personal Mac (Rohan; not willing)</td><td>MAM-only for Office apps + CA enforcement</td><td>Basic; Office apps protected, CA enforces approved apps only</td></tr></tbody></table></div></section><section class="lesson-section" id="section-ashscripts-current-state-after-lesson-36"><h2>AshScript's Current State After Lesson 3.6</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>MDM</td><td>Manages the device; requires enrollment</td></tr><tr><td>MAM</td><td>Manages apps and data; no enrollment needed</td></tr><tr><td>App Protection Policy</td><td>Controls company data inside managed apps</td></tr><tr><td>MAM-only</td><td>Personal device stays outside Intune device management</td></tr><tr><td>Conditional Launch</td><td>Blocks access when device/app conditions fail</td></tr><tr><td>Selective wipe</td><td>Removes company data, not personal data</td></tr></tbody></table></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in"><h2>Key Concepts to Lock In</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">MDM Manages the device; requires enrollment</div><div class="diagram-tile">MAM Manages apps and data; no enrollment needed</div><div class="diagram-tile">App Protection Policy Core MAM tool; controls data movement in managed apps</div><div class="diagram-tile">MAM-only Protects company data without touching personal device</div><div class="diagram-tile">Selective wipe Removes only company data; personal data untouched</div><div class="diagram-tile">iOS User Enrollment Privacy-first MDM; IT can't see personal apps or IMEI</div><div class="diagram-tile">Conditional Launch Automatic actions; block jailbroken, wipe after offline</div><div class="diagram-tile">CA + APP requirement Force unmanaged devices to use approved apps</div><div class="diagram-tile">Data transfer controls Block copy to personal apps, save to personal storage</div><div class="diagram-tile">90-day offline wipe Company data wiped if device offline too long</div></div></figure></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../3-5-android-enrollment-enterprise-work-profiles-cope-byod/"><span class="story-path-number">3.5</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Android Enrollment: Enterprise, Work Profiles, COPE &amp; BYOD</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">3.6</span><span class="story-path-label">YOU ARE HERE</span><strong>BYOD Enrollment: Personal Devices, MAM vs MDM</strong><small>Enrolling Devices</small></div><a class="story-path-step story-path-next" href="../3-7-enrollment-restrictions-limits/"><span class="story-path-number">3.7</span><span class="story-path-label">NEXT CHAPTER</span><strong>Enrollment Restrictions &amp; Limits</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-3">Learning Modules</a></nav></article>
-</div>
-</section>
-</main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
-<script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4"></script>
-</body></html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="BYOD Enrollment: Personal Devices, MAM vs MDM &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
+  <title>
+   Lesson 3.6: BYOD Enrollment: Personal Devices, MAM vs MDM &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase3-lesson" style="--lesson-accent:#ffd60a">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 3
+      </span>
+      /
+      <span>
+       3.6
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 3; ENROLLING DEVICES
+     </div>
+     <h1>
+      BYOD Enrollment: Personal Devices, MAM vs MDM
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak finds the balance between security and privacy
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-3">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 3
+        </small>
+        <strong>
+         Phase 3 &middot; Enrolling Devices
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       3.6 BYOD Enrollment: Personal Devices, MAM vs MDM
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-3">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-the-fundamental-byod-problem">
+        <span>
+         02
+        </span>
+        <strong>
+         The Fundamental BYOD Problem
+        </strong>
+       </a>
+       <a href="#section-mdm-vs-mam-understanding-the-difference">
+        <span>
+         03
+        </span>
+        <strong>
+         MDM vs MAM; Understanding the Difference
+        </strong>
+       </a>
+       <a href="#section-app-protection-policies-the-heart-of-mam">
+        <span>
+         04
+        </span>
+        <strong>
+         App Protection Policies; The Heart of MAM
+        </strong>
+       </a>
+       <a href="#section-creating-app-protection-policies">
+        <span>
+         05
+        </span>
+        <strong>
+         Creating App Protection Policies
+        </strong>
+       </a>
+       <a href="#section-policy-1-ios-app-protection-policy-byod">
+        <span>
+         06
+        </span>
+        <strong>
+         Policy 1; iOS App Protection Policy (BYOD)
+        </strong>
+       </a>
+       <a href="#section-policy-2-android-app-protection-policy-byod">
+        <span>
+         07
+        </span>
+        <strong>
+         Policy 2; Android App Protection Policy (BYOD)
+        </strong>
+       </a>
+       <a href="#section-mam-without-enrollment-the-user-experience">
+        <span>
+         08
+        </span>
+        <strong>
+         MAM Without Enrollment; The User Experience
+        </strong>
+       </a>
+       <a href="#section-mam-vs-mdm-vs-mammdm-the-full-comparison">
+        <span>
+         09
+        </span>
+        <strong>
+         MAM vs MDM vs MAM+MDM; The Full Comparison
+        </strong>
+       </a>
+       <a href="#section-ashscripts-byod-decision-framework">
+        <span>
+         10
+        </span>
+        <strong>
+         AshScript's BYOD Decision Framework
+        </strong>
+       </a>
+       <a href="#section-ios-user-enrollment-the-middle-ground">
+        <span>
+         11
+        </span>
+        <strong>
+         iOS User Enrollment; The Middle Ground
+        </strong>
+       </a>
+       <a href="#section-selective-wipe-the-employee-leaves">
+        <span>
+         12
+        </span>
+        <strong>
+         Selective Wipe; The Employee Leaves
+        </strong>
+       </a>
+       <a href="#section-conditional-access-for-mam-only-devices">
+        <span>
+         13
+        </span>
+        <strong>
+         Conditional Access for MAM-Only Devices
+        </strong>
+       </a>
+       <a href="#section-ashscripts-final-byod-strategy">
+        <span>
+         14
+        </span>
+        <strong>
+         AshScript's Final BYOD Strategy
+        </strong>
+       </a>
+       <a href="#section-ashscripts-current-state-after-lesson-36">
+        <span>
+         15
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 3.6
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in">
+        <span>
+         16
+        </span>
+        <strong>
+         Key Concepts to Lock In
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 3.6; BYOD Enrollment: Personal Devices, MAM vs MDM" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Friday morning. Ashpak has just sent an email to all 1,000 AshScript employees explaining the new
+       </p>
+       <p>
+        device enrollment program.
+       </p>
+       <p>
+        By 10 AM, his inbox has 47 replies. Most are supportive. But three stand out:
+       </p>
+       <p>
+        From Rohan (Senior Developer):
+       </p>
+       <blockquote class="quote">
+        "I'm not enrolling my personal MacBook in any MDM system. I have client code, personal projects,
+       </blockquote>
+       <p>
+        and private files on this machine. I don't care about policy; my personal device stays personal."
+       </p>
+       <p>
+        From Fatima (Sales Rep):
+       </p>
+       <blockquote class="quote">
+        "I understand the need for security, but I really don't want IT to be able to wipe my personal
+       </blockquote>
+       <p>
+        phone. My entire life is on it. Can we find a middle ground?"
+       </p>
+       <p>
+        From AshScript Legal (copied to Riya and Ashpak):
+       </p>
+       <blockquote class="quote">
+        "Please be advised that enrolling employee personal devices in a full MDM solution may create
+       </blockquote>
+       <p>
+        data privacy obligations under applicable law. We recommend reviewing the approach for
+       </p>
+       <p>
+        personal devices."
+       </p>
+       <p>
+        Riya forwards the legal email to Ashpak with one line:
+       </p>
+       <blockquote class="quote">
+        "Sort this out."
+       </blockquote>
+       <p>
+        Ashpak closes his inbox, opens a blank document, and starts writing. He's been expecting this. He
+       </p>
+       <p>
+        knows exactly what the answer is.
+       </p>
+       <p>
+        MAM-only mode. Protect the data. Not the device.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-the-fundamental-byod-problem">
+       <h2>
+        The Fundamental BYOD Problem
+       </h2>
+       <p>
+        The core tension in BYOD is this:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-mdm-vs-mam-understanding-the-difference">
+       <h2>
+        MDM vs MAM: Understanding the Difference
+       </h2>
+       <p>
+        This is one of the most important conceptual distinctions in all of Intune:
+       </p>
+       <div class="callout-accent">
+        The key insight: With MAM-only, Intune never touches the device. It only places a policy
+       </div>
+       <p>
+        wrapper around specific apps (Outlook, Teams, Edge). Company data inside those apps is
+       </p>
+       <p>
+        protected. Everything outside those apps; personal photos, personal email, personal files; is
+       </p>
+       <p>
+        completely invisible to IT.
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="BYOD tension between company security and employee privacy." loading="lazy" src="../../assets/images/intune/lesson-3-6-byod-tension.svg"/>
+        <figcaption>
+         MAM protects company data without taking over the personal device.
+        </figcaption>
+       </figure>
+       <div class="table-lead">
+        MDM vs MAM
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            MDM
+           </th>
+           <th scope="col">
+            MAM
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Mobile Device Management
+           </td>
+           <td>
+            Mobile Application Management
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Manages the DEVICE
+           </td>
+           <td>
+            Manages the APPS (and data within them)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Requires device enrollment (MDM certificate installed)
+           </td>
+           <td>
+            NO enrollment required
+           </td>
+          </tr>
+          <tr>
+           <td>
+            IT controls device settings; Wi-Fi, VPN, passcode
+           </td>
+           <td>
+            IT controls only app behaviour; copy/paste, save, screen share
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Can wipe ENTIRE device
+           </td>
+           <td>
+            Can wipe only COMPANY DATA inside managed apps
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Can see device inventory (hardware, OS, apps)
+           </td>
+           <td>
+            Cannot see device details at all
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Best for: corporate devices
+           </td>
+           <td>
+            Best for: BYOD personal devices
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-app-protection-policies-the-heart-of-mam">
+       <h2>
+        App Protection Policies: The Heart of MAM
+       </h2>
+       <p>
+        App Protection Policies (APP) are the mechanism that makes MAM work. They are policies applied to
+       </p>
+       <p>
+        specific apps that control how company data can be used within those apps.
+       </p>
+       <div class="table-lead">
+        App Protection Policy controls
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Control area
+           </th>
+           <th scope="col">
+            Examples
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Data movement controls
+           </td>
+           <td>
+            Block copy/paste to WhatsApp &bull; block save to personal iCloud &bull; block Dropbox sharing &bull; block screenshots
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Access controls
+           </td>
+           <td>
+            Require PIN/biometric &bull; require work account &bull; block jailbroken/rooted &bull; minimum app version
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Selective wipe
+           </td>
+           <td>
+            Remove only company data from managed apps &bull; personal data untouched
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-creating-app-protection-policies">
+       <h2>
+        Creating App Protection Policies
+       </h2>
+       <p>
+        Let's build AshScript's MAM policy for iOS personal devices step by step:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-policy-1-ios-app-protection-policy-byod">
+       <h3>
+        Policy 1: iOS App Protection Policy (BYOD)
+       </h3>
+       <p>
+        Basics:
+       </p>
+       <p>
+        Apps tab:
+       </p>
+       <p>
+        Data Protection tab; the core settings:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Platform: iOS/iPadOS
+         </div>
+         <div class="diagram-tile">
+          Name: AshScript iOS BYOD Protection
+         </div>
+         <div class="diagram-tile">
+          Description: Protects company data on personal iPhones
+         </div>
+         <div class="diagram-tile">
+          without enrolling the device
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Target apps:
+         </div>
+         <div class="diagram-tile">
+          Target all Microsoft apps
+         </div>
+         <div class="diagram-tile">
+          (Outlook, Teams, Edge, Office, OneDrive, etc.)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Additional apps (manually add):
+         </div>
+         <div class="diagram-tile">
+          AshScript CRM app
+         </div>
+         <div class="diagram-tile">
+          Adobe Acrobat (if accessing company PDFs)
+         </div>
+        </div>
+       </figure>
+       <p>
+        Access Requirements tab:
+       </p>
+       <p>
+        Conditional Launch tab; Automatic protections:
+       </p>
+       <p>
+        Assignments:
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Create
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-policy-2-android-app-protection-policy-byod">
+       <h3>
+        Policy 2: Android App Protection Policy (BYOD)
+       </h3>
+       <p>
+        The Android policy mirrors the iOS one. Create a separate policy:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Assign to: INTUNE-USR-ALL
+         </div>
+         <div class="diagram-tile">
+          (Policy applies to all users
+         </div>
+         <div class="diagram-tile">
+          on unmanaged/personal iOS devices)
+         </div>
+        </div>
+       </figure>
+       <p>
+        Key Android-specific consideration:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-mam-without-enrollment-the-user-experience">
+       <h2>
+        MAM Without Enrollment: The User Experience
+       </h2>
+       <p>
+        Here's what Rohan (the developer who refused MDM) experiences when he accesses company email
+       </p>
+       <p>
+        on his personal MacBook or phone using MAM-only:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Platform: Android
+         </div>
+         <div class="diagram-tile">
+          (Same settings as iOS policy above
+         </div>
+         <div class="diagram-tile">
+          ; Android has identical options)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Android additional settings:
+         </div>
+         <div class="diagram-tile">
+          (Android must have screen lock set)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ROHAN'S EXPERIENCE; MAM WITHOUT ENROLLMENT
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Rohan opens Outlook on his personal iPhone
+          </div>
+         </div>
+         <div class="diagram-tile">
+          (no enrollment; no MDM certificate installed)
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           Signs in: rohan@ashscript.com
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           App Protection Policy detects:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          "This user has a policy. Unmanaged device."
+         </div>
+         <div class="diagram-tile">
+          "Applying MAM protections..."
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           Rohan is prompted:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          "Set a PIN for Outlook access"
+         </div>
+         <div class="diagram-tile">
+          &rarr; Sets 6-digit PIN
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           Rohan can now read company email
+          </div>
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WHAT ROHAN CAN DO:
+         </div>
+         <div class="diagram-tile">
+          Read and send company email
+         </div>
+        </div>
+       </figure>
+       <p>
+        This is the answer Ashpak gives Rohan, Fatima, and Legal. MAM protects company data; nothing
+       </p>
+       <p>
+        more, nothing less.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-mam-vs-mdm-vs-mammdm-the-full-comparison">
+       <h2>
+        MAM vs MDM vs MAM+MDM: The Full Comparison
+       </h2>
+       <p>
+        Ashpak creates this table for Riya's briefing:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Access SharePoint files
+         </div>
+         <div class="diagram-tile">
+          Use Teams for calls and chat
+         </div>
+         <div class="diagram-tile">
+          View company documents
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WHAT ROHAN CANNOT DO:
+         </div>
+         <div class="diagram-tile">
+          &times; Copy company email text &rarr; paste into WhatsApp
+         </div>
+         <div class="diagram-tile">
+          &times; Save company attachment to iCloud
+         </div>
+         <div class="diagram-tile">
+          &times; Take screenshot of company document
+         </div>
+         <div class="diagram-tile">
+          &times; Open company file in personal Dropbox
+         </div>
+         <div class="diagram-tile">
+          &times; Share company data to personal apps
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WHAT IT CAN DO:
+         </div>
+         <div class="diagram-tile">
+          Selectively wipe company data from Outlook
+         </div>
+         <div class="diagram-tile">
+          (if Rohan leaves or loses phone)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WHAT IT CANNOT DO:
+         </div>
+         <div class="diagram-tile">
+          &times; See Rohan's personal emails
+         </div>
+         <div class="diagram-tile">
+          &times; See his personal photos
+         </div>
+         <div class="diagram-tile">
+          &times; See what apps he has installed
+         </div>
+         <div class="diagram-tile">
+          &times; Wipe his personal data
+         </div>
+         <div class="diagram-tile">
+          &times; Track his location
+         </div>
+        </div>
+       </figure>
+       <div class="table-lead">
+        Management comparison
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Capability
+           </th>
+           <th scope="col">
+            MAM only
+           </th>
+           <th scope="col">
+            MDM (enrolled)
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Device inventory
+           </td>
+           <td>
+            &times; No
+           </td>
+           <td>
+            Full visibility
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Compliance check
+           </td>
+           <td>
+            &times; No
+           </td>
+           <td>
+            Full compliance
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Push Wi-Fi/VPN
+           </td>
+           <td>
+            &times; No
+           </td>
+           <td>
+            Yes
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Device wipe
+           </td>
+           <td>
+            &times; No
+           </td>
+           <td>
+            Yes (full wipe)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Selective wipe (company data)
+           </td>
+           <td>
+            Company data only
+           </td>
+           <td>
+            Company data only
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-byod-decision-framework">
+       <h2>
+        AshScript's BYOD Decision Framework
+       </h2>
+       <p>
+        Ashpak creates a clear decision framework for every BYOD situation:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          BYOD DEVICE DECISION FRAMEWORK
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          IS THIS A COMPANY-OWNED DEVICE?
+         </div>
+         <div class="diagram-tile">
+          YES &rarr; MDM enrollment (previous lessons)
+         </div>
+         <div class="diagram-tile">
+          NO &rarr; Continue...
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WHAT PLATFORM?
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-ios-user-enrollment-the-middle-ground">
+       <h2>
+        iOS User Enrollment: The Middle Ground
+       </h2>
+       <p>
+        For employees who want to enroll their iPhone but want stronger privacy guarantees than full MDM,
+       </p>
+       <p>
+        Apple offers User Enrollment; a privacy-preserving MDM mode:
+       </p>
+       <p>
+        Enabling User Enrollment:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          USER ENROLLMENT vs FULL MDM (iOS)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          FULL MDM:
+         </div>
+         <div class="diagram-tile">
+          &bull; Device completely visible to IT
+         </div>
+         <div class="diagram-tile">
+          &bull; IT can see all installed apps
+         </div>
+         <div class="diagram-tile">
+          &bull; IT can perform full device wipe
+         </div>
+         <div class="diagram-tile">
+          &bull; Lost mode available
+         </div>
+         <div class="diagram-tile">
+          &bull; Supervised device capabilities
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          USER ENROLLMENT:
+         </div>
+         <div class="diagram-tile">
+          &bull; IT sees ONLY work-related information
+         </div>
+         <div class="diagram-tile">
+          &bull; IT CANNOT see personal apps list
+         </div>
+         <div class="diagram-tile">
+          &bull; IT CANNOT perform full device wipe
+         </div>
+         <div class="diagram-tile">
+          (selective work data wipe only)
+         </div>
+         <div class="diagram-tile">
+          &bull; Creates separate managed Apple ID partition
+         </div>
+         <div class="diagram-tile">
+          &bull; IT cannot see hardware identifiers
+         </div>
+         <div class="diagram-tile">
+          (IMEI, serial number hidden)
+         </div>
+         <div class="diagram-tile">
+          &bull; Best privacy option that still uses MDM
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Name: AshScript iOS User Enrollment
+         </div>
+         <div class="diagram-tile">
+          Enrollment type: User enrollment
+         </div>
+         <div class="diagram-tile">
+          &rarr; Assign to BYOD user group
+         </div>
+        </div>
+       </figure>
+       <div class="callout-accent">
+        When to offer User Enrollment: For employees who want the convenience of MDM features
+       </div>
+       <p>
+        (Wi-Fi profiles, certificates, VPN) but need strong privacy guarantees about personal data. It's a
+       </p>
+       <p>
+        genuine middle ground between full MDM and MAM-only.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-selective-wipe-the-employee-leaves">
+       <h2>
+        Selective Wipe: The Employee Leaves
+       </h2>
+       <p>
+        This is the moment MAM-only proves its value. Fatima leaves AshScript. Her personal phone has
+       </p>
+       <p>
+        company Outlook, Teams, and SharePoint data. With MAM-only:
+       </p>
+       <p>
+        Fatima's phone is returned to purely personal use. The company's data is gone. Everyone is satisfied.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-conditional-access-for-mam-only-devices">
+       <h2>
+        Conditional Access for MAM-Only Devices
+       </h2>
+       <p>
+        A common concern: "If someone isn't enrolled, can Conditional Access still protect company
+       </p>
+       <p>
+        resources?"
+       </p>
+       <p>
+        Yes; but differently. Ashpak creates a Conditional Access policy that requires approved apps and
+       </p>
+       <p>
+        app protection policies for unmanaged devices:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          SELECTIVE WIPE PROCESS
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Outlook; Company data present
+         </div>
+         <div class="diagram-tile">
+          Teams; Company data present
+         </div>
+         <div class="diagram-tile">
+          Edge; Company data present
+         </div>
+         <div class="diagram-tile">
+          &rarr; Confirm
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          RESULT:
+         </div>
+         <div class="diagram-tile">
+          All company emails in Outlook: DELETED
+         </div>
+         <div class="diagram-tile">
+          All company files in OneDrive: DELETED
+         </div>
+         <div class="diagram-tile">
+          Teams messages and files: DELETED
+         </div>
+         <div class="diagram-tile">
+          Work account signed out of all apps
+         </div>
+         <div class="diagram-tile">
+          &times; Personal photos: UNTOUCHED
+         </div>
+         <div class="diagram-tile">
+          &times; Personal emails: UNTOUCHED
+         </div>
+         <div class="diagram-tile">
+          &times; Personal apps: UNTOUCHED
+         </div>
+         <div class="diagram-tile">
+          &times; WhatsApp messages: UNTOUCHED
+         </div>
+        </div>
+       </figure>
+       <p>
+        Effect:
+       </p>
+       <p>
+        This means even Rohan on his personal MacBook must use managed apps; he can't just point a
+       </p>
+       <p>
+        random mail client at company Exchange. The company data is protected even without
+       </p>
+       <p>
+        enrollment.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-final-byod-strategy">
+       <h2>
+        AshScript's Final BYOD Strategy
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+           entra.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Name: CA006 - Require APP on Unmanaged Devices
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ASSIGNMENTS:
+         </div>
+         <div class="diagram-tile">
+          Users: All users
+         </div>
+         <div class="diagram-tile">
+          Resources: Office 365
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Conditions:
+         </div>
+         <div class="diagram-tile">
+          Device platforms: iOS, Android
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Filter for devices:
+         </div>
+         <div class="diagram-tile">
+          device.isCompliant -ne True AND
+         </div>
+         <div class="diagram-tile">
+          device.trustType -ne "ServerAD"
+         </div>
+         <div class="diagram-tile">
+          (targets unmanaged/non-compliant devices)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ACCESS CONTROLS:
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Grant:
+         </div>
+         <div class="diagram-tile">
+          Require approved client app
+         </div>
+         <div class="diagram-tile">
+          Require app protection policy
+         </div>
+         <div class="diagram-tile">
+          (Require ALL selected controls)
+         </div>
+         <div class="diagram-tile">
+          STATE: On
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          MANAGED ENROLLED DEVICE:
+         </div>
+         <div class="diagram-tile">
+          &rarr; Passes compliance check &rarr; Full access
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          UNMANAGED PERSONAL DEVICE:
+         </div>
+         <div class="diagram-tile">
+          &rarr; Must use Outlook/Teams/Edge (approved apps)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Must have App Protection Policy applied
+         </div>
+         <div class="diagram-tile">
+          &rarr; Cannot use browser to access company data
+         </div>
+         <div class="diagram-tile">
+          (browser isn't a managed app)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Cannot use third-party email clients
+         </div>
+        </div>
+       </figure>
+       <div class="table-lead">
+        AshScript final BYOD strategy
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Scenario
+           </th>
+           <th scope="col">
+            Solution
+           </th>
+           <th scope="col">
+            Protection level
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Personal Android (willing)
+           </td>
+           <td>
+            Android Work Profile MDM
+           </td>
+           <td>
+            Strong; full work profile management; personal side private
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Personal Android (not willing to MDM)
+           </td>
+           <td>
+            MAM-only App Protection Policy
+           </td>
+           <td>
+            Good; app-level data protection, no device visibility
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Personal iPhone (privacy concerned)
+           </td>
+           <td>
+            iOS User Enrollment
+           </td>
+           <td>
+            Strong; privacy-first MDM, work data separate
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Personal iPhone (no enrollment)
+           </td>
+           <td>
+            MAM-only App Protection
+           </td>
+           <td>
+            Good; app-level only
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Personal Mac (willing)
+           </td>
+           <td>
+            Company Portal macOS enrollment
+           </td>
+           <td>
+            Strong; full macOS management
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Personal Mac (Rohan; not willing)
+           </td>
+           <td>
+            MAM-only for Office apps + CA enforcement
+           </td>
+           <td>
+            Basic; Office apps protected, CA enforces approved apps only
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-current-state-after-lesson-36">
+       <h2>
+        AshScript's Current State After Lesson 3.6
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            MDM
+           </td>
+           <td>
+            Manages the device; requires enrollment
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MAM
+           </td>
+           <td>
+            Manages apps and data; no enrollment needed
+           </td>
+          </tr>
+          <tr>
+           <td>
+            App Protection Policy
+           </td>
+           <td>
+            Controls company data inside managed apps
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MAM-only
+           </td>
+           <td>
+            Personal device stays outside Intune device management
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Conditional Launch
+           </td>
+           <td>
+            Blocks access when device/app conditions fail
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Selective wipe
+           </td>
+           <td>
+            Removes company data, not personal data
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in">
+       <h2>
+        Key Concepts to Lock In
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          MDM Manages the device; requires enrollment
+         </div>
+         <div class="diagram-tile">
+          MAM Manages apps and data; no enrollment needed
+         </div>
+         <div class="diagram-tile">
+          App Protection Policy Core MAM tool; controls data movement in managed apps
+         </div>
+         <div class="diagram-tile">
+          MAM-only Protects company data without touching personal device
+         </div>
+         <div class="diagram-tile">
+          Selective wipe Removes only company data; personal data untouched
+         </div>
+         <div class="diagram-tile">
+          iOS User Enrollment Privacy-first MDM; IT can't see personal apps or IMEI
+         </div>
+         <div class="diagram-tile">
+          Conditional Launch Automatic actions; block jailbroken, wipe after offline
+         </div>
+         <div class="diagram-tile">
+          CA + APP requirement Force unmanaged devices to use approved apps
+         </div>
+         <div class="diagram-tile">
+          Data transfer controls Block copy to personal apps, save to personal storage
+         </div>
+         <div class="diagram-tile">
+          90-day offline wipe Company data wiped if device offline too long
+         </div>
+        </div>
+       </figure>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../3-5-android-enrollment-enterprise-work-profiles-cope-byod/">
+         <span class="story-path-number">
+          3.5
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Android Enrollment: Enterprise, Work Profiles, COPE &amp; BYOD
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          3.6
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          BYOD Enrollment: Personal Devices, MAM vs MDM
+         </strong>
+         <small>
+          Enrolling Devices
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../3-7-enrollment-restrictions-limits/">
+         <span class="story-path-number">
+          3.7
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Enrollment Restrictions &amp; Limits
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-3">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4">
+  </script>
+ </body>
+</html>

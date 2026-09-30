@@ -1,58 +1,1542 @@
 <!DOCTYPE html>
-
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Co-Management: SCCM + Intune Working Together · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
-<link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
-<title>Lesson 3.3: Co-Management: SCCM + Intune Working Together · ashscript</title>
-<link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
-</head>
-<body class="phase3-lesson" style="--lesson-accent:#ffd60a">
-<header class="site-header"><div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav="">
-<a href="../../">Scripts</a>
-<details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details>
-<a href="../../who-am-i/">Who Am I</a>
-</nav>
-</div></header>
-<main>
-<section class="page-hero intune-lesson-hero">
-<div class="container">
-<div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 3</span>/<span>3.3</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 3; ENROLLING DEVICES</div>
-<h1>Co-Management: SCCM + Intune Working Together</h1>
-<p class="lesson-subtitle">Ashpak builds the bridge between the old world and the new</p>
-</div>
-</section>
-<section class="section lesson-reader">
-<div class="container lesson-reader-layout">
-<aside class="lesson-sidebar">
-<div class="toc-label">COURSE NAVIGATION</div>
-<a class="lesson-phase-link" href="../../intune/#phase-3">
-<span aria-hidden="true" class="lesson-phase-dot"></span>
-<span class="lesson-phase-copy"><small>PHASE 3</small><strong>Phase 3 · Enrolling Devices</strong></span>
-</a>
-<div class="toc-label" style="margin-top:8px">CURRENT LESSON</div>
-<div class="lesson-index">3.3 Co-Management: SCCM + Intune Working Together</div>
-<a class="phase-back learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a>
-<div class="toc-label" style="margin-top:6px">ON THIS LESSON</div>
-<nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-what-is-co-management"><span>02</span><strong>What is Co-Management?</strong></a><a href="#section-the-workloads-what-can-be-split"><span>03</span><strong>The Workloads; What Can Be Split</strong></a><a href="#section-prerequisites-for-co-management"><span>04</span><strong>Prerequisites for Co-Management</strong></a><a href="#section-cloud-management-gateway-cmg-the-internet-bridge"><span>05</span><strong>Cloud Management Gateway (CMG); The Internet Bridge</strong></a><a href="#section-enabling-co-management-step-by-step"><span>06</span><strong>Enabling Co-Management; Step by Step</strong></a><a href="#section-step-1-enable-hybrid-entra-join-for-existing-devices"><span>07</span><strong>STEP 1; Enable Hybrid Entra Join for Existing Devices</strong></a><a href="#section-step-2-configure-mdm-auto-enrollment-via-group-policy"><span>08</span><strong>STEP 2; Configure MDM Auto-Enrollment via Group Policy</strong></a><a href="#section-step-3-enable-co-management-in-sccm"><span>09</span><strong>STEP 3; Enable Co-Management in SCCM</strong></a><a href="#section-step-4-verify-co-management-is-working"><span>10</span><strong>STEP 4; Verify Co-Management is Working</strong></a><a href="#section-ashscripts-co-management-migration-timeline"><span>11</span><strong>AshScript's Co-Management Migration Timeline</strong></a><a href="#section-the-co-management-dashboard-your-progress-tracker"><span>12</span><strong>The Co-Management Dashboard; Your Progress Tracker</strong></a><a href="#section-common-co-management-issues-and-fixes"><span>13</span><strong>Warning: Common Co-Management Issues and Fixes</strong></a><a href="#section-issue-1-devices-not-appearing-as-co-managed-in-intune"><span>14</span><strong>Issue 1; Devices Not Appearing as Co-Managed in Intune</strong></a><a href="#section-issue-2-policy-conflict-between-sccm-and-intune"><span>15</span><strong>Issue 2; Policy Conflict Between SCCM and Intune</strong></a><a href="#section-issue-3-cmg-not-working-for-remote-devices"><span>16</span><strong>Issue 3; CMG Not Working for Remote Devices</strong></a><a href="#section-co-management-vs-pure-intune-when-to-use-which"><span>17</span><strong>Co-Management vs Pure Intune; When to Use Which</strong></a><a href="#section-ashscripts-current-state-after-lesson-33"><span>18</span><strong>AshScript's Current State After Lesson 3.3</strong></a><a href="#section-key-concepts-to-lock-in"><span>19</span><strong>Key Concepts to Lock In</strong></a></nav>
-</aside>
-<article aria-label="Lesson 3.3; Co-Management: SCCM + Intune Working Together" class="lesson-content">
-<div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Ashpak stares at the SCCM console. 750 devices. All healthy. All managed. Software deployments</p><p>running. Patch compliance at 94%. Years of carefully built task sequences, baselines, and collections.</p><p>His phone buzzes. It's Riya:</p><blockquote class="quote">"Ashpak; the new laptops are great. Now I need the existing fleet in Intune too. But I'm not</blockquote><p>authorising a re-imaging project. These machines are working. I don't want a single user</p><p>disrupted."</p><p>Ashpak types back:</p><blockquote class="quote">"Co-management. Give me two weeks."</blockquote><p>He puts the phone down and opens the Microsoft documentation. The plan is clear in his head. He's</p><p>not going to rip out SCCM. He's not going to reimage anything. He's going to run both SCCM and</p><p>Intune simultaneously; and gradually shift control from one to the other.</p><p>This is co-management.</p></section><section class="lesson-section" id="section-what-is-co-management"><h2>What is Co-Management?</h2><p>Co-management is Microsoft's answer to one of the most common real-world challenges in enterprise</p><p>IT:</p><blockquote class="quote">"We have hundreds or thousands of devices managed by SCCM. We want to move to Intune. But</blockquote><p>we can't do it overnight. How do we transition without disruption?"</p><p>Co-management is the bridge. It allows a Windows device to be simultaneously managed by both</p><p>SCCM and Intune, with you choosing which tool handles which responsibilities.</p><div class="callout-accent">The key insight: Co-management is not a permanent state. It's a transition mechanism.</div><p>AshScript will use it to move workloads from SCCM to Intune over months, eventually retiring</p><p>SCCM once everything has migrated.</p></section><section class="lesson-section" id="section-the-workloads-what-can-be-split"><h2>The Workloads: What Can Be Split</h2><p>Co-management divides device management into workloads. Each workload can be assigned to</p><p>either SCCM or Intune independently:</p><div class="callout-accent">The Pilot option is gold. You can move a workload to Intune for just your 20-device pilot</div><p>group first, verify it works perfectly, then slide it to All devices. This is how Ashpak will migrate</p><p>every workload; pilot first, then production.</p><figure class="lesson-figure native-diagram"><img alt="Co-management workload split between SCCM and Intune." loading="lazy" src="../../assets/images/intune/lesson-3-3-workload-split.svg"/><figcaption>Workloads move independently from SCCM to Intune.</figcaption></figure></section><section class="lesson-section" id="section-prerequisites-for-co-management"><h2>Prerequisites for Co-Management</h2><p>Before Ashpak can enable co-management, the environment must meet several requirements:</p><div class="table-lead">Prerequisites checklist</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Area</th><th scope="col">Requirement</th></tr></thead><tbody><tr><td>SCCM</td><td>Version 1710 or later (Ashpak is on 2303)</td></tr><tr><td>Windows devices</td><td>Windows 10 1709 or later</td></tr><tr><td>Device identity</td><td>Hybrid Entra Joined</td></tr><tr><td>Identity sync</td><td>Entra Connect Sync running</td></tr><tr><td>Licensing</td><td>Microsoft Intune licence (M365 E3)</td></tr><tr><td>MDM</td><td>Intune MDM Authority set</td></tr><tr><td>Remote management</td><td>Cloud Management Gateway (CMG) configured</td></tr><tr><td>Accounts</td><td>SCCM admin • Intune admin • Global Admin for initial setup</td></tr></tbody></table></div></section><section class="lesson-section" id="section-cloud-management-gateway-cmg-the-internet-bridge"><h2>Cloud Management Gateway (CMG): The Internet Bridge</h2><p>Before getting into co-management setup, Ashpak must understand and configure the CMG. This is</p><p>what allows SCCM to manage devices over the internet; which is essential when employees work</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">Each workload setting:</div><div class="diagram-tile">SCCM → SCCM handles this workload</div><div class="diagram-tile">Pilot → Intune handles for PILOT group only</div><div class="diagram-tile">Intune → Intune handles for ALL co-managed devices</div><div class="diagram-tile diagram-tile-heading">PREREQUISITES CHECKLIST</div><div class="diagram-tile diagram-tile-heading">ON-PREMISES REQUIREMENTS</div><div class="diagram-tile">SCCM (Configuration Manager) version 1710 or later</div><div class="diagram-tile">(Ashpak is on version 2303; no issue)</div><div class="diagram-tile">All devices running Windows 10 1709 or later</div><div class="diagram-tile">Devices Hybrid Entra Joined</div><div class="diagram-tile">(domain-joined AND registered in Entra ID)</div><div class="diagram-tile">Entra Connect Sync running</div><div class="diagram-tile">(users synced from AD to Entra ID; done in Lesson 2.2)</div><div class="diagram-tile diagram-tile-heading">CLOUD REQUIREMENTS</div><div class="diagram-tile">Microsoft Intune licence (M365 E3; done)</div><div class="diagram-tile">Intune MDM Authority set (done in Lesson 1.4)</div><div class="diagram-tile">Cloud Management Gateway (CMG) configured</div><div class="diagram-tile">(needed for internet-based clients; explained below)</div><div class="diagram-tile diagram-tile-heading">ACCOUNT REQUIREMENTS</div><div class="diagram-tile">SCCM admin account</div><div class="diagram-tile">Intune admin account (Ashpak's IT account)</div><div class="diagram-tile">Global Admin for initial setup</div></div></figure><p>from home.</p><p>CMG setup is a dedicated topic. For co-management, understand that CMG is required for</p><p>devices that are not always on the corporate network. For AshScript's laptop fleet where many</p><p>users work remotely, CMG is mandatory.</p></section><section class="lesson-section" id="section-enabling-co-management-step-by-step"><h2>Enabling Co-Management: Step by Step</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">WITHOUT CMG:</div><div class="diagram-tile">Employee works from home</div><div class="diagram-tile">SCCM client on laptop tries to reach SCCM server</div><div class="diagram-tile">Cannot connect; not on corporate network</div><div class="diagram-tile">Device falls out of SCCM management</div><div class="diagram-tile">No patches. No software. No policies.</div><div class="diagram-tile diagram-tile-heading">WITH CMG:</div><div class="diagram-tile">Employee works from home</div><div class="diagram-tile">SCCM client contacts CMG (cloud service in Azure)</div><div class="diagram-tile">CMG securely relays to on-prem SCCM server</div><div class="diagram-tile">Device stays managed from anywhere</div><div class="diagram-tile diagram-tile-heading">CMG ARCHITECTURE</div><div class="diagram-tile diagram-tile-heading">HOME LAPTOP</div><div class="diagram-tile diagram-tile-heading">▼</div><div class="diagram-tile">(ashpak-cmg.cloudapp.net)</div><div class="diagram-tile diagram-tile-heading">▼</div><div class="diagram-tile diagram-tile-heading">CMG CONNECTION POINT</div><div class="diagram-tile">(on-prem SCCM server role)</div><div class="diagram-tile diagram-tile-heading">▼</div><div class="diagram-tile diagram-tile-heading">SCCM PRIMARY SITE SERVER</div></div></figure></section><section class="lesson-section" id="section-step-1-enable-hybrid-entra-join-for-existing-devices"><h3>STEP 1: Enable Hybrid Entra Join for Existing Devices</h3><p>Before co-management, AshScript's existing domain-joined laptops must become Hybrid Entra</p><p>Joined; registered in both on-prem AD and Entra ID.</p><p>Configure this via Entra Connect:</p><p>Verify with Group Policy:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">After the next Group Policy refresh (or gpupdate /force ), devices will register in Entra ID. Verify:</div></div></figure></section><section class="lesson-section" id="section-step-2-configure-mdm-auto-enrollment-via-group-policy"><h3>STEP 2: Configure MDM Auto-Enrollment via Group Policy</h3><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">On the Entra Connect server (ASHPAK-SYNC01)</div><div class="diagram-tile diagram-tile-heading">On Domain Controller:</div><div class="diagram-tile">Group Policy Management</div><div class="diagram-tile">as devices: ENABLED</div><div class="diagram-tile diagram-tile-heading">On the device; open CMD:</div><div class="diagram-tile">dsregcmd /status</div><div class="diagram-tile diagram-tile-heading">Look for:</div><div class="diagram-tile">AzureAdJoined: YES</div><div class="diagram-tile">DomainJoined: YES</div><div class="diagram-tile">(Both YES = Hybrid Entra Joined)</div></div></figure><p>This GPO tells Windows devices:</p><blockquote class="quote">"Once you're Hybrid Entra Joined, automatically enroll in the MDM authority (Intune)."</blockquote><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">After this GPO applies, devices enroll in Intune; they'll appear in Devices → All Devices in the</div></div></figure><p>Intune portal. But SCCM still manages them; enrollment just gives Intune visibility initially.</p></section><section class="lesson-section" id="section-step-3-enable-co-management-in-sccm"><h3>STEP 3: Enable Co-Management in SCCM</h3><p>Now the critical step; enabling co-management in the SCCM console:</p><p>The Co-management Configuration Wizard opens:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">On Domain Controller:</div><div class="diagram-tile">Group Policy Management</div><div class="diagram-tile">enrollment using default</div><div class="diagram-tile">Azure AD credentials</div><div class="diagram-tile diagram-tile-heading">→ ENABLED</div><div class="diagram-tile diagram-tile-heading">Select credential type:</div><div class="diagram-tile">→ Device credentials</div><div class="diagram-tile">SCCM Console</div><div class="diagram-tile">WIZARD STEP 1: Sign in to Intune</div><div class="diagram-tile diagram-tile-heading">Sign in with Intune admin credentials:</div><div class="diagram-tile">ashpak.it@ashscript.com</div><div class="diagram-tile">→ Connects SCCM to your Intune tenant</div></div></figure></section><section class="lesson-section" id="section-step-4-verify-co-management-is-working"><h3>STEP 4: Verify Co-Management is Working</h3><p>In SCCM:</p><p>In Intune:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">WIZARD STEP 2: Enablement</div><div class="diagram-tile diagram-tile-heading">Choose enrollment method:</div><div class="diagram-tile">○ All clients (all SCCM devices auto-enroll)</div><div class="diagram-tile">● Pilot collection (enroll only pilot group first)</div><div class="diagram-tile diagram-tile-heading">↑ ASHPAK'S CHOICE</div><div class="diagram-tile">Collection: SCCM-CoMgmt-Pilot</div><div class="diagram-tile">(20 test machines; Ashpak's pilot group)</div><div class="diagram-tile">WIZARD STEP 3: Workloads</div><div class="diagram-tile">For each workload, choose: SCCM / Pilot / Intune</div><div class="diagram-tile diagram-tile-heading">Initial AshScript configuration:</div><div class="diagram-tile">Compliance Policies: Pilot ← Test in Intune first</div><div class="diagram-tile">Device Configuration: SCCM ← Keep in SCCM for now</div><div class="diagram-tile">Endpoint Protection: SCCM ← Keep in SCCM for now</div><div class="diagram-tile">Resource Access Policies: SCCM ← Keep in SCCM for now</div><div class="diagram-tile">Client Apps: SCCM ← Keep in SCCM for now</div><div class="diagram-tile">Office Click-to-Run: SCCM ← Keep in SCCM for now</div><div class="diagram-tile">Windows Update Policies: SCCM ← Keep in SCCM for now</div><div class="diagram-tile">WIZARD STEP 4: Staging</div><div class="diagram-tile diagram-tile-heading">Pilot collection for Intune workloads:</div><div class="diagram-tile">SCCM-CoMgmt-Pilot (20 test devices)</div><div class="diagram-tile">→ Finish</div><div class="diagram-tile">SCCM Console</div></div></figure><p>On a co-managed device:</p></section><section class="lesson-section" id="section-ashscripts-co-management-migration-timeline"><h2>AshScript's Co-Management Migration Timeline</h2><p>Ashpak doesn't move everything to Intune at once. He follows a phased workload migration plan:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">Settings → Accounts → Access work or school</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Connected to AshScript's AD (SCCM/domain)</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">Connected to ashscript.com MDM (Intune)</div></div></div></figure><div class="callout-accent">When to retire SCCM: SCCM can be retired when:</div><p>All workloads have moved to Intune</p><p>No complex legacy Win32 apps still need SCCM</p><p>OS deployment is handled by Autopilot</p><p>All devices are modern (Windows 10/11 Entra Joined) For many enterprises, SCCM co-exists</p><p>for years. Don't rush retirement.</p><figure class="lesson-figure native-diagram"><img alt="AshScript co-management migration timeline." loading="lazy" src="../../assets/images/intune/lesson-3-3-migration-timeline.svg"/><figcaption>Pilot first, then production, then evaluate SCCM retirement.</figcaption></figure></section><section class="lesson-section" id="section-the-co-management-dashboard-your-progress-tracker"><h2>The Co-Management Dashboard: Your Progress Tracker</h2><p>SCCM provides a built-in dashboard that Ashpak checks weekly:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">SCCM Console</div><div class="diagram-tile diagram-tile-heading">CO-MANAGEMENT DASHBOARD PANELS</div><div class="diagram-tile">Panel 1: Enrollment Status</div><div class="diagram-tile">Panel 2: Workload Distribution</div><div class="diagram-tile">Compliance: 750 → Intune</div><div class="diagram-tile">Device Config: 750 → Intune</div><div class="diagram-tile">Endpoint Protect: 750 → Intune</div><div class="diagram-tile">Client Apps: 750 → SCCM</div><div class="diagram-tile">Panel 3: OS Version Distribution</div><div class="diagram-tile">Windows 11 23H2: 612 devices</div><div class="diagram-tile">Windows 11 22H2: 103 devices</div></div></figure><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Metric</th><th scope="col">Value</th></tr></thead><tbody><tr><td>Co-managed</td><td>750</td></tr><tr><td>SCCM only</td><td>0</td></tr><tr><td>Entra Joined</td><td>750</td></tr><tr><td>Errors</td><td>3</td></tr></tbody></table></div></section><section class="lesson-section" id="section-common-co-management-issues-and-fixes"><h2>Warning: Common Co-Management Issues and Fixes</h2></section><section class="lesson-section" id="section-issue-1-devices-not-appearing-as-co-managed-in-intune"><h3>Issue 1: Devices Not Appearing as Co-Managed in Intune</h3></section><section class="lesson-section" id="section-issue-2-policy-conflict-between-sccm-and-intune"><h3>Issue 2: Policy Conflict Between SCCM and Intune</h3><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Windows 10 22H2: 35 devices</div><div class="diagram-tile">Panel 4: Client Health</div><div class="diagram-tile">Healthy: 741</div><div class="diagram-tile">Errors: 9 ← investigate these</div><div class="diagram-tile">SYMPTOM: Devices enrolled in SCCM but not appearing</div><div class="diagram-tile">in Intune after enabling co-management</div><div class="diagram-tile diagram-tile-heading">CHECKS:</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Verify Hybrid Entra Join:</div></div><div class="diagram-tile">dsregcmd /status → AzureAdJoined: YES?</div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">Verify MDM enrollment GPO applied:</div></div><div class="diagram-tile">gpresult /r → Is the GPO in the Applied list?</div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">Check Intune enrollment:</div></div><div class="diagram-tile">Settings → Accounts → Access work or school</div><div class="diagram-tile">→ Is MDM entry present?</div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">Check SCCM client logs:</div></div><div class="diagram-tile">C:\Windows\CCM\Logs\CoManagementHandler.log</div><div class="diagram-tile diagram-tile-heading">FIX:</div><div class="diagram-tile">Run: gpupdate /force</div><div class="diagram-tile">Wait 15 minutes</div><div class="diagram-tile diagram-tile-heading">Manually trigger MDM enrollment:</div><div class="diagram-tile">Settings → Accounts → Access work or school</div><div class="diagram-tile">→ Connect → Enter work email</div><div class="diagram-tile">SYMPTOM: A setting is configured differently in SCCM</div><div class="diagram-tile">and Intune; unexpected device behaviour</div><div class="diagram-tile">EXAMPLE: SCCM sets firewall to OFF</div></div></figure></section><section class="lesson-section" id="section-issue-3-cmg-not-working-for-remote-devices"><h3>Issue 3: CMG Not Working for Remote Devices</h3></section><section class="lesson-section" id="section-co-management-vs-pure-intune-when-to-use-which"><h2>Co-Management vs Pure Intune: When to Use Which</h2><p>Understanding this helps Ashpak explain the strategy to Riya:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Intune compliance requires firewall ON</div><div class="diagram-tile">Device is non-compliant despite SCCM config</div><div class="diagram-tile">RULE: For each WORKLOAD, only ONE tool is in charge.</div><div class="diagram-tile">If Compliance workload = Intune,</div><div class="diagram-tile">Intune's compliance policies WIN for compliance.</div><div class="diagram-tile">SCCM compliance baselines are ignored.</div><div class="diagram-tile">FIX: Decide which tool owns the workload and</div><div class="diagram-tile">remove the conflicting config from the other.</div><div class="diagram-tile">Never configure the same setting in both tools.</div><div class="diagram-tile">SYMPTOM: Devices at home not receiving SCCM policies</div><div class="diagram-tile">Not appearing as co-managed</div><div class="diagram-tile diagram-tile-heading">CHECKS:</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">CMG service running in Azure portal?</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">CMG connection point role installed in SCCM?</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">Client can reach CMG URL?</div></div><div class="diagram-tile">Test: https://[CMGname].cloudapp.net/CCM_Proxy_MutualAuth/</div><div class="diagram-tile diagram-tile-heading">FIX:</div><div class="diagram-tile">Check Azure → App Services → CMG service health</div><div class="diagram-tile">Check SCCM → Administration → Cloud Services → CMG</div><div class="diagram-tile">Review CloudMgr.log on SCCM server</div></div></figure><div class="table-lead">Management model comparison</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Co-management</th><th scope="col">Pure Intune (Autopilot)</th></tr></thead><tbody><tr><td>For existing SCCM-managed devices</td><td>For new devices</td></tr><tr><td>Gradual workload transition</td><td>Full Intune from day one</td></tr><tr><td>Keeps SCCM capabilities during transition</td><td>No SCCM needed</td></tr><tr><td>Hybrid Entra Joined (domain + cloud)</td><td>Entra Joined (cloud only)</td></tr><tr><td>More complex to manage (two systems)</td><td>Simpler; one tool</td></tr><tr><td>Requires SCCM infrastructure</td><td>No on-prem infrastructure needed</td></tr><tr><td>Good for: migration path</td><td>Good for: net-new deployments</td></tr></tbody></table></div></section><section class="lesson-section" id="section-ashscripts-current-state-after-lesson-33"><h2>AshScript's Current State After Lesson 3.3</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>Co-management purpose</td><td>Bridge SCCM → Intune; gradual transition</td></tr><tr><td>Workloads</td><td>Each workload assigned to SCCM or Intune independently</td></tr><tr><td>Pilot setting</td><td>Move workload to Intune for pilot group first</td></tr><tr><td>Hybrid Entra Join</td><td>Existing domain devices registered in Entra ID</td></tr><tr><td>CMG</td><td>Enables SCCM management for remote devices</td></tr><tr><td>Migration principle</td><td>Pilot → validate → move to all devices</td></tr></tbody></table></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in"><h2>Key Concepts to Lock In</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">Co-management purpose Bridge SCCM → Intune; gradual transition</div><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">Workloads Each workload assigned to SCCM or Intune independently</div><div class="diagram-tile">Pilot setting Move workload to Intune for pilot group first</div><div class="diagram-tile">Hybrid Entra Join Required; device in both on-prem AD and Entra ID</div><div class="diagram-tile">CMG Enables SCCM management over internet (home workers)</div><div class="diagram-tile">GP auto-enrollment GPO triggers automatic Intune MDM enrollment</div><div class="diagram-tile">dsregcmd /status Verify device join state on device</div><div class="diagram-tile">CoManagementHandler.log SCCM log for co-management troubleshooting</div><div class="diagram-tile">Workload conflict rule Only one tool owns each workload; no overlap</div><div class="diagram-tile">SCCM retirement Only when ALL workloads migrated + no legacy dependency</div></div></figure><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>Co-management purpose</td><td>Bridge SCCM → Intune; gradual transition</td></tr><tr><td>Workloads</td><td>Each workload assigned to SCCM or Intune independently</td></tr><tr><td>Pilot setting</td><td>Move workload to Intune for pilot group first</td></tr><tr><td>Hybrid Entra Join</td><td>Existing domain devices registered in Entra ID</td></tr><tr><td>CMG</td><td>Enables SCCM management for remote devices</td></tr></tbody></table></div></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../3-2-windows-autopilot-zero-touch-deployment/"><span class="story-path-number">3.2</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Windows Autopilot: Zero Touch Deployment</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">3.3</span><span class="story-path-label">YOU ARE HERE</span><strong>Co-Management: SCCM + Intune Working Together</strong><small>Enrolling Devices</small></div><a class="story-path-step story-path-next" href="../3-4-macos-enrollment-ade-company-portal-profiles/"><span class="story-path-number">3.4</span><span class="story-path-label">NEXT CHAPTER</span><strong>macOS Enrollment: ADE, Company Portal &amp; Profiles</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-3">Learning Modules</a></nav></article>
-</div>
-</section>
-</main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
-<script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4"></script>
-</body></html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Co-Management: SCCM + Intune Working Together &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
+  <title>
+   Lesson 3.3: Co-Management: SCCM + Intune Working Together &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase3-lesson" style="--lesson-accent:#ffd60a">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 3
+      </span>
+      /
+      <span>
+       3.3
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 3; ENROLLING DEVICES
+     </div>
+     <h1>
+      Co-Management: SCCM + Intune Working Together
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds the bridge between the old world and the new
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-3">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 3
+        </small>
+        <strong>
+         Phase 3 &middot; Enrolling Devices
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       3.3 Co-Management: SCCM + Intune Working Together
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-3">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-what-is-co-management">
+        <span>
+         02
+        </span>
+        <strong>
+         What is Co-Management?
+        </strong>
+       </a>
+       <a href="#section-the-workloads-what-can-be-split">
+        <span>
+         03
+        </span>
+        <strong>
+         The Workloads; What Can Be Split
+        </strong>
+       </a>
+       <a href="#section-prerequisites-for-co-management">
+        <span>
+         04
+        </span>
+        <strong>
+         Prerequisites for Co-Management
+        </strong>
+       </a>
+       <a href="#section-cloud-management-gateway-cmg-the-internet-bridge">
+        <span>
+         05
+        </span>
+        <strong>
+         Cloud Management Gateway (CMG); The Internet Bridge
+        </strong>
+       </a>
+       <a href="#section-enabling-co-management-step-by-step">
+        <span>
+         06
+        </span>
+        <strong>
+         Enabling Co-Management; Step by Step
+        </strong>
+       </a>
+       <a href="#section-step-1-enable-hybrid-entra-join-for-existing-devices">
+        <span>
+         07
+        </span>
+        <strong>
+         STEP 1; Enable Hybrid Entra Join for Existing Devices
+        </strong>
+       </a>
+       <a href="#section-step-2-configure-mdm-auto-enrollment-via-group-policy">
+        <span>
+         08
+        </span>
+        <strong>
+         STEP 2; Configure MDM Auto-Enrollment via Group Policy
+        </strong>
+       </a>
+       <a href="#section-step-3-enable-co-management-in-sccm">
+        <span>
+         09
+        </span>
+        <strong>
+         STEP 3; Enable Co-Management in SCCM
+        </strong>
+       </a>
+       <a href="#section-step-4-verify-co-management-is-working">
+        <span>
+         10
+        </span>
+        <strong>
+         STEP 4; Verify Co-Management is Working
+        </strong>
+       </a>
+       <a href="#section-ashscripts-co-management-migration-timeline">
+        <span>
+         11
+        </span>
+        <strong>
+         AshScript's Co-Management Migration Timeline
+        </strong>
+       </a>
+       <a href="#section-the-co-management-dashboard-your-progress-tracker">
+        <span>
+         12
+        </span>
+        <strong>
+         The Co-Management Dashboard; Your Progress Tracker
+        </strong>
+       </a>
+       <a href="#section-common-co-management-issues-and-fixes">
+        <span>
+         13
+        </span>
+        <strong>
+         Warning: Common Co-Management Issues and Fixes
+        </strong>
+       </a>
+       <a href="#section-issue-1-devices-not-appearing-as-co-managed-in-intune">
+        <span>
+         14
+        </span>
+        <strong>
+         Issue 1; Devices Not Appearing as Co-Managed in Intune
+        </strong>
+       </a>
+       <a href="#section-issue-2-policy-conflict-between-sccm-and-intune">
+        <span>
+         15
+        </span>
+        <strong>
+         Issue 2; Policy Conflict Between SCCM and Intune
+        </strong>
+       </a>
+       <a href="#section-issue-3-cmg-not-working-for-remote-devices">
+        <span>
+         16
+        </span>
+        <strong>
+         Issue 3; CMG Not Working for Remote Devices
+        </strong>
+       </a>
+       <a href="#section-co-management-vs-pure-intune-when-to-use-which">
+        <span>
+         17
+        </span>
+        <strong>
+         Co-Management vs Pure Intune; When to Use Which
+        </strong>
+       </a>
+       <a href="#section-ashscripts-current-state-after-lesson-33">
+        <span>
+         18
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 3.3
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in">
+        <span>
+         19
+        </span>
+        <strong>
+         Key Concepts to Lock In
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 3.3; Co-Management: SCCM + Intune Working Together" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Ashpak stares at the SCCM console. 750 devices. All healthy. All managed. Software deployments
+       </p>
+       <p>
+        running. Patch compliance at 94%. Years of carefully built task sequences, baselines, and collections.
+       </p>
+       <p>
+        His phone buzzes. It's Riya:
+       </p>
+       <blockquote class="quote">
+        "Ashpak; the new laptops are great. Now I need the existing fleet in Intune too. But I'm not
+       </blockquote>
+       <p>
+        authorising a re-imaging project. These machines are working. I don't want a single user
+       </p>
+       <p>
+        disrupted."
+       </p>
+       <p>
+        Ashpak types back:
+       </p>
+       <blockquote class="quote">
+        "Co-management. Give me two weeks."
+       </blockquote>
+       <p>
+        He puts the phone down and opens the Microsoft documentation. The plan is clear in his head. He's
+       </p>
+       <p>
+        not going to rip out SCCM. He's not going to reimage anything. He's going to run both SCCM and
+       </p>
+       <p>
+        Intune simultaneously; and gradually shift control from one to the other.
+       </p>
+       <p>
+        This is co-management.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-what-is-co-management">
+       <h2>
+        What is Co-Management?
+       </h2>
+       <p>
+        Co-management is Microsoft's answer to one of the most common real-world challenges in enterprise
+       </p>
+       <p>
+        IT:
+       </p>
+       <blockquote class="quote">
+        "We have hundreds or thousands of devices managed by SCCM. We want to move to Intune. But
+       </blockquote>
+       <p>
+        we can't do it overnight. How do we transition without disruption?"
+       </p>
+       <p>
+        Co-management is the bridge. It allows a Windows device to be simultaneously managed by both
+       </p>
+       <p>
+        SCCM and Intune, with you choosing which tool handles which responsibilities.
+       </p>
+       <div class="callout-accent">
+        The key insight: Co-management is not a permanent state. It's a transition mechanism.
+       </div>
+       <p>
+        AshScript will use it to move workloads from SCCM to Intune over months, eventually retiring
+       </p>
+       <p>
+        SCCM once everything has migrated.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-the-workloads-what-can-be-split">
+       <h2>
+        The Workloads: What Can Be Split
+       </h2>
+       <p>
+        Co-management divides device management into workloads. Each workload can be assigned to
+       </p>
+       <p>
+        either SCCM or Intune independently:
+       </p>
+       <div class="callout-accent">
+        The Pilot option is gold. You can move a workload to Intune for just your 20-device pilot
+       </div>
+       <p>
+        group first, verify it works perfectly, then slide it to All devices. This is how Ashpak will migrate
+       </p>
+       <p>
+        every workload; pilot first, then production.
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="Co-management workload split between SCCM and Intune." loading="lazy" src="../../assets/images/intune/lesson-3-3-workload-split.svg"/>
+        <figcaption>
+         Workloads move independently from SCCM to Intune.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-prerequisites-for-co-management">
+       <h2>
+        Prerequisites for Co-Management
+       </h2>
+       <p>
+        Before Ashpak can enable co-management, the environment must meet several requirements:
+       </p>
+       <div class="table-lead">
+        Prerequisites checklist
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Area
+           </th>
+           <th scope="col">
+            Requirement
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            SCCM
+           </td>
+           <td>
+            Version 1710 or later (Ashpak is on 2303)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Windows devices
+           </td>
+           <td>
+            Windows 10 1709 or later
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Device identity
+           </td>
+           <td>
+            Hybrid Entra Joined
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Identity sync
+           </td>
+           <td>
+            Entra Connect Sync running
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Licensing
+           </td>
+           <td>
+            Microsoft Intune licence (M365 E3)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MDM
+           </td>
+           <td>
+            Intune MDM Authority set
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Remote management
+           </td>
+           <td>
+            Cloud Management Gateway (CMG) configured
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Accounts
+           </td>
+           <td>
+            SCCM admin &bull; Intune admin &bull; Global Admin for initial setup
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-cloud-management-gateway-cmg-the-internet-bridge">
+       <h2>
+        Cloud Management Gateway (CMG): The Internet Bridge
+       </h2>
+       <p>
+        Before getting into co-management setup, Ashpak must understand and configure the CMG. This is
+       </p>
+       <p>
+        what allows SCCM to manage devices over the internet; which is essential when employees work
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          Each workload setting:
+         </div>
+         <div class="diagram-tile">
+          SCCM &rarr; SCCM handles this workload
+         </div>
+         <div class="diagram-tile">
+          Pilot &rarr; Intune handles for PILOT group only
+         </div>
+         <div class="diagram-tile">
+          Intune &rarr; Intune handles for ALL co-managed devices
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          PREREQUISITES CHECKLIST
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ON-PREMISES REQUIREMENTS
+         </div>
+         <div class="diagram-tile">
+          SCCM (Configuration Manager) version 1710 or later
+         </div>
+         <div class="diagram-tile">
+          (Ashpak is on version 2303; no issue)
+         </div>
+         <div class="diagram-tile">
+          All devices running Windows 10 1709 or later
+         </div>
+         <div class="diagram-tile">
+          Devices Hybrid Entra Joined
+         </div>
+         <div class="diagram-tile">
+          (domain-joined AND registered in Entra ID)
+         </div>
+         <div class="diagram-tile">
+          Entra Connect Sync running
+         </div>
+         <div class="diagram-tile">
+          (users synced from AD to Entra ID; done in Lesson 2.2)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CLOUD REQUIREMENTS
+         </div>
+         <div class="diagram-tile">
+          Microsoft Intune licence (M365 E3; done)
+         </div>
+         <div class="diagram-tile">
+          Intune MDM Authority set (done in Lesson 1.4)
+         </div>
+         <div class="diagram-tile">
+          Cloud Management Gateway (CMG) configured
+         </div>
+         <div class="diagram-tile">
+          (needed for internet-based clients; explained below)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ACCOUNT REQUIREMENTS
+         </div>
+         <div class="diagram-tile">
+          SCCM admin account
+         </div>
+         <div class="diagram-tile">
+          Intune admin account (Ashpak's IT account)
+         </div>
+         <div class="diagram-tile">
+          Global Admin for initial setup
+         </div>
+        </div>
+       </figure>
+       <p>
+        from home.
+       </p>
+       <p>
+        CMG setup is a dedicated topic. For co-management, understand that CMG is required for
+       </p>
+       <p>
+        devices that are not always on the corporate network. For AshScript's laptop fleet where many
+       </p>
+       <p>
+        users work remotely, CMG is mandatory.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-enabling-co-management-step-by-step">
+       <h2>
+        Enabling Co-Management: Step by Step
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          WITHOUT CMG:
+         </div>
+         <div class="diagram-tile">
+          Employee works from home
+         </div>
+         <div class="diagram-tile">
+          SCCM client on laptop tries to reach SCCM server
+         </div>
+         <div class="diagram-tile">
+          Cannot connect; not on corporate network
+         </div>
+         <div class="diagram-tile">
+          Device falls out of SCCM management
+         </div>
+         <div class="diagram-tile">
+          No patches. No software. No policies.
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          WITH CMG:
+         </div>
+         <div class="diagram-tile">
+          Employee works from home
+         </div>
+         <div class="diagram-tile">
+          SCCM client contacts CMG (cloud service in Azure)
+         </div>
+         <div class="diagram-tile">
+          CMG securely relays to on-prem SCCM server
+         </div>
+         <div class="diagram-tile">
+          Device stays managed from anywhere
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CMG ARCHITECTURE
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          HOME LAPTOP
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ▼
+         </div>
+         <div class="diagram-tile">
+          (ashpak-cmg.cloudapp.net)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ▼
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CMG CONNECTION POINT
+         </div>
+         <div class="diagram-tile">
+          (on-prem SCCM server role)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ▼
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          SCCM PRIMARY SITE SERVER
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-step-1-enable-hybrid-entra-join-for-existing-devices">
+       <h3>
+        STEP 1: Enable Hybrid Entra Join for Existing Devices
+       </h3>
+       <p>
+        Before co-management, AshScript's existing domain-joined laptops must become Hybrid Entra
+       </p>
+       <p>
+        Joined; registered in both on-prem AD and Entra ID.
+       </p>
+       <p>
+        Configure this via Entra Connect:
+       </p>
+       <p>
+        Verify with Group Policy:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          After the next Group Policy refresh (or gpupdate /force ), devices will register in Entra ID. Verify:
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-step-2-configure-mdm-auto-enrollment-via-group-policy">
+       <h3>
+        STEP 2: Configure MDM Auto-Enrollment via Group Policy
+       </h3>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          On the Entra Connect server (ASHPAK-SYNC01)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          On Domain Controller:
+         </div>
+         <div class="diagram-tile">
+          Group Policy Management
+         </div>
+         <div class="diagram-tile">
+          as devices: ENABLED
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          On the device; open CMD:
+         </div>
+         <div class="diagram-tile">
+          dsregcmd /status
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Look for:
+         </div>
+         <div class="diagram-tile">
+          AzureAdJoined: YES
+         </div>
+         <div class="diagram-tile">
+          DomainJoined: YES
+         </div>
+         <div class="diagram-tile">
+          (Both YES = Hybrid Entra Joined)
+         </div>
+        </div>
+       </figure>
+       <p>
+        This GPO tells Windows devices:
+       </p>
+       <blockquote class="quote">
+        "Once you're Hybrid Entra Joined, automatically enroll in the MDM authority (Intune)."
+       </blockquote>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          After this GPO applies, devices enroll in Intune; they'll appear in Devices &rarr; All Devices in the
+         </div>
+        </div>
+       </figure>
+       <p>
+        Intune portal. But SCCM still manages them; enrollment just gives Intune visibility initially.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-step-3-enable-co-management-in-sccm">
+       <h3>
+        STEP 3: Enable Co-Management in SCCM
+       </h3>
+       <p>
+        Now the critical step; enabling co-management in the SCCM console:
+       </p>
+       <p>
+        The Co-management Configuration Wizard opens:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          On Domain Controller:
+         </div>
+         <div class="diagram-tile">
+          Group Policy Management
+         </div>
+         <div class="diagram-tile">
+          enrollment using default
+         </div>
+         <div class="diagram-tile">
+          Azure AD credentials
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          &rarr; ENABLED
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Select credential type:
+         </div>
+         <div class="diagram-tile">
+          &rarr; Device credentials
+         </div>
+         <div class="diagram-tile">
+          SCCM Console
+         </div>
+         <div class="diagram-tile">
+          WIZARD STEP 1: Sign in to Intune
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Sign in with Intune admin credentials:
+         </div>
+         <div class="diagram-tile">
+          ashpak.it@ashscript.com
+         </div>
+         <div class="diagram-tile">
+          &rarr; Connects SCCM to your Intune tenant
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-step-4-verify-co-management-is-working">
+       <h3>
+        STEP 4: Verify Co-Management is Working
+       </h3>
+       <p>
+        In SCCM:
+       </p>
+       <p>
+        In Intune:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          WIZARD STEP 2: Enablement
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Choose enrollment method:
+         </div>
+         <div class="diagram-tile">
+          &cir; All clients (all SCCM devices auto-enroll)
+         </div>
+         <div class="diagram-tile">
+          ● Pilot collection (enroll only pilot group first)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          &uarr; ASHPAK'S CHOICE
+         </div>
+         <div class="diagram-tile">
+          Collection: SCCM-CoMgmt-Pilot
+         </div>
+         <div class="diagram-tile">
+          (20 test machines; Ashpak's pilot group)
+         </div>
+         <div class="diagram-tile">
+          WIZARD STEP 3: Workloads
+         </div>
+         <div class="diagram-tile">
+          For each workload, choose: SCCM / Pilot / Intune
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Initial AshScript configuration:
+         </div>
+         <div class="diagram-tile">
+          Compliance Policies: Pilot &larr; Test in Intune first
+         </div>
+         <div class="diagram-tile">
+          Device Configuration: SCCM &larr; Keep in SCCM for now
+         </div>
+         <div class="diagram-tile">
+          Endpoint Protection: SCCM &larr; Keep in SCCM for now
+         </div>
+         <div class="diagram-tile">
+          Resource Access Policies: SCCM &larr; Keep in SCCM for now
+         </div>
+         <div class="diagram-tile">
+          Client Apps: SCCM &larr; Keep in SCCM for now
+         </div>
+         <div class="diagram-tile">
+          Office Click-to-Run: SCCM &larr; Keep in SCCM for now
+         </div>
+         <div class="diagram-tile">
+          Windows Update Policies: SCCM &larr; Keep in SCCM for now
+         </div>
+         <div class="diagram-tile">
+          WIZARD STEP 4: Staging
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Pilot collection for Intune workloads:
+         </div>
+         <div class="diagram-tile">
+          SCCM-CoMgmt-Pilot (20 test devices)
+         </div>
+         <div class="diagram-tile">
+          &rarr; Finish
+         </div>
+         <div class="diagram-tile">
+          SCCM Console
+         </div>
+        </div>
+       </figure>
+       <p>
+        On a co-managed device:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-co-management-migration-timeline">
+       <h2>
+        AshScript's Co-Management Migration Timeline
+       </h2>
+       <p>
+        Ashpak doesn't move everything to Intune at once. He follows a phased workload migration plan:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          Settings &rarr; Accounts &rarr; Access work or school
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Connected to AshScript's AD (SCCM/domain)
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           Connected to ashscript.com MDM (Intune)
+          </div>
+         </div>
+        </div>
+       </figure>
+       <div class="callout-accent">
+        When to retire SCCM: SCCM can be retired when:
+       </div>
+       <p>
+        All workloads have moved to Intune
+       </p>
+       <p>
+        No complex legacy Win32 apps still need SCCM
+       </p>
+       <p>
+        OS deployment is handled by Autopilot
+       </p>
+       <p>
+        All devices are modern (Windows 10/11 Entra Joined) For many enterprises, SCCM co-exists
+       </p>
+       <p>
+        for years. Don't rush retirement.
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="AshScript co-management migration timeline." loading="lazy" src="../../assets/images/intune/lesson-3-3-migration-timeline.svg"/>
+        <figcaption>
+         Pilot first, then production, then evaluate SCCM retirement.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-the-co-management-dashboard-your-progress-tracker">
+       <h2>
+        The Co-Management Dashboard: Your Progress Tracker
+       </h2>
+       <p>
+        SCCM provides a built-in dashboard that Ashpak checks weekly:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          SCCM Console
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CO-MANAGEMENT DASHBOARD PANELS
+         </div>
+         <div class="diagram-tile">
+          Panel 1: Enrollment Status
+         </div>
+         <div class="diagram-tile">
+          Panel 2: Workload Distribution
+         </div>
+         <div class="diagram-tile">
+          Compliance: 750 &rarr; Intune
+         </div>
+         <div class="diagram-tile">
+          Device Config: 750 &rarr; Intune
+         </div>
+         <div class="diagram-tile">
+          Endpoint Protect: 750 &rarr; Intune
+         </div>
+         <div class="diagram-tile">
+          Client Apps: 750 &rarr; SCCM
+         </div>
+         <div class="diagram-tile">
+          Panel 3: OS Version Distribution
+         </div>
+         <div class="diagram-tile">
+          Windows 11 23H2: 612 devices
+         </div>
+         <div class="diagram-tile">
+          Windows 11 22H2: 103 devices
+         </div>
+        </div>
+       </figure>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Metric
+           </th>
+           <th scope="col">
+            Value
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Co-managed
+           </td>
+           <td>
+            750
+           </td>
+          </tr>
+          <tr>
+           <td>
+            SCCM only
+           </td>
+           <td>
+            0
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Entra Joined
+           </td>
+           <td>
+            750
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Errors
+           </td>
+           <td>
+            3
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-common-co-management-issues-and-fixes">
+       <h2>
+        Warning: Common Co-Management Issues and Fixes
+       </h2>
+      </section>
+      <section class="lesson-section" id="section-issue-1-devices-not-appearing-as-co-managed-in-intune">
+       <h3>
+        Issue 1: Devices Not Appearing as Co-Managed in Intune
+       </h3>
+      </section>
+      <section class="lesson-section" id="section-issue-2-policy-conflict-between-sccm-and-intune">
+       <h3>
+        Issue 2: Policy Conflict Between SCCM and Intune
+       </h3>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Windows 10 22H2: 35 devices
+         </div>
+         <div class="diagram-tile">
+          Panel 4: Client Health
+         </div>
+         <div class="diagram-tile">
+          Healthy: 741
+         </div>
+         <div class="diagram-tile">
+          Errors: 9 &larr; investigate these
+         </div>
+         <div class="diagram-tile">
+          SYMPTOM: Devices enrolled in SCCM but not appearing
+         </div>
+         <div class="diagram-tile">
+          in Intune after enabling co-management
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CHECKS:
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Verify Hybrid Entra Join:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          dsregcmd /status &rarr; AzureAdJoined: YES?
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           Verify MDM enrollment GPO applied:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          gpresult /r &rarr; Is the GPO in the Applied list?
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           Check Intune enrollment:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Settings &rarr; Accounts &rarr; Access work or school
+         </div>
+         <div class="diagram-tile">
+          &rarr; Is MDM entry present?
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           Check SCCM client logs:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          C:\Windows\CCM\Logs\CoManagementHandler.log
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          FIX:
+         </div>
+         <div class="diagram-tile">
+          Run: gpupdate /force
+         </div>
+         <div class="diagram-tile">
+          Wait 15 minutes
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Manually trigger MDM enrollment:
+         </div>
+         <div class="diagram-tile">
+          Settings &rarr; Accounts &rarr; Access work or school
+         </div>
+         <div class="diagram-tile">
+          &rarr; Connect &rarr; Enter work email
+         </div>
+         <div class="diagram-tile">
+          SYMPTOM: A setting is configured differently in SCCM
+         </div>
+         <div class="diagram-tile">
+          and Intune; unexpected device behaviour
+         </div>
+         <div class="diagram-tile">
+          EXAMPLE: SCCM sets firewall to OFF
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-issue-3-cmg-not-working-for-remote-devices">
+       <h3>
+        Issue 3: CMG Not Working for Remote Devices
+       </h3>
+      </section>
+      <section class="lesson-section" id="section-co-management-vs-pure-intune-when-to-use-which">
+       <h2>
+        Co-Management vs Pure Intune: When to Use Which
+       </h2>
+       <p>
+        Understanding this helps Ashpak explain the strategy to Riya:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Intune compliance requires firewall ON
+         </div>
+         <div class="diagram-tile">
+          Device is non-compliant despite SCCM config
+         </div>
+         <div class="diagram-tile">
+          RULE: For each WORKLOAD, only ONE tool is in charge.
+         </div>
+         <div class="diagram-tile">
+          If Compliance workload = Intune,
+         </div>
+         <div class="diagram-tile">
+          Intune's compliance policies WIN for compliance.
+         </div>
+         <div class="diagram-tile">
+          SCCM compliance baselines are ignored.
+         </div>
+         <div class="diagram-tile">
+          FIX: Decide which tool owns the workload and
+         </div>
+         <div class="diagram-tile">
+          remove the conflicting config from the other.
+         </div>
+         <div class="diagram-tile">
+          Never configure the same setting in both tools.
+         </div>
+         <div class="diagram-tile">
+          SYMPTOM: Devices at home not receiving SCCM policies
+         </div>
+         <div class="diagram-tile">
+          Not appearing as co-managed
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CHECKS:
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           CMG service running in Azure portal?
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           CMG connection point role installed in SCCM?
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           Client can reach CMG URL?
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Test: https://[CMGname].cloudapp.net/CCM_Proxy_MutualAuth/
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          FIX:
+         </div>
+         <div class="diagram-tile">
+          Check Azure &rarr; App Services &rarr; CMG service health
+         </div>
+         <div class="diagram-tile">
+          Check SCCM &rarr; Administration &rarr; Cloud Services &rarr; CMG
+         </div>
+         <div class="diagram-tile">
+          Review CloudMgr.log on SCCM server
+         </div>
+        </div>
+       </figure>
+       <div class="table-lead">
+        Management model comparison
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Co-management
+           </th>
+           <th scope="col">
+            Pure Intune (Autopilot)
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            For existing SCCM-managed devices
+           </td>
+           <td>
+            For new devices
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Gradual workload transition
+           </td>
+           <td>
+            Full Intune from day one
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Keeps SCCM capabilities during transition
+           </td>
+           <td>
+            No SCCM needed
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Hybrid Entra Joined (domain + cloud)
+           </td>
+           <td>
+            Entra Joined (cloud only)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            More complex to manage (two systems)
+           </td>
+           <td>
+            Simpler; one tool
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Requires SCCM infrastructure
+           </td>
+           <td>
+            No on-prem infrastructure needed
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Good for: migration path
+           </td>
+           <td>
+            Good for: net-new deployments
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-current-state-after-lesson-33">
+       <h2>
+        AshScript's Current State After Lesson 3.3
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Co-management purpose
+           </td>
+           <td>
+            Bridge SCCM &rarr; Intune; gradual transition
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Workloads
+           </td>
+           <td>
+            Each workload assigned to SCCM or Intune independently
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Pilot setting
+           </td>
+           <td>
+            Move workload to Intune for pilot group first
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Hybrid Entra Join
+           </td>
+           <td>
+            Existing domain devices registered in Entra ID
+           </td>
+          </tr>
+          <tr>
+           <td>
+            CMG
+           </td>
+           <td>
+            Enables SCCM management for remote devices
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Migration principle
+           </td>
+           <td>
+            Pilot &rarr; validate &rarr; move to all devices
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in">
+       <h2>
+        Key Concepts to Lock In
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          Co-management purpose Bridge SCCM &rarr; Intune; gradual transition
+         </div>
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          Workloads Each workload assigned to SCCM or Intune independently
+         </div>
+         <div class="diagram-tile">
+          Pilot setting Move workload to Intune for pilot group first
+         </div>
+         <div class="diagram-tile">
+          Hybrid Entra Join Required; device in both on-prem AD and Entra ID
+         </div>
+         <div class="diagram-tile">
+          CMG Enables SCCM management over internet (home workers)
+         </div>
+         <div class="diagram-tile">
+          GP auto-enrollment GPO triggers automatic Intune MDM enrollment
+         </div>
+         <div class="diagram-tile">
+          dsregcmd /status Verify device join state on device
+         </div>
+         <div class="diagram-tile">
+          CoManagementHandler.log SCCM log for co-management troubleshooting
+         </div>
+         <div class="diagram-tile">
+          Workload conflict rule Only one tool owns each workload; no overlap
+         </div>
+         <div class="diagram-tile">
+          SCCM retirement Only when ALL workloads migrated + no legacy dependency
+         </div>
+        </div>
+       </figure>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Co-management purpose
+           </td>
+           <td>
+            Bridge SCCM &rarr; Intune; gradual transition
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Workloads
+           </td>
+           <td>
+            Each workload assigned to SCCM or Intune independently
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Pilot setting
+           </td>
+           <td>
+            Move workload to Intune for pilot group first
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Hybrid Entra Join
+           </td>
+           <td>
+            Existing domain devices registered in Entra ID
+           </td>
+          </tr>
+          <tr>
+           <td>
+            CMG
+           </td>
+           <td>
+            Enables SCCM management for remote devices
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../3-2-windows-autopilot-zero-touch-deployment/">
+         <span class="story-path-number">
+          3.2
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Windows Autopilot: Zero Touch Deployment
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          3.3
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Co-Management: SCCM + Intune Working Together
+         </strong>
+         <small>
+          Enrolling Devices
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../3-4-macos-enrollment-ade-company-portal-profiles/">
+         <span class="story-path-number">
+          3.4
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          macOS Enrollment: ADE, Company Portal &amp; Profiles
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-3">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4">
+  </script>
+ </body>
+</html>

@@ -1,11 +1,509 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Custom Reports and Data Export · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/><title>Lesson 8.2: Custom Reports and Data Export · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase8-lesson" style="--lesson-accent:#a46b4c"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 8</span>/<span>8.2</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 8; MONITORING, REPORTING &amp; TROUBLESHOOTING</div><h1>Custom Reports and Data Export</h1><p class="lesson-subtitle">Ashpak builds the board report and scheduled exports</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-8"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 8</small><strong>Phase 8; Monitoring, Reporting &amp; Troubleshooting</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">8.2 Custom Reports and Data Export</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-8">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor"><span>02</span><strong>Lesson 8.2; Custom Reports and Data Export; Ashpak builds the board report and scheduled exports ;</strong></a><a href="#section-intune-report-builder-custom-reports"><span>03</span><strong>Intune Report Builder; Custom Reports</strong></a><a href="#section-scheduling-report-delivery-for-automatic-weekly-delivery-ashpak-uses-t"><span>04</span><strong>Scheduling Report Delivery For automatic weekly delivery, Ashpak uses the Intune Data Warehouse and scheduled export:</strong></a><a href="#section-compliance-trend-analysis"><span>05</span><strong>Compliance Trend Analysis</strong></a><a href="#section-current-state-after-lesson-82"><span>06</span><strong>Current State After Lesson 8.2</strong></a><a href="#section-lesson-83-alerts-monitoring-and-service-health-ashpak-builds-the-early"><span>07</span><strong>Lesson 8.3; Alerts, Monitoring, and Service Health; Ashpak builds the early warning system ;</strong></a><a href="#section-intune-service-health-monitoring"><span>08</span><strong>Intune Service Health Monitoring</strong></a></nav></aside>
-<article aria-label="Lesson 8.2; Custom Reports and Data Export" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-8">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="0"><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Alerts + monitoring (Lesson 8.3)</div><div class="diagram-item">Day-to-day operational workflows (Lesson 8.4)</div><div class="diagram-item">Weekly operations checklist (Lesson 8.5)</div></div></div></div></figure></section><section class="lesson-section" id="section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor"><h2>Lesson 8.2: Custom Reports and Data Export: Ashpak builds the board report and scheduled exports :</h2><p>The Scene Monday afternoon. Built-in reports answered the immediate questions. But Riya doesn't want to log into the Intune portal every Thursday before the board meeting. She wants a clean, structured report delivered to her inbox automatically. Ashpak has two tools for this: Intune Report Builder; custom column selection, saved reports Microsoft Graph API + Power BI; scheduled exports, rich visualisations</p></section><section class="lesson-section" id="section-intune-report-builder-custom-reports"><h2>Intune Report Builder: Custom Reports</h2><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Reports 3 └── Report builder (preview) 4 → + New report 5 6 STEP 1: Choose data source 7 Category: Devices 8 Data: All devices with compliance 9 (combines device inventory + compliance state) 10 11 STEP 2: Choose columns 12 Selected columns (drag to order): 13 Device name 14 User principal name 15 OS 16 OS version 17 Ownership (Corporate/Personal) 18 Enrollment date 19 Last check-in 20 Compliance state 21 Encryption state</p><p>22 MDE onboarding state 23 Primary user display name 24 25 STEP 3: Apply filters 26 Ownership: Corporate 27 (Board report only needs corporate devices) 28 29 STEP 4: Save report 30 Name: AshScript-Board-Device-Report 31 → Save 32 33 STEP 5: Run and export 34 → Generate report 35 → Export (CSV) 36 37 Saved report available to re-run anytime 38 without reconfiguring</p></section><section class="lesson-section" id="section-scheduling-report-delivery-for-automatic-weekly-delivery-ashpak-uses-t"><h2>Scheduling Report Delivery For automatic weekly delivery, Ashpak uses the Intune Data Warehouse and scheduled export:</h2><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> 2 └── Reports → Data Warehouse 3 → OData feed URL: 4 <a class="lesson-url" href="https://fef.msua06.manage.microsoft" rel="noopener noreferrer" target="_blank">https://fef.msua06.manage.microsoft</a> 5 .com/ReportingService/DataWarehouse 6 Service.svc?api-version=v1.0 7 8 OPTION 1: Power BI Desktop connection 9 Open Power BI Desktop 10 → Get Data → OData Feed 11 → Paste Intune Data Warehouse URL 12 → Sign in with Intune admin credentials 13 → Select tables: 14 devices, users, complianceStates, 15 appInstallStatuses, managedDevices 16 → Load data 17 → Build dashboard visuals 18 → Publish to Power BI Service 19 → Schedule refresh: daily at 6 AM 20 → Share dashboard with Riya + Kabir</p><p>Power BI Dashboard; Visuals Ashpak builds:</p><p>1 PAGE 1: EXECUTIVE SUMMARY (for Riya) 2 Visual 1: KPI card; Total enrolled devices 3 Visual 2: KPI card; Compliance rate % 4 Visual 3: KPI card; Encryption rate % 5 Visual 4: KPI card; Active threats 6 Visual 5: Donut; Device OS split 7 Visual 6: Trend line; Compliance over 30 days 8 9 PAGE 2: COMPLIANCE DETAIL (for Kabir) 10 Visual 1: Table; Non-compliant devices 11 with failure reasons 12 Visual 2: Bar chart; Failures by compliance 13 setting 14 Visual 3: Map; Device location by region 15 Visual 4: Table; Devices in grace period 16 17 PAGE 3: APP DEPLOYMENT (for Kabir) 18 Visual 1: Table; App install failures 19 Visual 2: Bar chart; Apps by install rate 20 Visual 3: Licence utilisation by VPP app 21 22 PAGE 4: SECURITY (for Security team) 23 Visual 1: MDE onboarding rate 24 Visual 2: Vulnerability count trend 25 Visual 3: Alert history (30 days) 26 Visual 4: Encryption by platform</p><p>Graph API; Automated CSV Export For teams that prefer CSV over Power BI, Ashpak scripts a Graph API export that runs weekly:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">powershell</div></div></figure><p>1 # ASHSCRIPT-WEEKLY-REPORT.PS1 2 # Runs every Monday 07:00 via Azure Automation 3 # Exports key metrics to SharePoint 4 5 # Authentication 6 $tenantId = "ashpak.onmicrosoft.com" 7 $clientId = "[App registration client ID]" 8 $clientSecret = "[Secret; from Key Vault]" 9 10 $tokenBody = @{ 11 Grant_Type = "client_credentials" 12 Scope = " <a class="lesson-url" href="https://graph.microsoft.com/.default" rel="noopener noreferrer" target="_blank">https://graph.microsoft.com/.default</a> " 13 Client_Id = $clientId 14 Client_Secret = $clientSecret 15 }</p><p>16 17 $tokenResponse = Invoke-RestMethod ` 18 -Uri " <a class="lesson-url" href="https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token" rel="noopener noreferrer" target="_blank">https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token</a> " ` 19 -Method POST ` 20 -Body $tokenBody 21 22 $headers = @{ 23 "Authorization" = "Bearer $($tokenResponse.access_token)" 24 "Content-Type" = "application/json" 25 } 26 27 # Get all managed devices 28 $devicesUri = " <a class="lesson-url" href="https://graph.microsoft.com/v1.0/deviceManagement/managedDevices" rel="noopener noreferrer" target="_blank">https://graph.microsoft.com/v1.0/deviceManagement/managedDevices</a> " 29 $devices = @() 30 $response = Invoke-RestMethod -Uri $devicesUri -Headers $headers 31 32 do { 33 $devices += $response.value 34 $response = if ($response.'@odata.nextLink') { 35 Invoke-RestMethod -Uri $response.'@odata.nextLink' ` 36 -Headers $headers 37 } else { $null } 38 } while ($response) 39 40 # Build report object 41 $report = $devices | Select-Object ` 42 deviceName, 43 userPrincipalName, 44 operatingSystem, 45 osVersion, 46 complianceState, 47 isEncrypted, 48 lastSyncDateTime, 49 managementAgent, 50 enrolledDateTime 51 52 # Export to CSV 53 $reportDate = Get-Date -Format "yyyy-MM-dd" 54 $csvPath = "C:\Reports\DeviceReport-$reportDate.csv" 55 $report | Export-Csv -Path $csvPath -NoTypeInformation 56 57 Write-Host "Report exported: $($devices.Count) devices" 58 Write-Host "Compliant: $(($devices | Where complianceState -eq 'compliant').Count)" 59 Write-Host "Non-compliant: $(($devices | Where complianceState -eq 'noncompliant').C 60 61 # Upload to SharePoint (IT Reports library) 62 # [SharePoint upload code here]</p></section><section class="lesson-section" id="section-compliance-trend-analysis"><h2>Compliance Trend Analysis</h2><p>Ashpak wants to track compliance rate over time; to show the board that it's improving:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="1"><div class="diagram-group"><div class="diagram-item"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-flow"><span class="diagram-chip">Reports</span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Device compliance</span></div><div class="diagram-item">→ Compliance trend</div><div class="diagram-item">COMPLIANCE TREND; LAST 60 DAYS:</div></div><div class="diagram-group"><div class="diagram-items"><div class="diagram-item">Day 1 (Before Phase 5): 0% (no policies)</div><div class="diagram-item">Day 7 (Policies deployed): 61%</div><div class="diagram-item">Day 14 (Grace periods expiring): 74%</div><div class="diagram-item">Day 21 (Remediation in progress): 79%</div><div class="diagram-item">Day 30 (Post-fixes): 84%</div><div class="diagram-item">Day 45 (After Windows 11 upgrade wave): 87%</div><div class="diagram-item">Day 60 (Target): 90% ← goal</div><div class="diagram-item">TREND: ↑ Improving</div><div class="diagram-item">Board message: "Compliance improved from 0% to</div><div class="diagram-item">84% in 30 days. Target 90% within 60 days."</div></div></div></div></figure></section><section class="lesson-section" id="section-current-state-after-lesson-82"><h2>Current State After Lesson 8.2</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="2"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT</div><div class="diagram-items"><div class="diagram-item">Alerts + monitoring (Lesson 8.3)</div><div class="diagram-item">Operational workflows (Lesson 8.4)</div><div class="diagram-item">Weekly operations checklist (Lesson 8.5)</div></div></div></div></figure></section><section class="lesson-section" id="section-lesson-83-alerts-monitoring-and-service-health-ashpak-builds-the-early"><h2>Lesson 8.3: Alerts, Monitoring, and Service Health: Ashpak builds the early warning system :</h2><p>The Scene Tuesday morning. Reports are running. Power BI dashboard is live. But Ashpak thinks about the 2 AM Finance laptop incident again. He found out because he happened to check email at 8 AM. What if he'd been on holiday? What if it was a Friday night?</p><blockquote class="quote">"Reporting tells you what happened. Monitoring tells you what's happening right now."</blockquote><p>He builds the monitoring stack.</p></section><section class="lesson-section" id="section-intune-service-health-monitoring"><h2>Intune Service Health Monitoring</h2><p>1 <a class="lesson-url" href="https://admin.microsoft.com" rel="noopener noreferrer" target="_blank">admin.microsoft.com</a> 2 └── Health → Service health 3 4 SERVICES TO MONITOR: 5 Microsoft Intune: Normal 6 Microsoft Entra ID: Normal 7 Exchange Online: Normal 8 SharePoint Online: Normal 9 Microsoft Teams: Normal 10 Microsoft Defender: Normal</p><p>Setting up service health email alerts:</p><p>1 <a class="lesson-url" href="https://admin.microsoft.com" rel="noopener noreferrer" target="_blank">admin.microsoft.com</a> 2 └── Health → Service health 3 → Customise 4 → Email preferences 5 6 Email notifications for: 7 Microsoft Intune incidents 8 Microsoft Entra incidents 9 Microsoft Defender incidents 10 11 Recipients:</p></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../8-1-intune-built-in-reports-and-dashboards/"><span class="story-path-number">8.1</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Intune Built-In Reports and Dashboards</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">8.2</span><span class="story-path-label">YOU ARE HERE</span><strong>Custom Reports and Data Export</strong><small>Monitoring, Reporting &amp; Troubleshooting</small></div><a class="story-path-step story-path-next" href="../8-3-alerts-monitoring-and-service-health/"><span class="story-path-number">8.3</span><span class="story-path-label">NEXT CHAPTER</span><strong>Alerts, Monitoring, and Service Health</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-8">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script><script defer="" src="../../assets/js/lesson-toc.js"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Custom Reports and Data Export &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/>
+  <title>
+   Lesson 8.2: Custom Reports and Data Export &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 8
+      </span>
+      /
+      <span>
+       8.2
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 8; MONITORING, REPORTING &amp; TROUBLESHOOTING
+     </div>
+     <h1>
+      Custom Reports and Data Export
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds the board report and scheduled exports
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-8">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 8
+        </small>
+        <strong>
+         Phase 8; Monitoring, Reporting &amp; Troubleshooting
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       8.2 Custom Reports and Data Export
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-8">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor">
+        <span>
+         02
+        </span>
+        <strong>
+         Lesson 8.2; Custom Reports and Data Export; Ashpak builds the board report and scheduled exports ;
+        </strong>
+       </a>
+       <a href="#section-intune-report-builder-custom-reports">
+        <span>
+         03
+        </span>
+        <strong>
+         Intune Report Builder; Custom Reports
+        </strong>
+       </a>
+       <a href="#section-scheduling-report-delivery-for-automatic-weekly-delivery-ashpak-uses-t">
+        <span>
+         04
+        </span>
+        <strong>
+         Scheduling Report Delivery For automatic weekly delivery, Ashpak uses the Intune Data Warehouse and scheduled export:
+        </strong>
+       </a>
+       <a href="#section-compliance-trend-analysis">
+        <span>
+         05
+        </span>
+        <strong>
+         Compliance Trend Analysis
+        </strong>
+       </a>
+       <a href="#section-current-state-after-lesson-82">
+        <span>
+         06
+        </span>
+        <strong>
+         Current State After Lesson 8.2
+        </strong>
+       </a>
+       <a href="#section-lesson-83-alerts-monitoring-and-service-health-ashpak-builds-the-early">
+        <span>
+         07
+        </span>
+        <strong>
+         Lesson 8.3; Alerts, Monitoring, and Service Health; Ashpak builds the early warning system ;
+        </strong>
+       </a>
+       <a href="#section-intune-service-health-monitoring">
+        <span>
+         08
+        </span>
+        <strong>
+         Intune Service Health Monitoring
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 8.2; Custom Reports and Data Export" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-8">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="0">
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Alerts + monitoring (Lesson 8.3)
+           </div>
+           <div class="diagram-item">
+            Day-to-day operational workflows (Lesson 8.4)
+           </div>
+           <div class="diagram-item">
+            Weekly operations checklist (Lesson 8.5)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-lesson-82-custom-reports-and-data-export-ashpak-builds-the-board-repor">
+       <h2>
+        Lesson 8.2: Custom Reports and Data Export: Ashpak builds the board report and scheduled exports :
+       </h2>
+       <p>
+        The Scene Monday afternoon. Built-in reports answered the immediate questions. But Riya doesn't want to log into the Intune portal every Thursday before the board meeting. She wants a clean, structured report delivered to her inbox automatically. Ashpak has two tools for this: Intune Report Builder; custom column selection, saved reports Microsoft Graph API + Power BI; scheduled exports, rich visualisations
+       </p>
+      </section>
+      <section class="lesson-section" id="section-intune-report-builder-custom-reports">
+       <h2>
+        Intune Report Builder: Custom Reports
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Reports 3 &boxur;&boxh;&boxh; Report builder (preview) 4 &rarr; + New report 5 6 STEP 1: Choose data source 7 Category: Devices 8 Data: All devices with compliance 9 (combines device inventory + compliance state) 10 11 STEP 2: Choose columns 12 Selected columns (drag to order): 13 Device name 14 User principal name 15 OS 16 OS version 17 Ownership (Corporate/Personal) 18 Enrollment date 19 Last check-in 20 Compliance state 21 Encryption state
+       </p>
+       <p>
+        22 MDE onboarding state 23 Primary user display name 24 25 STEP 3: Apply filters 26 Ownership: Corporate 27 (Board report only needs corporate devices) 28 29 STEP 4: Save report 30 Name: AshScript-Board-Device-Report 31 &rarr; Save 32 33 STEP 5: Run and export 34 &rarr; Generate report 35 &rarr; Export (CSV) 36 37 Saved report available to re-run anytime 38 without reconfiguring
+       </p>
+      </section>
+      <section class="lesson-section" id="section-scheduling-report-delivery-for-automatic-weekly-delivery-ashpak-uses-t">
+       <h2>
+        Scheduling Report Delivery For automatic weekly delivery, Ashpak uses the Intune Data Warehouse and scheduled export:
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Reports &rarr; Data Warehouse 3 &rarr; OData feed URL: 4
+        <a class="lesson-url" href="https://fef.msua06.manage.microsoft" rel="noopener noreferrer" target="_blank">
+         https://fef.msua06.manage.microsoft
+        </a>
+        5 .com/ReportingService/DataWarehouse 6 Service.svc?api-version=v1.0 7 8 OPTION 1: Power BI Desktop connection 9 Open Power BI Desktop 10 &rarr; Get Data &rarr; OData Feed 11 &rarr; Paste Intune Data Warehouse URL 12 &rarr; Sign in with Intune admin credentials 13 &rarr; Select tables: 14 devices, users, complianceStates, 15 appInstallStatuses, managedDevices 16 &rarr; Load data 17 &rarr; Build dashboard visuals 18 &rarr; Publish to Power BI Service 19 &rarr; Schedule refresh: daily at 6 AM 20 &rarr; Share dashboard with Riya + Kabir
+       </p>
+       <p>
+        Power BI Dashboard; Visuals Ashpak builds:
+       </p>
+       <p>
+        1 PAGE 1: EXECUTIVE SUMMARY (for Riya) 2 Visual 1: KPI card; Total enrolled devices 3 Visual 2: KPI card; Compliance rate % 4 Visual 3: KPI card; Encryption rate % 5 Visual 4: KPI card; Active threats 6 Visual 5: Donut; Device OS split 7 Visual 6: Trend line; Compliance over 30 days 8 9 PAGE 2: COMPLIANCE DETAIL (for Kabir) 10 Visual 1: Table; Non-compliant devices 11 with failure reasons 12 Visual 2: Bar chart; Failures by compliance 13 setting 14 Visual 3: Map; Device location by region 15 Visual 4: Table; Devices in grace period 16 17 PAGE 3: APP DEPLOYMENT (for Kabir) 18 Visual 1: Table; App install failures 19 Visual 2: Bar chart; Apps by install rate 20 Visual 3: Licence utilisation by VPP app 21 22 PAGE 4: SECURITY (for Security team) 23 Visual 1: MDE onboarding rate 24 Visual 2: Vulnerability count trend 25 Visual 3: Alert history (30 days) 26 Visual 4: Encryption by platform
+       </p>
+       <p>
+        Graph API; Automated CSV Export For teams that prefer CSV over Power BI, Ashpak scripts a Graph API export that runs weekly:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          powershell
+         </div>
+        </div>
+       </figure>
+       <p>
+        1 # ASHSCRIPT-WEEKLY-REPORT.PS1 2 # Runs every Monday 07:00 via Azure Automation 3 # Exports key metrics to SharePoint 4 5 # Authentication 6 $tenantId = "ashpak.onmicrosoft.com" 7 $clientId = "[App registration client ID]" 8 $clientSecret = "[Secret; from Key Vault]" 9 10 $tokenBody = @{ 11 Grant_Type = "client_credentials" 12 Scope = "
+        <a class="lesson-url" href="https://graph.microsoft.com/.default" rel="noopener noreferrer" target="_blank">
+         https://graph.microsoft.com/.default
+        </a>
+        " 13 Client_Id = $clientId 14 Client_Secret = $clientSecret 15 }
+       </p>
+       <p>
+        16 17 $tokenResponse = Invoke-RestMethod ` 18 -Uri "
+        <a class="lesson-url" href="https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token" rel="noopener noreferrer" target="_blank">
+         https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token
+        </a>
+        " ` 19 -Method POST ` 20 -Body $tokenBody 21 22 $headers = @{ 23 "Authorization" = "Bearer $($tokenResponse.access_token)" 24 "Content-Type" = "application/json" 25 } 26 27 # Get all managed devices 28 $devicesUri = "
+        <a class="lesson-url" href="https://graph.microsoft.com/v1.0/deviceManagement/managedDevices" rel="noopener noreferrer" target="_blank">
+         https://graph.microsoft.com/v1.0/deviceManagement/managedDevices
+        </a>
+        " 29 $devices = @() 30 $response = Invoke-RestMethod -Uri $devicesUri -Headers $headers 31 32 do { 33 $devices += $response.value 34 $response = if ($response.'@odata.nextLink') { 35 Invoke-RestMethod -Uri $response.'@odata.nextLink' ` 36 -Headers $headers 37 } else { $null } 38 } while ($response) 39 40 # Build report object 41 $report = $devices | Select-Object ` 42 deviceName, 43 userPrincipalName, 44 operatingSystem, 45 osVersion, 46 complianceState, 47 isEncrypted, 48 lastSyncDateTime, 49 managementAgent, 50 enrolledDateTime 51 52 # Export to CSV 53 $reportDate = Get-Date -Format "yyyy-MM-dd" 54 $csvPath = "C:\Reports\DeviceReport-$reportDate.csv" 55 $report | Export-Csv -Path $csvPath -NoTypeInformation 56 57 Write-Host "Report exported: $($devices.Count) devices" 58 Write-Host "Compliant: $(($devices | Where complianceState -eq 'compliant').Count)" 59 Write-Host "Non-compliant: $(($devices | Where complianceState -eq 'noncompliant').C 60 61 # Upload to SharePoint (IT Reports library) 62 # [SharePoint upload code here]
+       </p>
+      </section>
+      <section class="lesson-section" id="section-compliance-trend-analysis">
+       <h2>
+        Compliance Trend Analysis
+       </h2>
+       <p>
+        Ashpak wants to track compliance rate over time; to show the board that it's improving:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="1">
+         <div class="diagram-group">
+          <div class="diagram-item">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+          </div>
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            Reports
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Device compliance
+           </span>
+          </div>
+          <div class="diagram-item">
+           &rarr; Compliance trend
+          </div>
+          <div class="diagram-item">
+           COMPLIANCE TREND; LAST 60 DAYS:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Day 1 (Before Phase 5): 0% (no policies)
+           </div>
+           <div class="diagram-item">
+            Day 7 (Policies deployed): 61%
+           </div>
+           <div class="diagram-item">
+            Day 14 (Grace periods expiring): 74%
+           </div>
+           <div class="diagram-item">
+            Day 21 (Remediation in progress): 79%
+           </div>
+           <div class="diagram-item">
+            Day 30 (Post-fixes): 84%
+           </div>
+           <div class="diagram-item">
+            Day 45 (After Windows 11 upgrade wave): 87%
+           </div>
+           <div class="diagram-item">
+            Day 60 (Target): 90% &larr; goal
+           </div>
+           <div class="diagram-item">
+            TREND: &uarr; Improving
+           </div>
+           <div class="diagram-item">
+            Board message: "Compliance improved from 0% to
+           </div>
+           <div class="diagram-item">
+            84% in 30 days. Target 90% within 60 days."
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-current-state-after-lesson-82">
+       <h2>
+        Current State After Lesson 8.2
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="2">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Alerts + monitoring (Lesson 8.3)
+           </div>
+           <div class="diagram-item">
+            Operational workflows (Lesson 8.4)
+           </div>
+           <div class="diagram-item">
+            Weekly operations checklist (Lesson 8.5)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-lesson-83-alerts-monitoring-and-service-health-ashpak-builds-the-early">
+       <h2>
+        Lesson 8.3: Alerts, Monitoring, and Service Health: Ashpak builds the early warning system :
+       </h2>
+       <p>
+        The Scene Tuesday morning. Reports are running. Power BI dashboard is live. But Ashpak thinks about the 2 AM Finance laptop incident again. He found out because he happened to check email at 8 AM. What if he'd been on holiday? What if it was a Friday night?
+       </p>
+       <blockquote class="quote">
+        "Reporting tells you what happened. Monitoring tells you what's happening right now."
+       </blockquote>
+       <p>
+        He builds the monitoring stack.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-intune-service-health-monitoring">
+       <h2>
+        Intune Service Health Monitoring
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://admin.microsoft.com" rel="noopener noreferrer" target="_blank">
+         admin.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Health &rarr; Service health 3 4 SERVICES TO MONITOR: 5 Microsoft Intune: Normal 6 Microsoft Entra ID: Normal 7 Exchange Online: Normal 8 SharePoint Online: Normal 9 Microsoft Teams: Normal 10 Microsoft Defender: Normal
+       </p>
+       <p>
+        Setting up service health email alerts:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://admin.microsoft.com" rel="noopener noreferrer" target="_blank">
+         admin.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Health &rarr; Service health 3 &rarr; Customise 4 &rarr; Email preferences 5 6 Email notifications for: 7 Microsoft Intune incidents 8 Microsoft Entra incidents 9 Microsoft Defender incidents 10 11 Recipients:
+       </p>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../8-1-intune-built-in-reports-and-dashboards/">
+         <span class="story-path-number">
+          8.1
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Intune Built-In Reports and Dashboards
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          8.2
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Custom Reports and Data Export
+         </strong>
+         <small>
+          Monitoring, Reporting &amp; Troubleshooting
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../8-3-alerts-monitoring-and-service-health/">
+         <span class="story-path-number">
+          8.3
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Alerts, Monitoring, and Service Health
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-8">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/lesson-toc.js">
+  </script>
+ </body>
+</html>

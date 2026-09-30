@@ -1,11 +1,917 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Incident Response Workflow · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/><title>Lesson 7.5: Incident Response Workflow · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase7-lesson" style="--lesson-accent:#b9c2b7"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 7</span>/<span>7.5</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 7; SECURITY &amp; ENDPOINT PROTECTION</div><h1>Incident Response Workflow</h1><p class="lesson-subtitle">Ashpak builds the playbook AshScript will follow for every future incident</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-7"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 7</small><strong>Phase 7; Security &amp; Endpoint Protection</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">7.5 Incident Response Workflow</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-7">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-lesson-75-incident-response-workflow-ashpak-builds-the-playbook-ashscr"><span>02</span><strong>Lesson 7.5; Incident Response Workflow; Ashpak builds the playbook AshScript will follow for every future incident ;</strong></a><a href="#section-ashscript-security-incident-response-playbook-severity-classification"><span>03</span><strong>AshScript Security Incident Response Playbook Severity Classification:</strong></a><a href="#section-building-the-incident-response-toolkit-in-mde-indicator-of-compromise-"><span>04</span><strong>Building the Incident Response Toolkit in MDE Indicator of Compromise (IoC) Blocking:</strong></a><a href="#section-phase-7-complete-ashscript-security-posture"><span>05</span><strong>Phase 7 Complete; AshScript Security Posture</strong></a><a href="#section-phase-7-complete"><span>06</span><strong>Phase 7 Complete</strong></a><a href="#section-key-concepts-to-lock-in-phase-7"><span>07</span><strong>Key Concepts to Lock In; Phase 7</strong></a><a href="#section-device-isolation-cuts-all-network-except-mde-investigation-continues"><span>08</span><strong>Device isolation Cuts all network except MDE; investigation continues</strong></a><a href="#section-incident-playbook-detect-contain-investigate-remediate-recover-review"><span>09</span><strong>Incident playbook Detect → Contain → Investigate → Remediate → Recover → Review</strong></a></nav></aside>
-<article aria-label="Lesson 7.5; Incident Response Workflow" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-7">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="0"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT</div><div class="diagram-items"><div class="diagram-item">Incident response workflow (Lesson 7.5)</div></div></div></div></figure></section><section class="lesson-section" id="section-lesson-75-incident-response-workflow-ashpak-builds-the-playbook-ashscr"><h2>Lesson 7.5: Incident Response Workflow: Ashpak builds the playbook AshScript will follow for every future incident :</h2><p>The Scene Friday afternoon. Phase 7 is nearly complete. Ashpak has investigated two real incidents this week; ransomware and credential theft. He handled both well. But he got lucky in one respect: he was in the office. What happens at 3 AM when he's asleep and a new incident fires? He opens a document and starts writing. Not a Intune profile. Not a KQL query. A playbook; the documented, repeatable process for handling security incidents at AshScript.</p></section><section class="lesson-section" id="section-ashscript-security-incident-response-playbook-severity-classification"><h2>AshScript Security Incident Response Playbook Severity Classification:</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SEVERITY</th><th scope="col">CRITERIA</th><th scope="col">RESPONSE TIME</th></tr></thead><tbody><tr><td>CRITICAL</td><td>Active ransomware<br/>Data exfiltration in<br/>progress<br/>Credential breach of<br/>admin account</td><td>Immediate<br/>(24/7 response)</td></tr><tr><td>HIGH</td><td>Malware on multiple<br/>devices<br/>Active threat not yet<br/>contained<br/>Successful phishing</td><td>Within 2 hours</td></tr><tr><td>MEDIUM</td><td>Malware quarantined<br/>Single device affected<br/>Suspicious behaviou<br/>blocked</td><td>Within 8 hours<br/>(business hours)</td></tr><tr><td>LOW</td><td>Informational alerts<br/>Policy violations<br/>Outdated software</td><td>Within 24 hours</td></tr></tbody></table></div><p>Incident Response Steps:</p><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="1"><div class="diagram-group diagram-label-only"><div class="diagram-group-title">PHASE 1: DETECT</div></div><div class="diagram-group"><div class="diagram-group-title">Sources:</div><div class="diagram-items"><div class="diagram-item">MDE alert (email notification)</div><div class="diagram-item">User report to helpdesk</div><div class="diagram-item">Automated investigation finding</div><div class="diagram-item">Custom detection rule trigger</div><div class="diagram-item">Actions:</div><div class="diagram-item">1. Triage alert severity (table above)</div><div class="diagram-item">2. Identify affected device(s) and user(s)</div><div class="diagram-item">3. Determine: active threat or already</div><div class="diagram-item">contained?</div><div class="diagram-item">4. Escalate if CRITICAL or HIGH</div><div class="diagram-item">PHASE 2: CONTAIN</div></div></div><div class="diagram-group"><div class="diagram-group-title">Immediate containment options:</div><div class="diagram-items"><div class="diagram-item">A. Isolate device (MDE device action)</div><div class="diagram-item">→ Cuts all network except MDE sensor</div><div class="diagram-item">→ Use for: active threat, suspected</div><div class="diagram-item">lateral movement</div><div class="diagram-item">B. Revoke user sessions (Entra)</div><div class="diagram-item">→ Blocks user from authenticating</div><div class="diagram-item">→ Use for: compromised credentials</div><div class="diagram-item">C. Disable user account (Entra)</div><div class="diagram-item">→ Full lockout + APP wipe trigger</div><div class="diagram-item">→ Use for: confirmed insider threat</div><div class="diagram-item">or account compromise</div><div class="diagram-item">D. Block IoC in MDE</div><div class="diagram-item">→ <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> → Settings</div><div class="diagram-item">→ Indicators → + Add indicator</div><div class="diagram-item">→ Block IP/domain/file hash globally</div><div class="diagram-item">→ Use for: known malicious C2/file</div><div class="diagram-item">PHASE 3: INVESTIGATE</div></div></div><div class="diagram-group"><div class="diagram-group-title">Tools:</div><div class="diagram-items"><div class="diagram-item">Device timeline (30-day history)</div><div class="diagram-item">Advanced Hunting (KQL queries)</div><div class="diagram-item">Live Response (remote shell)</div><div class="diagram-item">Automated investigation report</div><div class="diagram-item">Questions to answer:</div><div class="diagram-item">1. What was the initial attack vector?</div><div class="diagram-item">(phishing? USB? exploit? insider?)</div><div class="diagram-item">2. What did the attacker do on the device?</div><div class="diagram-item">3. Did they move laterally?</div><div class="diagram-item">4. Did they exfiltrate data?</div><div class="diagram-item">5. What is the full scope?</div><div class="diagram-item">(1 device? 10 devices? whole tenant?)</div><div class="diagram-item">PHASE 4: REMEDIATE</div></div></div><div class="diagram-group"><div class="diagram-group-title">Actions:</div><div class="diagram-items"><div class="diagram-item">A. Run automated investigation</div><div class="diagram-item">(let MDE handle remediation if confident)</div><div class="diagram-item">B. Manual remediation via Live Response:</div><div class="diagram-item">→ Quarantine malicious files</div><div class="diagram-item">→ Remove persistence mechanisms</div><div class="diagram-item">→ Clean registry entries</div><div class="diagram-item">C. Full device wipe + rebuild</div><div class="diagram-item">(for heavily compromised devices)</div><div class="diagram-item">D. Patch/update vulnerabilities</div><div class="diagram-item">exploited in the attack</div><div class="diagram-item">(via Intune update ring or manual)</div><div class="diagram-item">PHASE 5: RECOVER</div></div></div><div class="diagram-group"><div class="diagram-group-title">Actions:</div><div class="diagram-items"><div class="diagram-item">A. Release device from isolation</div><div class="diagram-item">(after confirmed clean)</div><div class="diagram-item">B. Restore files from backup</div><div class="diagram-item">(VSS shadow copies or backup solution)</div><div class="diagram-item">C. Re-enable user account</div><div class="diagram-item">(after password reset + MFA review)</div><div class="diagram-item">D. Monitor device for 72 hours</div><div class="diagram-item">post-remediation for re-infection</div><div class="diagram-item">PHASE 6: POST-INCIDENT</div></div></div><div class="diagram-group"><div class="diagram-group-title">Documentation (within 48 hours):</div><div class="diagram-items"><div class="diagram-item">Timeline of events</div><div class="diagram-item">Attack vector</div><div class="diagram-item">Affected systems</div><div class="diagram-item">Actions taken</div><div class="diagram-item">Files involved</div><div class="diagram-item">Lessons learned</div><div class="diagram-item">Improvements:</div><div class="diagram-item">What detection should have caught</div><div class="diagram-item">this earlier?</div><div class="diagram-item">What prevention could have blocked it?</div><div class="diagram-item">Update playbook with new learnings</div><div class="diagram-item">Create custom detection for pattern</div><div class="diagram-item">Update training if phishing-related</div></div></div></div></figure></section><section class="lesson-section" id="section-building-the-incident-response-toolkit-in-mde-indicator-of-compromise-"><h2>Building the Incident Response Toolkit in MDE Indicator of Compromise (IoC) Blocking:</h2><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Settings → Endpoints 3 → Indicators 4 → + Add indicator 5 6 TYPE: File hash (SHA-256) 7 VALUE: [Hash of Invoice_Dec2024.exe] 8 ACTION: Block and remediate 9 TITLE: Ransomware dropper; Dec 2024 10 phishing campaign 11 SEVERITY: High 12 DESCRIPTION: File dropper from phishing 13 campaign targeting Finance. 14 Block on all devices. 15 16 → Save 17 18 RESULT: 19 If ANY device in the tenant encounters 20 a file with this hash: 21 → Defender blocks it immediately 22 → Alert generated</p><p>23 → No investigation needed; known bad</p><p>Blocking the malicious domain:</p><p>1 <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a> 2 └── Settings → Indicators → URLs/Domains 3 4 TYPE: Domain 5 VALUE: invoice-portal.xyz 6 ACTION: Block 7 TITLE: Malicious domain; Dec 2024 8 phishing campaign 9 10 → Save 11 12 RESULT: 13 Any device attempting to reach 14 invoice-portal.xyz: 15 → Network connection blocked 16 → User sees: "This website is blocked 17 by your organisation's security policy"</p></section><section class="lesson-section" id="section-phase-7-complete-ashscript-security-posture"><h2>Phase 7 Complete: AshScript Security Posture</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="2"><div class="diagram-group"><div class="diagram-flow"><span class="diagram-chip"><a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">security.microsoft.com</a></span><span aria-hidden="true" class="diagram-arrow">→</span><span class="diagram-chip">Home</span></div><div class="diagram-item">SECURITY POSTURE; END OF PHASE 7:</div></div><div class="diagram-group"><div class="diagram-group-title">Microsoft Secure Score:</div><div class="diagram-items"><div class="diagram-item">Before MDE: Unknown (not measured)</div><div class="diagram-item">After Phase 7: 561/700 (80%)</div><div class="diagram-item">(Was 432/700 before implementing</div><div class="diagram-item">recommendations from Lesson 7.3)</div><div class="diagram-item">DEVICES:</div><div class="diagram-item">Onboarded: 839/847 (99%)</div><div class="diagram-item">Sensor healthy: 832/847 (98%)</div><div class="diagram-item">No active threats: 844/847 (99.6%)</div><div class="diagram-item">ALERTS (last 7 days):</div><div class="diagram-item">High resolved: 2</div><div class="diagram-item">Medium resolved: 7</div><div class="diagram-item">Low resolved: 23</div><div class="diagram-item">Active: 0</div><div class="diagram-item">VULNERABILITIES:</div><div class="diagram-item">Critical: 0 (from 3; remediated)</div><div class="diagram-item">High: 5 (from 12; in progress)</div><div class="diagram-item">Medium: 28 (patching in progress)</div></div></div></div></figure></section><section class="lesson-section" id="section-phase-7-complete"><h2>Phase 7 Complete</h2><figure class="diagram-card diagram-card-modern"><div class="diagram-visual" data-diagram-index="3"><div class="diagram-group"><div class="diagram-group-title">ASHSCRIPT TENANT; PHASE 7 COMPLETE</div><div class="diagram-items"><div class="diagram-item">MDE onboarded: 839/847 devices (all platforms)</div><div class="diagram-item">Automated investigation + full automation</div><div class="diagram-item">Alert notifications configured (email + portal)</div><div class="diagram-item">Custom detections: 5 rules (mass exfil + others)</div><div class="diagram-item">Advanced Hunting: 4 proactive hunt queries</div><div class="diagram-item">Vulnerability management: 3 critical CVEs resolved</div><div class="diagram-item">MDE risk → Intune compliance → CA access block</div><div class="diagram-item">Finance/Legal/Exec: Low risk threshold</div><div class="diagram-item">Incident response playbook documented</div><div class="diagram-item">IoC blocking: malicious file hash + domain</div><div class="diagram-item">Security score: 432 → 561 (+129 points)</div><div class="diagram-item">2 real incidents: fully investigated + resolved</div></div></div><div class="diagram-group diagram-label-only"><div class="diagram-group-title">Phase 8; Intune Reporting and Operations</div></div></div></figure></section><section class="lesson-section" id="section-key-concepts-to-lock-in-phase-7"><h2>Key Concepts to Lock In: Phase 7</h2><p>Concept Remember This</p><p>MDE vs Windows Defender Defender = AV only; MDE = EDR + hunting + response + vuln mgmt</p><p>MDE sensor = "Sense" Windows service; streams continuous telemetry</p></section><section class="lesson-section" id="section-device-isolation-cuts-all-network-except-mde-investigation-continues"><h3>Device isolation Cuts all network except MDE: investigation continues</h3><p>Live Response Remote shell into device; collect, remediate, investigate</p><p>Concept Remember This</p><p>Advanced Hunting KQL on 30-day telemetry; proactive threat hunting</p><p>Automated investigation MDE AI investigates alert + remediates automatically</p><p>ASR prevalence rule Blocks new/rare executables from internet; stops 0-days</p><p>MDE risk → Intune Risk score shared via connector → drives compliance state</p><p>High risk = non-compliant Automatic CA block when active threat detected</p><p>IoC indicators Block known-bad file hashes/domains across entire fleet</p><p>Custom detections KQL rules that run on schedule; org-specific threat logic</p></section><section class="lesson-section" id="section-incident-playbook-detect-contain-investigate-remediate-recover-review"><h3>Incident playbook Detect → Contain → Investigate → Remediate → Recover → Review</h3></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../7-4-mde-intune-compliance-integration/"><span class="story-path-number">7.4</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>MDE + Intune Compliance Integration</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">7.5</span><span class="story-path-label">YOU ARE HERE</span><strong>Incident Response Workflow</strong><small>Security &amp; Endpoint Protection</small></div><a class="story-path-step story-path-next" href="../7-6-attack-surface-reduction-asr-rules/"><span class="story-path-number">7.6</span><span class="story-path-label">NEXT CHAPTER</span><strong>Attack Surface Reduction (ASR) Rules</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-7">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script><script defer="" src="../../assets/js/lesson-toc.js"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Incident Response Workflow &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=32" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=32" rel="apple-touch-icon"/>
+  <title>
+   Lesson 7.5: Incident Response Workflow &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 7
+      </span>
+      /
+      <span>
+       7.5
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 7; SECURITY &amp; ENDPOINT PROTECTION
+     </div>
+     <h1>
+      Incident Response Workflow
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds the playbook AshScript will follow for every future incident
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-7">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 7
+        </small>
+        <strong>
+         Phase 7; Security &amp; Endpoint Protection
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       7.5 Incident Response Workflow
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-7">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-lesson-75-incident-response-workflow-ashpak-builds-the-playbook-ashscr">
+        <span>
+         02
+        </span>
+        <strong>
+         Lesson 7.5; Incident Response Workflow; Ashpak builds the playbook AshScript will follow for every future incident ;
+        </strong>
+       </a>
+       <a href="#section-ashscript-security-incident-response-playbook-severity-classification">
+        <span>
+         03
+        </span>
+        <strong>
+         AshScript Security Incident Response Playbook Severity Classification:
+        </strong>
+       </a>
+       <a href="#section-building-the-incident-response-toolkit-in-mde-indicator-of-compromise-">
+        <span>
+         04
+        </span>
+        <strong>
+         Building the Incident Response Toolkit in MDE Indicator of Compromise (IoC) Blocking:
+        </strong>
+       </a>
+       <a href="#section-phase-7-complete-ashscript-security-posture">
+        <span>
+         05
+        </span>
+        <strong>
+         Phase 7 Complete; AshScript Security Posture
+        </strong>
+       </a>
+       <a href="#section-phase-7-complete">
+        <span>
+         06
+        </span>
+        <strong>
+         Phase 7 Complete
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in-phase-7">
+        <span>
+         07
+        </span>
+        <strong>
+         Key Concepts to Lock In; Phase 7
+        </strong>
+       </a>
+       <a href="#section-device-isolation-cuts-all-network-except-mde-investigation-continues">
+        <span>
+         08
+        </span>
+        <strong>
+         Device isolation Cuts all network except MDE; investigation continues
+        </strong>
+       </a>
+       <a href="#section-incident-playbook-detect-contain-investigate-remediate-recover-review">
+        <span>
+         09
+        </span>
+        <strong>
+         Incident playbook Detect &rarr; Contain &rarr; Investigate &rarr; Remediate &rarr; Recover &rarr; Review
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 7.5; Incident Response Workflow" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-7">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="0">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Incident response workflow (Lesson 7.5)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-lesson-75-incident-response-workflow-ashpak-builds-the-playbook-ashscr">
+       <h2>
+        Lesson 7.5: Incident Response Workflow: Ashpak builds the playbook AshScript will follow for every future incident :
+       </h2>
+       <p>
+        The Scene Friday afternoon. Phase 7 is nearly complete. Ashpak has investigated two real incidents this week; ransomware and credential theft. He handled both well. But he got lucky in one respect: he was in the office. What happens at 3 AM when he's asleep and a new incident fires? He opens a document and starts writing. Not a Intune profile. Not a KQL query. A playbook; the documented, repeatable process for handling security incidents at AshScript.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-ashscript-security-incident-response-playbook-severity-classification">
+       <h2>
+        AshScript Security Incident Response Playbook Severity Classification:
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SEVERITY
+           </th>
+           <th scope="col">
+            CRITERIA
+           </th>
+           <th scope="col">
+            RESPONSE TIME
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            CRITICAL
+           </td>
+           <td>
+            Active ransomware
+            <br/>
+            Data exfiltration in
+            <br/>
+            progress
+            <br/>
+            Credential breach of
+            <br/>
+            admin account
+           </td>
+           <td>
+            Immediate
+            <br/>
+            (24/7 response)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            HIGH
+           </td>
+           <td>
+            Malware on multiple
+            <br/>
+            devices
+            <br/>
+            Active threat not yet
+            <br/>
+            contained
+            <br/>
+            Successful phishing
+           </td>
+           <td>
+            Within 2 hours
+           </td>
+          </tr>
+          <tr>
+           <td>
+            MEDIUM
+           </td>
+           <td>
+            Malware quarantined
+            <br/>
+            Single device affected
+            <br/>
+            Suspicious behaviou
+            <br/>
+            blocked
+           </td>
+           <td>
+            Within 8 hours
+            <br/>
+            (business hours)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            LOW
+           </td>
+           <td>
+            Informational alerts
+            <br/>
+            Policy violations
+            <br/>
+            Outdated software
+           </td>
+           <td>
+            Within 24 hours
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        Incident Response Steps:
+       </p>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="1">
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           PHASE 1: DETECT
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Sources:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            MDE alert (email notification)
+           </div>
+           <div class="diagram-item">
+            User report to helpdesk
+           </div>
+           <div class="diagram-item">
+            Automated investigation finding
+           </div>
+           <div class="diagram-item">
+            Custom detection rule trigger
+           </div>
+           <div class="diagram-item">
+            Actions:
+           </div>
+           <div class="diagram-item">
+            1. Triage alert severity (table above)
+           </div>
+           <div class="diagram-item">
+            2. Identify affected device(s) and user(s)
+           </div>
+           <div class="diagram-item">
+            3. Determine: active threat or already
+           </div>
+           <div class="diagram-item">
+            contained?
+           </div>
+           <div class="diagram-item">
+            4. Escalate if CRITICAL or HIGH
+           </div>
+           <div class="diagram-item">
+            PHASE 2: CONTAIN
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Immediate containment options:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            A. Isolate device (MDE device action)
+           </div>
+           <div class="diagram-item">
+            &rarr; Cuts all network except MDE sensor
+           </div>
+           <div class="diagram-item">
+            &rarr; Use for: active threat, suspected
+           </div>
+           <div class="diagram-item">
+            lateral movement
+           </div>
+           <div class="diagram-item">
+            B. Revoke user sessions (Entra)
+           </div>
+           <div class="diagram-item">
+            &rarr; Blocks user from authenticating
+           </div>
+           <div class="diagram-item">
+            &rarr; Use for: compromised credentials
+           </div>
+           <div class="diagram-item">
+            C. Disable user account (Entra)
+           </div>
+           <div class="diagram-item">
+            &rarr; Full lockout + APP wipe trigger
+           </div>
+           <div class="diagram-item">
+            &rarr; Use for: confirmed insider threat
+           </div>
+           <div class="diagram-item">
+            or account compromise
+           </div>
+           <div class="diagram-item">
+            D. Block IoC in MDE
+           </div>
+           <div class="diagram-item">
+            &rarr;
+            <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+             security.microsoft.com
+            </a>
+            &rarr; Settings
+           </div>
+           <div class="diagram-item">
+            &rarr; Indicators &rarr; + Add indicator
+           </div>
+           <div class="diagram-item">
+            &rarr; Block IP/domain/file hash globally
+           </div>
+           <div class="diagram-item">
+            &rarr; Use for: known malicious C2/file
+           </div>
+           <div class="diagram-item">
+            PHASE 3: INVESTIGATE
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Tools:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Device timeline (30-day history)
+           </div>
+           <div class="diagram-item">
+            Advanced Hunting (KQL queries)
+           </div>
+           <div class="diagram-item">
+            Live Response (remote shell)
+           </div>
+           <div class="diagram-item">
+            Automated investigation report
+           </div>
+           <div class="diagram-item">
+            Questions to answer:
+           </div>
+           <div class="diagram-item">
+            1. What was the initial attack vector?
+           </div>
+           <div class="diagram-item">
+            (phishing? USB? exploit? insider?)
+           </div>
+           <div class="diagram-item">
+            2. What did the attacker do on the device?
+           </div>
+           <div class="diagram-item">
+            3. Did they move laterally?
+           </div>
+           <div class="diagram-item">
+            4. Did they exfiltrate data?
+           </div>
+           <div class="diagram-item">
+            5. What is the full scope?
+           </div>
+           <div class="diagram-item">
+            (1 device? 10 devices? whole tenant?)
+           </div>
+           <div class="diagram-item">
+            PHASE 4: REMEDIATE
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Actions:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            A. Run automated investigation
+           </div>
+           <div class="diagram-item">
+            (let MDE handle remediation if confident)
+           </div>
+           <div class="diagram-item">
+            B. Manual remediation via Live Response:
+           </div>
+           <div class="diagram-item">
+            &rarr; Quarantine malicious files
+           </div>
+           <div class="diagram-item">
+            &rarr; Remove persistence mechanisms
+           </div>
+           <div class="diagram-item">
+            &rarr; Clean registry entries
+           </div>
+           <div class="diagram-item">
+            C. Full device wipe + rebuild
+           </div>
+           <div class="diagram-item">
+            (for heavily compromised devices)
+           </div>
+           <div class="diagram-item">
+            D. Patch/update vulnerabilities
+           </div>
+           <div class="diagram-item">
+            exploited in the attack
+           </div>
+           <div class="diagram-item">
+            (via Intune update ring or manual)
+           </div>
+           <div class="diagram-item">
+            PHASE 5: RECOVER
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Actions:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            A. Release device from isolation
+           </div>
+           <div class="diagram-item">
+            (after confirmed clean)
+           </div>
+           <div class="diagram-item">
+            B. Restore files from backup
+           </div>
+           <div class="diagram-item">
+            (VSS shadow copies or backup solution)
+           </div>
+           <div class="diagram-item">
+            C. Re-enable user account
+           </div>
+           <div class="diagram-item">
+            (after password reset + MFA review)
+           </div>
+           <div class="diagram-item">
+            D. Monitor device for 72 hours
+           </div>
+           <div class="diagram-item">
+            post-remediation for re-infection
+           </div>
+           <div class="diagram-item">
+            PHASE 6: POST-INCIDENT
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Documentation (within 48 hours):
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Timeline of events
+           </div>
+           <div class="diagram-item">
+            Attack vector
+           </div>
+           <div class="diagram-item">
+            Affected systems
+           </div>
+           <div class="diagram-item">
+            Actions taken
+           </div>
+           <div class="diagram-item">
+            Files involved
+           </div>
+           <div class="diagram-item">
+            Lessons learned
+           </div>
+           <div class="diagram-item">
+            Improvements:
+           </div>
+           <div class="diagram-item">
+            What detection should have caught
+           </div>
+           <div class="diagram-item">
+            this earlier?
+           </div>
+           <div class="diagram-item">
+            What prevention could have blocked it?
+           </div>
+           <div class="diagram-item">
+            Update playbook with new learnings
+           </div>
+           <div class="diagram-item">
+            Create custom detection for pattern
+           </div>
+           <div class="diagram-item">
+            Update training if phishing-related
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-building-the-incident-response-toolkit-in-mde-indicator-of-compromise-">
+       <h2>
+        Building the Incident Response Toolkit in MDE Indicator of Compromise (IoC) Blocking:
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Settings &rarr; Endpoints 3 &rarr; Indicators 4 &rarr; + Add indicator 5 6 TYPE: File hash (SHA-256) 7 VALUE: [Hash of Invoice_Dec2024.exe] 8 ACTION: Block and remediate 9 TITLE: Ransomware dropper; Dec 2024 10 phishing campaign 11 SEVERITY: High 12 DESCRIPTION: File dropper from phishing 13 campaign targeting Finance. 14 Block on all devices. 15 16 &rarr; Save 17 18 RESULT: 19 If ANY device in the tenant encounters 20 a file with this hash: 21 &rarr; Defender blocks it immediately 22 &rarr; Alert generated
+       </p>
+       <p>
+        23 &rarr; No investigation needed; known bad
+       </p>
+       <p>
+        Blocking the malicious domain:
+       </p>
+       <p>
+        1
+        <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+         security.microsoft.com
+        </a>
+        2 &boxur;&boxh;&boxh; Settings &rarr; Indicators &rarr; URLs/Domains 3 4 TYPE: Domain 5 VALUE: invoice-portal.xyz 6 ACTION: Block 7 TITLE: Malicious domain; Dec 2024 8 phishing campaign 9 10 &rarr; Save 11 12 RESULT: 13 Any device attempting to reach 14 invoice-portal.xyz: 15 &rarr; Network connection blocked 16 &rarr; User sees: "This website is blocked 17 by your organisation's security policy"
+       </p>
+      </section>
+      <section class="lesson-section" id="section-phase-7-complete-ashscript-security-posture">
+       <h2>
+        Phase 7 Complete: AshScript Security Posture
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="2">
+         <div class="diagram-group">
+          <div class="diagram-flow">
+           <span class="diagram-chip">
+            <a class="lesson-url" href="https://security.microsoft.com" rel="noopener noreferrer" target="_blank">
+             security.microsoft.com
+            </a>
+           </span>
+           <span aria-hidden="true" class="diagram-arrow">
+            &rarr;
+           </span>
+           <span class="diagram-chip">
+            Home
+           </span>
+          </div>
+          <div class="diagram-item">
+           SECURITY POSTURE; END OF PHASE 7:
+          </div>
+         </div>
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           Microsoft Secure Score:
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            Before MDE: Unknown (not measured)
+           </div>
+           <div class="diagram-item">
+            After Phase 7: 561/700 (80%)
+           </div>
+           <div class="diagram-item">
+            (Was 432/700 before implementing
+           </div>
+           <div class="diagram-item">
+            recommendations from Lesson 7.3)
+           </div>
+           <div class="diagram-item">
+            DEVICES:
+           </div>
+           <div class="diagram-item">
+            Onboarded: 839/847 (99%)
+           </div>
+           <div class="diagram-item">
+            Sensor healthy: 832/847 (98%)
+           </div>
+           <div class="diagram-item">
+            No active threats: 844/847 (99.6%)
+           </div>
+           <div class="diagram-item">
+            ALERTS (last 7 days):
+           </div>
+           <div class="diagram-item">
+            High resolved: 2
+           </div>
+           <div class="diagram-item">
+            Medium resolved: 7
+           </div>
+           <div class="diagram-item">
+            Low resolved: 23
+           </div>
+           <div class="diagram-item">
+            Active: 0
+           </div>
+           <div class="diagram-item">
+            VULNERABILITIES:
+           </div>
+           <div class="diagram-item">
+            Critical: 0 (from 3; remediated)
+           </div>
+           <div class="diagram-item">
+            High: 5 (from 12; in progress)
+           </div>
+           <div class="diagram-item">
+            Medium: 28 (patching in progress)
+           </div>
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-phase-7-complete">
+       <h2>
+        Phase 7 Complete
+       </h2>
+       <figure class="diagram-card diagram-card-modern">
+        <div class="diagram-visual" data-diagram-index="3">
+         <div class="diagram-group">
+          <div class="diagram-group-title">
+           ASHSCRIPT TENANT; PHASE 7 COMPLETE
+          </div>
+          <div class="diagram-items">
+           <div class="diagram-item">
+            MDE onboarded: 839/847 devices (all platforms)
+           </div>
+           <div class="diagram-item">
+            Automated investigation + full automation
+           </div>
+           <div class="diagram-item">
+            Alert notifications configured (email + portal)
+           </div>
+           <div class="diagram-item">
+            Custom detections: 5 rules (mass exfil + others)
+           </div>
+           <div class="diagram-item">
+            Advanced Hunting: 4 proactive hunt queries
+           </div>
+           <div class="diagram-item">
+            Vulnerability management: 3 critical CVEs resolved
+           </div>
+           <div class="diagram-item">
+            MDE risk &rarr; Intune compliance &rarr; CA access block
+           </div>
+           <div class="diagram-item">
+            Finance/Legal/Exec: Low risk threshold
+           </div>
+           <div class="diagram-item">
+            Incident response playbook documented
+           </div>
+           <div class="diagram-item">
+            IoC blocking: malicious file hash + domain
+           </div>
+           <div class="diagram-item">
+            Security score: 432 &rarr; 561 (+129 points)
+           </div>
+           <div class="diagram-item">
+            2 real incidents: fully investigated + resolved
+           </div>
+          </div>
+         </div>
+         <div class="diagram-group diagram-label-only">
+          <div class="diagram-group-title">
+           Phase 8; Intune Reporting and Operations
+          </div>
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in-phase-7">
+       <h2>
+        Key Concepts to Lock In: Phase 7
+       </h2>
+       <p>
+        Concept Remember This
+       </p>
+       <p>
+        MDE vs Windows Defender Defender = AV only; MDE = EDR + hunting + response + vuln mgmt
+       </p>
+       <p>
+        MDE sensor = "Sense" Windows service; streams continuous telemetry
+       </p>
+      </section>
+      <section class="lesson-section" id="section-device-isolation-cuts-all-network-except-mde-investigation-continues">
+       <h3>
+        Device isolation Cuts all network except MDE: investigation continues
+       </h3>
+       <p>
+        Live Response Remote shell into device; collect, remediate, investigate
+       </p>
+       <p>
+        Concept Remember This
+       </p>
+       <p>
+        Advanced Hunting KQL on 30-day telemetry; proactive threat hunting
+       </p>
+       <p>
+        Automated investigation MDE AI investigates alert + remediates automatically
+       </p>
+       <p>
+        ASR prevalence rule Blocks new/rare executables from internet; stops 0-days
+       </p>
+       <p>
+        MDE risk &rarr; Intune Risk score shared via connector &rarr; drives compliance state
+       </p>
+       <p>
+        High risk = non-compliant Automatic CA block when active threat detected
+       </p>
+       <p>
+        IoC indicators Block known-bad file hashes/domains across entire fleet
+       </p>
+       <p>
+        Custom detections KQL rules that run on schedule; org-specific threat logic
+       </p>
+      </section>
+      <section class="lesson-section" id="section-incident-playbook-detect-contain-investigate-remediate-recover-review">
+       <h3>
+        Incident playbook Detect &rarr; Contain &rarr; Investigate &rarr; Remediate &rarr; Recover &rarr; Review
+       </h3>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../7-4-mde-intune-compliance-integration/">
+         <span class="story-path-number">
+          7.4
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          MDE + Intune Compliance Integration
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          7.5
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Incident Response Workflow
+         </strong>
+         <small>
+          Security &amp; Endpoint Protection
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../7-6-attack-surface-reduction-asr-rules/">
+         <span class="story-path-number">
+          7.6
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Attack Surface Reduction (ASR) Rules
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-7">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/lesson-toc.js">
+  </script>
+ </body>
+</html>

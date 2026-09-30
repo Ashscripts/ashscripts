@@ -1,11 +1,1109 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Windows Compliance Policies · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=17" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=17" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=17" rel="apple-touch-icon"/><title>Lesson 5.2: Windows Compliance Policies · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase5-lesson" style="--lesson-accent:#5aa0ff"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 5</span>/<span>5.2</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 5; COMPLIANCE &amp; CONDITIONAL ACCESS</div><h1>Windows Compliance Policies</h1><p class="lesson-subtitle">Ashpak defines what a secure Windows laptop looks like</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-5"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 5</small><strong>Phase 5; Compliance &amp; Conditional Access</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">5.2 Windows Compliance Policies</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-5">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-building-the-windows-corporate-compliance-policy"><span>02</span><strong>Building the Windows Corporate Compliance Policy</strong></a><a href="#section-actions-for-non-compliance-tab"><span>03</span><strong>Actions for Non-Compliance Tab</strong></a><a href="#section-windows-byod-compliance-policy"><span>04</span><strong>Windows BYOD Compliance Policy</strong></a><a href="#section-windows-compliance-monitoring"><span>05</span><strong>Windows Compliance Monitoring</strong></a><a href="#section-troubleshooting-windows-compliance-issues"><span>06</span><strong>Troubleshooting Windows Compliance Issues</strong></a><a href="#section-ashscript-s-current-state-after-lesson-5-2"><span>07</span><strong>AshScript's Current State After Lesson 5.2</strong></a><a href="#section-key-concepts-to-lock-in-lesson-5-2"><span>08</span><strong>Key Concepts to Lock In; Lesson 5.2</strong></a></nav></aside>
-<article aria-label="Lesson 5.2; Windows Compliance Policies" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-5">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Same Wednesday. 11:30 AM. Ashpak has the compliance policy framework clear in his mind. Now he builds the actual rules; starting with Windows, which covers 800 of AshScript's 847 enrolled devices. He opens a document and lists what a compliant AshScript Windows laptop looks like: 1 ASHSCRIPT COMPLIANT WINDOWS DEVICE: 2 ────────────────────────────────────────────────────── 3 Windows 10 21H2 minimum (or Windows 11) 4 BitLocker enabled on OS drive 5 Secure Boot enabled 6 Code Integrity (HVCI) enabled 7 Microsoft Defender active and up-to-date 8 Firewall enabled 9 No high or critical active threats 10 Password/PIN required to sign in 11 Device not jailbroken or tampered with 12 Checked in with Intune within 30 days</p><p>This list becomes the compliance policy.</p></section><section class="lesson-section" id="section-building-the-windows-corporate-compliance-policy"><h2>Building the Windows Corporate Compliance Policy</h2><p>Device Health Tab 13 ────────────────────────────────────────────────────── 1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Compliance policies</div></div><div class="diagram-note">+ Create Policy</div></div></div><p>4 Platform: Windows 10 and later</p><p>5 → Create 7 Name: WIN-COMPLY-Corporate 8 Description: Compliance requirements for all 9 AshScript corporate Windows devices 10 Enforces encryption, AV, OS version, 11 security configuration</p><div class="table-lead">Reference table</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SETTING</th><th scope="col">VALUE</th></tr></thead><tbody><tr><td>Require BitLocker</td><td>Require<br/>(device must have<br/>BitLocker enabled on<br/>OS drive)</td></tr><tr><td>Require Secure Boot to be<br/>enabled on the device</td><td>Require<br/>(protects boot process<br/>from rootkits)</td></tr><tr><td>Require code integrity</td><td>Require<br/>(HVCI; validates<br/>kernel integrity)</td></tr></tbody></table></div><p>Device Properties Tab</p><div class="callout lesson-source-callout"><span>OS version format for Windows: The format is Major.Minor.Build.Revision; for example:</span></div><p>Ashpak sets minimum to 10.0.19044; any build below this is non-compliant. System Security Tab</p><div class="table-lead">Reference table</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SETTING</th><th scope="col">VALUE</th></tr></thead><tbody><tr><td>Minimum OS version</td><td>10.0.19044.0<br/>(Windows 10 21H2<br/>minimum)</td></tr><tr><td>Maximum OS version</td><td>Not configured<br/>(allow Windows 11<br/>and future versions)</td></tr><tr><td>Valid operating systems</td><td>Not configured<br/>(Windows 10 + 11 both<br/>acceptable)</td></tr></tbody></table></div><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Windows 10 21H2</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">10.0.19044</div></div><div class="flow-row"><div class="flow-node flow-node-key">Windows 10 22H2</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">10.0.19045</div></div><div class="flow-row"><div class="flow-node flow-node-key">Windows 11 22H2</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">10.0.22621</div></div><div class="flow-row"><div class="flow-node flow-node-key">Windows 11 23H2</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">10.0.22631</div></div><div class="flow-row"><div class="flow-node flow-node-key">Windows 11 24H2</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">10.0.26100</div></div><div class="diagram-note">SYSTEM SECURITY SETTINGS</div><div class="diagram-note">CATEGORY / SETTING                VALUE</div><div class="diagram-note">┼</div><div class="diagram-note">PASSWORD</div><div class="diagram-note">Require a password to unlock      Require</div></div></div><p>Microsoft Defender for Endpoint Tab For devices onboarded to Defender for Endpoint (MDE), Ashpak adds risk-based compliance:</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">mobile devices</div><div class="flow-node">Simple passwords                  Block</div><div class="flow-node">Password type                     Alphanumeric</div><div class="flow-node">Minimum password length           10</div><div class="flow-node">Maximum minutes of inactivity     5 minutes</div><div class="flow-node">before password is required</div><div class="flow-node">Password expiration (days)        90</div><div class="flow-node">Number of previous passwords      5</div><div class="flow-node">to prevent reuse</div><div class="flow-node">┼</div><div class="flow-node">ENCRYPTION</div><div class="flow-node">Require encryption of data        Require</div><div class="flow-node">storage on device</div><div class="flow-node">┼</div><div class="flow-node">DEVICE SECURITY</div><div class="flow-node">Firewall                          Require</div><div class="flow-node">Trusted Platform Module (TPM)     Require</div><div class="flow-node">Antivirus                         Require</div><div class="flow-node">(registered in</div><div class="flow-node">Windows Security Centre)</div><div class="flow-node">Antispyware                       Require</div><div class="flow-node">┼</div><div class="flow-node">MICROSOFT DEFENDER</div><div class="flow-node">Antimalware                       Require</div><div class="flow-node">Antimalware security              Require</div><div class="flow-node">intelligence up-to-date</div><div class="flow-node">Real-time protection              Require</div><div class="flow-node">DEFENDER FOR ENDPOINT SETTINGS</div><div class="flow-node">SETTING                           VALUE</div><div class="flow-node">┼</div><div class="flow-node">Require the device to be at       Medium</div><div class="flow-node">or under the machine risk score</div><div class="diagram-kv"><span class="diagram-k">Risk levels</span><strong></strong></div><div class="flow-node">Clear → Low → Medium</div><div class="flow-node">→ High</div><div class="flow-node">If device risk = High</div><div class="flow-node">→ Non-compliant</div><div class="flow-node">(active threat detected)</div></div></div></div><div class="callout lesson-source-callout"><span>Defender risk score integration: MDE continuously analyses device telemetry and assigns a</span></div><p>risk score. Intune compliance policy checks this score. If a device has an active malware infection (High risk), it immediately becomes non-compliant; Conditional Access blocks it from corporate resources even if every other compliance check passes. This is real-time threat-based access control.</p></section><section class="lesson-section" id="section-actions-for-non-compliance-tab"><h2>Actions for Non-Compliance Tab</h2><p>Assignments:</p></section><section class="lesson-section" id="section-windows-byod-compliance-policy"><h2>Windows BYOD Compliance Policy</h2><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">ACTIONS FOR NON-COMPLIANCE</div><div class="flow-node">ACTION                      SCHEDULE   MESSAGE TEMPLATE</div><div class="flow-node">┼┼</div><div class="flow-node">Send email to end user      0 days     AshScript</div><div class="flow-node">(immediately) Non-Compliance</div><div class="flow-node">Alert</div><div class="flow-node">┼┼</div><div class="flow-node">Mark device non-compliant   3 days    ;</div><div class="flow-node">┼┼</div><div class="flow-node">Send push notification      3 days     "Action required:</div><div class="flow-node">secure your</div><div class="flow-node">device"</div><div class="flow-node">┼┼</div><div class="flow-node">Remotely lock device        30 days   ;</div><div class="flow-node">┼┼</div><div class="flow-node">Retire device               60 days   ;</div></div></div></div><p>1 Include: INTUNE-DEV-WINDOWS-CORPORATE 2 Exclude: INTUNE-DEV-PILOT 3 (Pilot tests separately first)</p><p>4 → Review + Create</p><p>For personal Windows devices that ARE enrolled (Rohan's scenario; less strict):</p></section><section class="lesson-section" id="section-windows-compliance-monitoring"><h2>Windows Compliance Monitoring</h2><p>Compliance Overview Dashboard: Drill into non-compliant devices: 1 Name: WIN-COMPLY-BYOD 3 KEY DIFFERENCES FROM CORPORATE:</p><div class="table-lead">Reference table</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SETTING</th><th scope="col">CORPORATE</th><th scope="col">BYOD</th></tr></thead><tbody><tr><td>BitLocker<br/>Secure Boot<br/>Code Integrity<br/>Minimum OS<br/>Antivirus<br/>Firewall<br/>Password length<br/>MDE risk score<br/>Grace period</td><td>Require<br/>Require<br/>Require<br/>10.0.19044<br/>(21H2)<br/>Require<br/>Require<br/>10<br/>Medium max<br/>3 days</td><td>Require<br/>Require<br/>Not configured<br/>10.0.19041<br/>(2004; older ok)<br/>Require<br/>Require<br/>8<br/>Not configured<br/>(no MDE on BYOD)<br/>7 days<br/>(more lenient)</td></tr></tbody></table></div><p>21 Assign to: INTUNE-DEV-WINDOWS-BYOD 1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Compliance policies</div></div><div class="diagram-note">WIN-COMPLY-Corporate</div><div class="diagram-note">Device status</div><div class="diagram-note">Compliant:         712</div><div class="diagram-note">Non-compliant:      48  ×</div><div class="diagram-note">In grace period:    22  Warning:</div><div class="diagram-note">Not evaluated:      15</div><div class="diagram-note">Error:               3</div></div></div><p>Overall tenant compliance posture:</p></section><section class="lesson-section" id="section-troubleshooting-windows-compliance-issues"><h2>Troubleshooting Windows Compliance Issues</h2><p>Issue 1; Device Shows Non-Compliant for BitLocker Despite Policy 1 Filter: Status = Non-compliant 2 Shows each device + which rule(s) failed: 4 DEVICE FAILED RULE 5 ASHPC-ROHAN02 BitLocker not enabled 6 ASHPC-SALES-07 OS version: 10.0.18363 7 (below minimum 10.0.19044) 8 ASHPC-FINANCE-03 Antivirus: Not reporting 9 ASHPC-DEV-12 Defender: Signatures 10 out of date 1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Reports</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Device Compliance</div></div><div class="diagram-note">Device compliance report</div></div></div><p>4 Overall compliance: 84.1% 5 Non-compliant by setting: 6 BitLocker: 23 devices 7 OS version: 31 devices 8 Antivirus: 12 devices 9 Firewall: 4 devices 1 SYMPTOM: BitLocker compliance check fails 2 even though BitLocker profile shows 3 Succeeded 5 CAUSE: Compliance checks BitLocker STATUS 6 not whether the profile was applied 7 Profile success ≠ encryption complete 9 COMMON SCENARIOS: 10 A) BitLocker encrypting (in progress)</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Shows non-compliant until complete</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">Wait for encryption to finish</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">Check: manage-bde -status C:</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>Issue 2; OS Version Non-Compliant After Update Ring Deployed Issue 3; Antivirus Shows Non-Compliant on Healthy Device</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">B) TPM not ready</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">BitLocker can't enable</div></div><div class="flow-row"><div class="flow-node flow-node-key">Check tpm.msc on device</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>18 C) BitLocker profile applied but user 19 dismissed the encryption prompt</p><p>20 → On Intune portal: verify 21 BitLocker profile AND compliance 22 status separately 24 FIX: 25 Force BitLocker on device: 26 manage-bde -on C: -RecoveryPassword 27 OR wait for profile to trigger encryption</p><p>28 Force sync after: Device → Sync 1 SYMPTOM: Devices showing non-compliant for 2 OS version even after Update Ring 3 deployed 5 CAUSE: Update ring has 7-day deferral 6 Compliance policy requires newer build 7 Devices haven't updated yet 9 LOGIC: 10 Update Ring: 7-day deferral 11 Compliance: Requires build 10.0.19045</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Day 1-7: Device at 10.0.19044</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Non-compliant</div></div><div class="flow-row"><div class="flow-node flow-node-key">Day 8+:  Update installs</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Compliant</div></div></div></div><p>15 FIX (option 1): 16 Adjust minimum OS version in compliance 17 to match currently deployed build 18 Update after new build confirmed deployed 20 FIX (option 2): 21 Extend grace period to 10 days 22 Covers the 7-day deferral + 3-day buffer 23 Devices won't be marked non-compliant 24 during the update window</p></section><section class="lesson-section" id="section-ashscript-s-current-state-after-lesson-5-2"><h2>AshScript's Current State After Lesson 5.2</h2><p>1 SYMPTOM: Device shows non-compliant for 2 "Antivirus" but Defender is running 4 CAUSE: Windows Security Centre (WSC) not 5 correctly reporting Defender status 6 to Intune 8 DIAGNOSIS: 9 On device: PowerShell (admin) 10 Get-MpComputerStatus</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">AMRunningMode: Normal</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">RealTimeProtectionEnabled: True</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">(Defender is fine)</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>15 WSC report to Intune may be stale</p><p>16 → Force sync + wait for re-evaluation 18 FIX: 19 Restart Windows Security service: 20 sc stop wscsvc &amp;&amp; sc start wscsvc 21 Force Intune sync 22 Allow 30 minutes for re-evaluation</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">ASHSCRIPT TENANT</div><div class="diagram-note">Default compliance behaviour: Not compliant</div><div class="diagram-note">Non-compliance notification template created</div><div class="diagram-note">Compliance policy plan documented</div><div class="diagram-note">Grace period strategy: 3 days</div><div class="flow-row"><div class="flow-node flow-node-key">Action timeline: Email Day 0</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Block Day 3</div></div><div class="flow-row"><div class="flow-node flow-node-key">Lock Day 30</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Retire Day 60</div></div><div class="diagram-note">Windows compliance policy (Lesson 5.2)</div><div class="diagram-note">macOS compliance policy (Lesson 5.3)</div><div class="diagram-note">iOS compliance policy (Lesson 5.4)</div><div class="diagram-note">Android compliance policy (Lesson 5.5)</div><div class="diagram-note">Compliance + CA integration (Lesson 5.6)</div></div></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in-lesson-5-2"><h2>Key Concepts to Lock In: Lesson 5.2</h2><p>Concept Remember This Windows OS version format Major.Minor.Build; 10.0.19044 = Win10 21H2 BitLocker compliance Checks encryption STATUS; not whether profile applied MDE risk score High risk = non-compliant; real-time threat blocking BYOD vs corporate BYOD gets relaxed rules + longer grace period Secure Boot compliance Must be enabled; protects boot process Grace period + update rings Extend grace to cover update deferral window WSC reporting Windows Security Centre reports AV status to Intune Non-compliance drill-down Per-device view shows exactly which rule failed</p></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../5-1-compliance-policy-fundamentals/"><span class="story-path-number">5.1</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Compliance Policy Fundamentals</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">5.2</span><span class="story-path-label">YOU ARE HERE</span><strong>Windows Compliance Policies</strong><small>Compliance &amp; Conditional Access</small></div><a class="story-path-step story-path-next" href="../5-3-macos-compliance-policies/"><span class="story-path-number">5.3</span><span class="story-path-label">NEXT CHAPTER</span><strong>macOS Compliance Policies</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-5">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Windows Compliance Policies &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=17" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=17" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=17" rel="apple-touch-icon"/>
+  <title>
+   Lesson 5.2: Windows Compliance Policies &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 5
+      </span>
+      /
+      <span>
+       5.2
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 5; COMPLIANCE &amp; CONDITIONAL ACCESS
+     </div>
+     <h1>
+      Windows Compliance Policies
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak defines what a secure Windows laptop looks like
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-5">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 5
+        </small>
+        <strong>
+         Phase 5; Compliance &amp; Conditional Access
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       5.2 Windows Compliance Policies
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-5">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-building-the-windows-corporate-compliance-policy">
+        <span>
+         02
+        </span>
+        <strong>
+         Building the Windows Corporate Compliance Policy
+        </strong>
+       </a>
+       <a href="#section-actions-for-non-compliance-tab">
+        <span>
+         03
+        </span>
+        <strong>
+         Actions for Non-Compliance Tab
+        </strong>
+       </a>
+       <a href="#section-windows-byod-compliance-policy">
+        <span>
+         04
+        </span>
+        <strong>
+         Windows BYOD Compliance Policy
+        </strong>
+       </a>
+       <a href="#section-windows-compliance-monitoring">
+        <span>
+         05
+        </span>
+        <strong>
+         Windows Compliance Monitoring
+        </strong>
+       </a>
+       <a href="#section-troubleshooting-windows-compliance-issues">
+        <span>
+         06
+        </span>
+        <strong>
+         Troubleshooting Windows Compliance Issues
+        </strong>
+       </a>
+       <a href="#section-ashscript-s-current-state-after-lesson-5-2">
+        <span>
+         07
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 5.2
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in-lesson-5-2">
+        <span>
+         08
+        </span>
+        <strong>
+         Key Concepts to Lock In; Lesson 5.2
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 5.2; Windows Compliance Policies" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-5">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Same Wednesday. 11:30 AM. Ashpak has the compliance policy framework clear in his mind. Now he builds the actual rules; starting with Windows, which covers 800 of AshScript's 847 enrolled devices. He opens a document and lists what a compliant AshScript Windows laptop looks like: 1 ASHSCRIPT COMPLIANT WINDOWS DEVICE: 2 &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh; 3 Windows 10 21H2 minimum (or Windows 11) 4 BitLocker enabled on OS drive 5 Secure Boot enabled 6 Code Integrity (HVCI) enabled 7 Microsoft Defender active and up-to-date 8 Firewall enabled 9 No high or critical active threats 10 Password/PIN required to sign in 11 Device not jailbroken or tampered with 12 Checked in with Intune within 30 days
+       </p>
+       <p>
+        This list becomes the compliance policy.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-building-the-windows-corporate-compliance-policy">
+       <h2>
+        Building the Windows Corporate Compliance Policy
+       </h2>
+       <p>
+        Device Health Tab 13 &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh; 1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Compliance policies
+          </div>
+         </div>
+         <div class="diagram-note">
+          + Create Policy
+         </div>
+        </div>
+       </div>
+       <p>
+        4 Platform: Windows 10 and later
+       </p>
+       <p>
+        5 &rarr; Create 7 Name: WIN-COMPLY-Corporate 8 Description: Compliance requirements for all 9 AshScript corporate Windows devices 10 Enforces encryption, AV, OS version, 11 security configuration
+       </p>
+       <div class="table-lead">
+        Reference table
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SETTING
+           </th>
+           <th scope="col">
+            VALUE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Require BitLocker
+           </td>
+           <td>
+            Require
+            <br/>
+            (device must have
+            <br/>
+            BitLocker enabled on
+            <br/>
+            OS drive)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Require Secure Boot to be
+            <br/>
+            enabled on the device
+           </td>
+           <td>
+            Require
+            <br/>
+            (protects boot process
+            <br/>
+            from rootkits)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Require code integrity
+           </td>
+           <td>
+            Require
+            <br/>
+            (HVCI; validates
+            <br/>
+            kernel integrity)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        Device Properties Tab
+       </p>
+       <div class="callout lesson-source-callout">
+        <span>
+         OS version format for Windows: The format is Major.Minor.Build.Revision; for example:
+        </span>
+       </div>
+       <p>
+        Ashpak sets minimum to 10.0.19044; any build below this is non-compliant. System Security Tab
+       </p>
+       <div class="table-lead">
+        Reference table
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SETTING
+           </th>
+           <th scope="col">
+            VALUE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Minimum OS version
+           </td>
+           <td>
+            10.0.19044.0
+            <br/>
+            (Windows 10 21H2
+            <br/>
+            minimum)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Maximum OS version
+           </td>
+           <td>
+            Not configured
+            <br/>
+            (allow Windows 11
+            <br/>
+            and future versions)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Valid operating systems
+           </td>
+           <td>
+            Not configured
+            <br/>
+            (Windows 10 + 11 both
+            <br/>
+            acceptable)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Windows 10 21H2
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           10.0.19044
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Windows 10 22H2
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           10.0.19045
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Windows 11 22H2
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           10.0.22621
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Windows 11 23H2
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           10.0.22631
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Windows 11 24H2
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           10.0.26100
+          </div>
+         </div>
+         <div class="diagram-note">
+          SYSTEM SECURITY SETTINGS
+         </div>
+         <div class="diagram-note">
+          CATEGORY / SETTING                VALUE
+         </div>
+         <div class="diagram-note">
+          &boxvh;
+         </div>
+         <div class="diagram-note">
+          PASSWORD
+         </div>
+         <div class="diagram-note">
+          Require a password to unlock      Require
+         </div>
+        </div>
+       </div>
+       <p>
+        Microsoft Defender for Endpoint Tab For devices onboarded to Defender for Endpoint (MDE), Ashpak adds risk-based compliance:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           mobile devices
+          </div>
+          <div class="flow-node">
+           Simple passwords                  Block
+          </div>
+          <div class="flow-node">
+           Password type                     Alphanumeric
+          </div>
+          <div class="flow-node">
+           Minimum password length           10
+          </div>
+          <div class="flow-node">
+           Maximum minutes of inactivity     5 minutes
+          </div>
+          <div class="flow-node">
+           before password is required
+          </div>
+          <div class="flow-node">
+           Password expiration (days)        90
+          </div>
+          <div class="flow-node">
+           Number of previous passwords      5
+          </div>
+          <div class="flow-node">
+           to prevent reuse
+          </div>
+          <div class="flow-node">
+           &boxvh;
+          </div>
+          <div class="flow-node">
+           ENCRYPTION
+          </div>
+          <div class="flow-node">
+           Require encryption of data        Require
+          </div>
+          <div class="flow-node">
+           storage on device
+          </div>
+          <div class="flow-node">
+           &boxvh;
+          </div>
+          <div class="flow-node">
+           DEVICE SECURITY
+          </div>
+          <div class="flow-node">
+           Firewall                          Require
+          </div>
+          <div class="flow-node">
+           Trusted Platform Module (TPM)     Require
+          </div>
+          <div class="flow-node">
+           Antivirus                         Require
+          </div>
+          <div class="flow-node">
+           (registered in
+          </div>
+          <div class="flow-node">
+           Windows Security Centre)
+          </div>
+          <div class="flow-node">
+           Antispyware                       Require
+          </div>
+          <div class="flow-node">
+           &boxvh;
+          </div>
+          <div class="flow-node">
+           MICROSOFT DEFENDER
+          </div>
+          <div class="flow-node">
+           Antimalware                       Require
+          </div>
+          <div class="flow-node">
+           Antimalware security              Require
+          </div>
+          <div class="flow-node">
+           intelligence up-to-date
+          </div>
+          <div class="flow-node">
+           Real-time protection              Require
+          </div>
+          <div class="flow-node">
+           DEFENDER FOR ENDPOINT SETTINGS
+          </div>
+          <div class="flow-node">
+           SETTING                           VALUE
+          </div>
+          <div class="flow-node">
+           &boxvh;
+          </div>
+          <div class="flow-node">
+           Require the device to be at       Medium
+          </div>
+          <div class="flow-node">
+           or under the machine risk score
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Risk levels
+           </span>
+           <strong>
+           </strong>
+          </div>
+          <div class="flow-node">
+           Clear &rarr; Low &rarr; Medium
+          </div>
+          <div class="flow-node">
+           &rarr; High
+          </div>
+          <div class="flow-node">
+           If device risk = High
+          </div>
+          <div class="flow-node">
+           &rarr; Non-compliant
+          </div>
+          <div class="flow-node">
+           (active threat detected)
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="callout lesson-source-callout">
+        <span>
+         Defender risk score integration: MDE continuously analyses device telemetry and assigns a
+        </span>
+       </div>
+       <p>
+        risk score. Intune compliance policy checks this score. If a device has an active malware infection (High risk), it immediately becomes non-compliant; Conditional Access blocks it from corporate resources even if every other compliance check passes. This is real-time threat-based access control.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-actions-for-non-compliance-tab">
+       <h2>
+        Actions for Non-Compliance Tab
+       </h2>
+       <p>
+        Assignments:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-windows-byod-compliance-policy">
+       <h2>
+        Windows BYOD Compliance Policy
+       </h2>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           ACTIONS FOR NON-COMPLIANCE
+          </div>
+          <div class="flow-node">
+           ACTION                      SCHEDULE   MESSAGE TEMPLATE
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Send email to end user      0 days     AshScript
+          </div>
+          <div class="flow-node">
+           (immediately) Non-Compliance
+          </div>
+          <div class="flow-node">
+           Alert
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Mark device non-compliant   3 days    ;
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Send push notification      3 days     "Action required:
+          </div>
+          <div class="flow-node">
+           secure your
+          </div>
+          <div class="flow-node">
+           device"
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Remotely lock device        30 days   ;
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Retire device               60 days   ;
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        1 Include: INTUNE-DEV-WINDOWS-CORPORATE 2 Exclude: INTUNE-DEV-PILOT 3 (Pilot tests separately first)
+       </p>
+       <p>
+        4 &rarr; Review + Create
+       </p>
+       <p>
+        For personal Windows devices that ARE enrolled (Rohan's scenario; less strict):
+       </p>
+      </section>
+      <section class="lesson-section" id="section-windows-compliance-monitoring">
+       <h2>
+        Windows Compliance Monitoring
+       </h2>
+       <p>
+        Compliance Overview Dashboard: Drill into non-compliant devices: 1 Name: WIN-COMPLY-BYOD 3 KEY DIFFERENCES FROM CORPORATE:
+       </p>
+       <div class="table-lead">
+        Reference table
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SETTING
+           </th>
+           <th scope="col">
+            CORPORATE
+           </th>
+           <th scope="col">
+            BYOD
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            BitLocker
+            <br/>
+            Secure Boot
+            <br/>
+            Code Integrity
+            <br/>
+            Minimum OS
+            <br/>
+            Antivirus
+            <br/>
+            Firewall
+            <br/>
+            Password length
+            <br/>
+            MDE risk score
+            <br/>
+            Grace period
+           </td>
+           <td>
+            Require
+            <br/>
+            Require
+            <br/>
+            Require
+            <br/>
+            10.0.19044
+            <br/>
+            (21H2)
+            <br/>
+            Require
+            <br/>
+            Require
+            <br/>
+            10
+            <br/>
+            Medium max
+            <br/>
+            3 days
+           </td>
+           <td>
+            Require
+            <br/>
+            Require
+            <br/>
+            Not configured
+            <br/>
+            10.0.19041
+            <br/>
+            (2004; older ok)
+            <br/>
+            Require
+            <br/>
+            Require
+            <br/>
+            8
+            <br/>
+            Not configured
+            <br/>
+            (no MDE on BYOD)
+            <br/>
+            7 days
+            <br/>
+            (more lenient)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        21 Assign to: INTUNE-DEV-WINDOWS-BYOD 1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Compliance policies
+          </div>
+         </div>
+         <div class="diagram-note">
+          WIN-COMPLY-Corporate
+         </div>
+         <div class="diagram-note">
+          Device status
+         </div>
+         <div class="diagram-note">
+          Compliant:         712
+         </div>
+         <div class="diagram-note">
+          Non-compliant:      48  &times;
+         </div>
+         <div class="diagram-note">
+          In grace period:    22  Warning:
+         </div>
+         <div class="diagram-note">
+          Not evaluated:      15
+         </div>
+         <div class="diagram-note">
+          Error:               3
+         </div>
+        </div>
+       </div>
+       <p>
+        Overall tenant compliance posture:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-troubleshooting-windows-compliance-issues">
+       <h2>
+        Troubleshooting Windows Compliance Issues
+       </h2>
+       <p>
+        Issue 1; Device Shows Non-Compliant for BitLocker Despite Policy 1 Filter: Status = Non-compliant 2 Shows each device + which rule(s) failed: 4 DEVICE FAILED RULE 5 ASHPC-ROHAN02 BitLocker not enabled 6 ASHPC-SALES-07 OS version: 10.0.18363 7 (below minimum 10.0.19044) 8 ASHPC-FINANCE-03 Antivirus: Not reporting 9 ASHPC-DEV-12 Defender: Signatures 10 out of date 1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Reports
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Device Compliance
+          </div>
+         </div>
+         <div class="diagram-note">
+          Device compliance report
+         </div>
+        </div>
+       </div>
+       <p>
+        4 Overall compliance: 84.1% 5 Non-compliant by setting: 6 BitLocker: 23 devices 7 OS version: 31 devices 8 Antivirus: 12 devices 9 Firewall: 4 devices 1 SYMPTOM: BitLocker compliance check fails 2 even though BitLocker profile shows 3 Succeeded 5 CAUSE: Compliance checks BitLocker STATUS 6 not whether the profile was applied 7 Profile success &ne; encryption complete 9 COMMON SCENARIOS: 10 A) BitLocker encrypting (in progress)
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Shows non-compliant until complete
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Wait for encryption to finish
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Check: manage-bde -status C:
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        Issue 2; OS Version Non-Compliant After Update Ring Deployed Issue 3; Antivirus Shows Non-Compliant on Healthy Device
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           B) TPM not ready
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           BitLocker can't enable
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Check tpm.msc on device
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        18 C) BitLocker profile applied but user 19 dismissed the encryption prompt
+       </p>
+       <p>
+        20 &rarr; On Intune portal: verify 21 BitLocker profile AND compliance 22 status separately 24 FIX: 25 Force BitLocker on device: 26 manage-bde -on C: -RecoveryPassword 27 OR wait for profile to trigger encryption
+       </p>
+       <p>
+        28 Force sync after: Device &rarr; Sync 1 SYMPTOM: Devices showing non-compliant for 2 OS version even after Update Ring 3 deployed 5 CAUSE: Update ring has 7-day deferral 6 Compliance policy requires newer build 7 Devices haven't updated yet 9 LOGIC: 10 Update Ring: 7-day deferral 11 Compliance: Requires build 10.0.19045
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Day 1-7: Device at 10.0.19044
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Non-compliant
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Day 8+:  Update installs
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Compliant
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        15 FIX (option 1): 16 Adjust minimum OS version in compliance 17 to match currently deployed build 18 Update after new build confirmed deployed 20 FIX (option 2): 21 Extend grace period to 10 days 22 Covers the 7-day deferral + 3-day buffer 23 Devices won't be marked non-compliant 24 during the update window
+       </p>
+      </section>
+      <section class="lesson-section" id="section-ashscript-s-current-state-after-lesson-5-2">
+       <h2>
+        AshScript's Current State After Lesson 5.2
+       </h2>
+       <p>
+        1 SYMPTOM: Device shows non-compliant for 2 "Antivirus" but Defender is running 4 CAUSE: Windows Security Centre (WSC) not 5 correctly reporting Defender status 6 to Intune 8 DIAGNOSIS: 9 On device: PowerShell (admin) 10 Get-MpComputerStatus
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           AMRunningMode: Normal
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           RealTimeProtectionEnabled: True
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           (Defender is fine)
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        15 WSC report to Intune may be stale
+       </p>
+       <p>
+        16 &rarr; Force sync + wait for re-evaluation 18 FIX: 19 Restart Windows Security service: 20 sc stop wscsvc &amp;&amp; sc start wscsvc 21 Force Intune sync 22 Allow 30 minutes for re-evaluation
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          ASHSCRIPT TENANT
+         </div>
+         <div class="diagram-note">
+          Default compliance behaviour: Not compliant
+         </div>
+         <div class="diagram-note">
+          Non-compliance notification template created
+         </div>
+         <div class="diagram-note">
+          Compliance policy plan documented
+         </div>
+         <div class="diagram-note">
+          Grace period strategy: 3 days
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Action timeline: Email Day 0
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Block Day 3
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Lock Day 30
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Retire Day 60
+          </div>
+         </div>
+         <div class="diagram-note">
+          Windows compliance policy (Lesson 5.2)
+         </div>
+         <div class="diagram-note">
+          macOS compliance policy (Lesson 5.3)
+         </div>
+         <div class="diagram-note">
+          iOS compliance policy (Lesson 5.4)
+         </div>
+         <div class="diagram-note">
+          Android compliance policy (Lesson 5.5)
+         </div>
+         <div class="diagram-note">
+          Compliance + CA integration (Lesson 5.6)
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in-lesson-5-2">
+       <h2>
+        Key Concepts to Lock In: Lesson 5.2
+       </h2>
+       <p>
+        Concept Remember This Windows OS version format Major.Minor.Build; 10.0.19044 = Win10 21H2 BitLocker compliance Checks encryption STATUS; not whether profile applied MDE risk score High risk = non-compliant; real-time threat blocking BYOD vs corporate BYOD gets relaxed rules + longer grace period Secure Boot compliance Must be enabled; protects boot process Grace period + update rings Extend grace to cover update deferral window WSC reporting Windows Security Centre reports AV status to Intune Non-compliance drill-down Per-device view shows exactly which rule failed
+       </p>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../5-1-compliance-policy-fundamentals/">
+         <span class="story-path-number">
+          5.1
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Compliance Policy Fundamentals
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          5.2
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Windows Compliance Policies
+         </strong>
+         <small>
+          Compliance &amp; Conditional Access
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../5-3-macos-compliance-policies/">
+         <span class="story-path-number">
+          5.3
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          macOS Compliance Policies
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-5">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+ </body>
+</html>

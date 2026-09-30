@@ -1,58 +1,1789 @@
 <!DOCTYPE html>
-
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="Enrollment Methods: Every Platform Explained · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
-<link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
-<link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
-<title>Lesson 3.1: Enrollment Methods: Every Platform Explained · ashscript</title>
-<link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
-</head>
-<body class="phase3-lesson" style="--lesson-accent:#ffd60a">
-<header class="site-header"><div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav="">
-<a href="../../">Scripts</a>
-<details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details>
-<a href="../../who-am-i/">Who Am I</a>
-</nav>
-</div></header>
-<main>
-<section class="page-hero intune-lesson-hero">
-<div class="container">
-<div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 3</span>/<span>3.1</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 3; ENROLLING DEVICES</div>
-<h1>Enrollment Methods: Every Platform Explained</h1>
-<p class="lesson-subtitle">Ashpak faces 50 boxes, 6 platforms, and one Friday deadline</p>
-</div>
-</section>
-<section class="section lesson-reader">
-<div class="container lesson-reader-layout">
-<aside class="lesson-sidebar">
-<div class="toc-label">COURSE NAVIGATION</div>
-<a class="lesson-phase-link" href="../../intune/#phase-3">
-<span aria-hidden="true" class="lesson-phase-dot"></span>
-<span class="lesson-phase-copy"><small>PHASE 3</small><strong>Phase 3 · Enrolling Devices</strong></span>
-</a>
-<div class="toc-label" style="margin-top:8px">CURRENT LESSON</div>
-<div class="lesson-index">3.1 Enrollment Methods: Every Platform Explained</div>
-<a class="phase-back learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a>
-<div class="toc-label" style="margin-top:6px">ON THIS LESSON</div>
-<nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-what-is-device-enrollment"><span>02</span><strong>What is Device Enrollment?</strong></a><a href="#section-the-enrollment-landscape-every-method"><span>03</span><strong>The Enrollment Landscape; Every Method</strong></a><a href="#section-windows-enrollment-methods-deep-dive"><span>04</span><strong>Windows Enrollment Methods; Deep Dive</strong></a><a href="#section-method-1-windows-autopilot-primary-method-for-new-devices"><span>05</span><strong>Method 1; Windows Autopilot Recommended: (Primary Method for New Devices)</strong></a><a href="#section-method-2-co-management-sccm-intune-primary-method-for-existing-devices"><span>06</span><strong>Method 2; Co-Management (SCCM + Intune) Recommended: (Primary Method for Existing Devices)</strong></a><a href="#section-method-3-group-policy-auto-enrollment"><span>07</span><strong>Method 3; Group Policy Auto-Enrollment</strong></a><a href="#section-method-4-entra-join-during-oobe-manual"><span>08</span><strong>Method 4; Entra Join During OOBE (Manual)</strong></a><a href="#section-method-5-bulk-enrollment-provisioning-package"><span>09</span><strong>Method 5; Bulk Enrollment (Provisioning Package)</strong></a><a href="#section-macos-enrollment-methods-deep-dive"><span>10</span><strong>macOS Enrollment Methods; Deep Dive</strong></a><a href="#section-method-1-ade-automated-device-enrollment-primary"><span>11</span><strong>Method 1; ADE (Automated Device Enrollment) Recommended: Primary</strong></a><a href="#section-method-2-company-portal-manual-macos-enrollment"><span>12</span><strong>Method 2; Company Portal (Manual macOS Enrollment)</strong></a><a href="#section-android-enrollment-methods-deep-dive"><span>13</span><strong>Android Enrollment Methods; Deep Dive</strong></a><a href="#section-method-1-android-enterprise-work-profile-byod"><span>14</span><strong>Method 1; Android Enterprise Work Profile (BYOD) Recommended:</strong></a><a href="#section-method-2-android-enterprise-fully-managed-cobo"><span>15</span><strong>Method 2; Android Enterprise Fully Managed (COBO) Recommended:</strong></a><a href="#section-method-3-android-enterprise-cope-corporate-owned-personally-enabled"><span>16</span><strong>Method 3; Android Enterprise COPE (Corporate-Owned, Personally Enabled)</strong></a><a href="#section-method-4-android-dedicated-kiosk"><span>17</span><strong>Method 4; Android Dedicated (Kiosk)</strong></a><a href="#section-iosipados-enrollment"><span>18</span><strong>iOS/iPadOS Enrollment</strong></a><a href="#section-linux-enrollment"><span>19</span><strong>Linux Enrollment</strong></a><a href="#section-prerequisites-before-any-enrollment-happens"><span>20</span><strong>Prerequisites Before Any Enrollment Happens</strong></a><a href="#section-ashscripts-enrollment-strategy-the-master-plan"><span>21</span><strong>AshScript's Enrollment Strategy; The Master Plan</strong></a><a href="#section-enrollment-restrictions-controlling-what-can-enroll"><span>22</span><strong>Enrollment Restrictions; Controlling What Can Enroll</strong></a><a href="#section-ashscripts-current-state-after-lesson-31"><span>23</span><strong>AshScript's Current State After Lesson 3.1</strong></a><a href="#section-key-concepts-to-lock-in"><span>24</span><strong>Key Concepts to Lock In</strong></a></nav>
-</aside>
-<article aria-label="Lesson 3.1; Enrollment Methods: Every Platform Explained" class="lesson-content">
-<div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>It's Monday morning. The IT room at AshScript looks like a delivery warehouse. Fifty brand-new</p><p>Windows laptops in boxes. A pallet of MacBooks arriving Wednesday. Two hundred Android phones</p><p>already in use by the Sales team. Executives with iPhones. A handful of Linux machines in the Dev</p><p>team. And every employee's personal phone quietly accessing company email.</p><p>Riya stands in the doorway:</p><blockquote class="quote">"Ashpak, I need all of this managed. Every device. Every platform. But here's the constraint; we</blockquote><p>have four IT staff, 1,000 users, and I will not allow a process that requires someone to physically</p><p>touch every machine. Whatever you build must scale."</p><p>Ashpak looks at the room. Then he opens his laptop and pulls up a diagram he's been preparing all</p><p>weekend; AshScript's Device Enrollment Master Plan.</p></section><section class="lesson-section" id="section-what-is-device-enrollment"><h2>What is Device Enrollment?</h2><p>Before a device can be managed by Intune; before policies apply, before apps deploy, before</p><p>compliance is checked; the device must be enrolled.</p><p>Enrollment is the process by which:</p><p>The MDM certificate is what makes this happen. When a device enrolls, Intune issues it an MDM</p><p>certificate. This certificate is the device's proof of identity; it's how Intune knows the device is</p><p>managed and how policies are securely delivered.</p></section><section class="lesson-section" id="section-the-enrollment-landscape-every-method"><h2>The Enrollment Landscape: Every Method</h2><p>There is no single enrollment method. Microsoft has built different methods for different platforms</p><p>and scenarios. Here is the complete map:</p><p>This looks complex; but it becomes logical once you understand the two questions that determine</p><p>which method to use:</p><figure class="lesson-figure native-diagram"><img alt="Enrollment decision model for Intune platforms and methods." loading="lazy" src="../../assets/images/intune/lesson-3-1-enrollment-model.svg"/><figcaption>Ownership and pre-configuration determine the enrollment path.</figcaption></figure><div class="table-lead">Enrollment methods map</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Platform</th><th scope="col">Enrollment methods</th></tr></thead><tbody><tr><td>Windows</td><td>Windows Autopilot (zero-touch) • Co-management (SCCM + Intune) • Entra join during OOBE (manual) • Group Policy auto-enrollment • Bulk enrollment (provisioning package)</td></tr><tr><td>macOS</td><td>ADE - Automated Device Enrollment (Apple) • Company Portal (manual) • Direct enrollment (no user affinity)</td></tr><tr><td>iOS/iPadOS</td><td>ADE - Automated Device Enrollment • Apple Configurator 2 • Company Portal (BYOD)</td></tr><tr><td>Android</td><td>Android Enterprise - Work Profile (BYOD) • Android Enterprise - Fully Managed (COBO) • Android Enterprise - COPE • Android Enterprise - Dedicated (Kiosk) • Samsung Knox Mobile Enrollment</td></tr><tr><td>Linux</td><td>Microsoft Intune app (manual) • Limited management; growing feature set</td></tr></tbody></table></div></section><section class="lesson-section" id="section-windows-enrollment-methods-deep-dive"><h2>Windows Enrollment Methods: Deep Dive</h2><p>Windows is AshScript's primary platform; 800 of the 1,000 devices are Windows. Getting this right is</p><p>critical.</p></section><section class="lesson-section" id="section-method-1-windows-autopilot-primary-method-for-new-devices"><h3>Method 1: Windows Autopilot Recommended: (Primary Method for New Devices)</h3><p>What it is: A cloud-based zero-touch deployment service. You register a device's hardware hash with</p><p>Autopilot. When the user turns the device on for the first time, it recognises itself, downloads the</p><p>Intune configuration, and self-provisions; no IT involvement needed.</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">QUESTION 1: Who owns the device?</div><div class="diagram-tile">Corporate-owned → Full MDM enrollment</div><div class="diagram-tile">Personal (BYOD) → MAM or lightweight MDM</div><div class="diagram-tile">QUESTION 2: Can we pre-configure the device before it</div><div class="diagram-tile">reaches the user?</div><div class="diagram-tile">Yes → Zero-touch / automated enrollment (Autopilot, ADE)</div><div class="diagram-tile">No → User-driven or manual enrollment</div><div class="diagram-tile diagram-tile-heading">AUTOPILOT FLOW</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Ashpak registers device hardware hash with Autopilot</div></div><div class="diagram-tile">(Done at purchase; vendor sends the hash directly)</div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">New laptop arrives at employee's desk (still in box)</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">Employee opens box, plugs in, turns on</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">Device connects to internet via Wi-Fi</div></div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">Windows recognises the device hash</div></div><div class="diagram-tile">→ "This is an AshScript device"</div><div class="diagram-tile"><span class="diagram-tile-number">6</span><div class="diagram-tile-body">Device downloads Intune enrollment profile</div></div><div class="diagram-tile">Entra joins automatically</div><div class="diagram-tile">User signs in with ashpak@ashscript.com</div><div class="diagram-tile"><span class="diagram-tile-number">7</span><div class="diagram-tile-body">Intune policies, apps, certificates deploy</div></div><div class="diagram-tile">silently in the background</div><div class="diagram-tile"><span class="diagram-tile-number">8</span><div class="diagram-tile-body">In 20-30 minutes:</div></div><div class="diagram-tile">Device fully configured</div><div class="diagram-tile">All apps installed</div></div></figure><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: New corporate Windows devices AshScript use: All 50 new laptops; this is</li></ul></div><p>exactly what Riya asked for × Not for: Existing enrolled devices, BYOD, macOS/Android</p></section><section class="lesson-section" id="section-method-2-co-management-sccm-intune-primary-method-for-existing-devices"><h3>Method 2: Co-Management (SCCM + Intune) Recommended: (Primary Method for Existing Devices)</h3><p>What it is: A transition method that allows SCCM-managed devices to be simultaneously managed</p><p>by both SCCM and Intune. You choose which workloads each tool handles.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: AshScript's existing 750 SCCM-managed Windows laptops AshScript use:</li></ul></div><p>Migration path for current fleet × Not for: New devices (use Autopilot instead)</p></section><section class="lesson-section" id="section-method-3-group-policy-auto-enrollment"><h3>Method 3: Group Policy Auto-Enrollment</h3><p>What it is: An AD Group Policy that automatically enrolls existing domain-joined Windows 10/11</p><p>devices into Intune without user interaction.</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">All policies applied</div><div class="diagram-tile">User is productive</div><div class="diagram-tile">Zero IT hands-on time required</div><div class="diagram-tile diagram-tile-heading">CO-MANAGEMENT SPLIT</div><div class="diagram-tile diagram-tile-heading">SCCM handles: Intune handles:</div><div class="diagram-tile">• Complex app deployment • Compliance policies</div><div class="diagram-tile">• OSD / imaging • Conditional Access</div><div class="diagram-tile">• Complex software updates • Modern config profiles</div><div class="diagram-tile">• Legacy Win32 apps • Certificate deployment</div><div class="diagram-tile">• New app deployment</div><div class="diagram-tile">Over time, workloads shift from SCCM → Intune</div><div class="diagram-tile">until eventually SCCM is retired</div><div class="diagram-tile diagram-tile-heading">HOW IT WORKS</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Ashpak creates a GPO in on-prem AD:</div></div><div class="diagram-tile">Computer Configuration → Administrative Templates</div></div></figure><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: Bulk enrolling existing domain-joined PCs AshScript use: Enrolling the existing</li></ul></div><p>750 laptops alongside co-management × Not for: New devices, non-domain-joined devices</p></section><section class="lesson-section" id="section-method-4-entra-join-during-oobe-manual"><h3>Method 4: Entra Join During OOBE (Manual)</h3><p>What it is: During Windows setup (Out-of-Box Experience), the user signs in with their work account.</p><p>The device Entra-joins and auto-enrolls in Intune.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: Small deployments where IT hands the device to the user × Not scalable; user</li></ul></div><p>must do this step themselves × AshScript's position: Used only as a fallback, not primary</p><p>method</p></section><section class="lesson-section" id="section-method-5-bulk-enrollment-provisioning-package"><h3>Method 5: Bulk Enrollment (Provisioning Package)</h3><p>What it is: Create a provisioning package (.ppkg file) using Windows Configuration Designer. Copy</p><p>it to a USB drive or network share. Run it on multiple devices to batch-enroll them.</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">→ Windows Components → MDM</div><div class="diagram-tile">→ Enable Automatic MDM Enrollment</div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">GPO applies to all domain-joined machines</div></div><div class="diagram-tile">(or a targeted OU)</div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">On next Group Policy refresh (90 min default),</div></div><div class="diagram-tile">devices automatically enroll in Intune</div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">No user action needed</div></div><div class="diagram-tile diagram-tile-heading">USER EXPERIENCE</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Turn on new device</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">"Sign in with your organisation"</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">Enter: ashpak@ashscript.com</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">MFA approval</div></div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">Device Entra-joins automatically</div></div><div class="diagram-tile"><span class="diagram-tile-number">6</span><div class="diagram-tile-body">Intune enrollment starts automatically</div></div></div></figure><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: Shared devices, kiosks, devices without internet during setup × AshScript use:</li></ul></div><p>Only for kiosk scenarios in the warehouse</p></section><section class="lesson-section" id="section-macos-enrollment-methods-deep-dive"><h2>macOS Enrollment Methods: Deep Dive</h2><p>AshScript has 150 macOS devices; primarily used by designers, developers, and executives.</p></section><section class="lesson-section" id="section-method-1-ade-automated-device-enrollment-primary"><h3>Method 1: ADE (Automated Device Enrollment) Recommended: Primary</h3><p>What it is: Apple's enterprise program (formerly DEP; Device Enrollment Program). Devices are</p><p>registered in Apple Business Manager (ABM) and automatically enroll in Intune when first turned on.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: All corporate macOS devices bought through Apple Business Manager</li></ul></div><p>AshScript use: All 150 corporate Macs Warning: Requires: Apple Business Manager setup + MDM</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">USE CASE</div><div class="diagram-tile">Scenario: 100 kiosk devices in a warehouse</div><div class="diagram-tile">No user account needed. No Autopilot possible.</div><div class="diagram-tile">IT walks around with a USB drive and runs</div><div class="diagram-tile">the package on each device.</div><div class="diagram-tile diagram-tile-heading">ADE FLOW FOR MACOS</div><div class="diagram-tile diagram-tile-heading">Prerequisites:</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">Apple Business Manager account (free)</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">ABM connected to Intune via MDM Server token</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">ADE enrollment profile created in Intune</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">Devices purchased through Apple or</div></div><div class="diagram-tile">authorised reseller (linked to ABM)</div><div class="diagram-tile diagram-tile-heading">User experience:</div><div class="diagram-tile"><span class="diagram-tile-number">1</span><div class="diagram-tile-body">MacBook ships directly to employee</div></div><div class="diagram-tile"><span class="diagram-tile-number">2</span><div class="diagram-tile-body">Employee turns it on</div></div><div class="diagram-tile"><span class="diagram-tile-number">3</span><div class="diagram-tile-body">macOS Setup Assistant runs</div></div><div class="diagram-tile"><span class="diagram-tile-number">4</span><div class="diagram-tile-body">"This Mac is managed by AshScript"</div></div><div class="diagram-tile"><span class="diagram-tile-number">5</span><div class="diagram-tile-body">User signs in with ashpak@ashscript.com</div></div><div class="diagram-tile"><span class="diagram-tile-number">6</span><div class="diagram-tile-body">Intune profiles + apps deploy silently</div></div><div class="diagram-tile"><span class="diagram-tile-number">7</span><div class="diagram-tile-body">Ready in ~30 minutes</div></div></div></figure><p>token in Intune (covered in Lesson 3.4)</p></section><section class="lesson-section" id="section-method-2-company-portal-manual-macos-enrollment"><h3>Method 2: Company Portal (Manual macOS Enrollment)</h3><p>What it is: User downloads the Intune Company Portal app from the Mac App Store and signs in with</p><p>their work account to enroll the device.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: Existing Macs not purchased through ABM AshScript use: Any existing</li></ul></div><p>MacBooks already in use before ABM was set up × Less automated than ADE; user must take</p><p>steps</p></section><section class="lesson-section" id="section-android-enrollment-methods-deep-dive"><h2>Android Enrollment Methods: Deep Dive</h2><p>AshScript has 200 Android devices; mostly Samsung phones used by the Sales team.</p><p>Android enrollment is the most complex; Microsoft and Google have built multiple profiles for</p><p>different ownership and use scenarios:</p></section><section class="lesson-section" id="section-method-1-android-enterprise-work-profile-byod"><h3>Method 1: Android Enterprise Work Profile (BYOD) Recommended:</h3><p>What it is: Creates a separate encrypted container on the user's personal Android phone. Work</p><p>apps and data live in the work profile. Personal apps and data remain completely separate and private.</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">User downloads Company Portal</div><div class="diagram-tile diagram-tile-heading">ANDROID WORK PROFILE STRUCTURE</div><div class="diagram-tile">Personal Side Work Side</div></div></figure><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: BYOD; employees using personal phones for work AshScript use: Personal</li></ul></div><p>phones requesting company email access Privacy: IT cannot see personal apps or data</p></section><section class="lesson-section" id="section-method-2-android-enterprise-fully-managed-cobo"><h3>Method 2: Android Enterprise Fully Managed (COBO) Recommended:</h3><p>What it is: Company-Owned, Business-Only. The device is entirely managed by Intune. No personal</p><p>use. Used for corporate-owned phones dedicated to work.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: Corporate-owned phones issued to employees (no personal use) AshScript use:</li></ul></div><p>Sales team's 200 corporate Samsung phones</p></section><section class="lesson-section" id="section-method-3-android-enterprise-cope-corporate-owned-personally-enabled"><h3>Method 3: Android Enterprise COPE (Corporate-Owned, Personally Enabled)</h3><p>What it is: Like Work Profile but on a company-owned device. The company owns the device and can</p><p>fully manage it, BUT the user also gets a personal profile for limited personal use.</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">User can remove work profile anytime</div><div class="diagram-tile">Intune can wipe ONLY the work profile</div><div class="diagram-tile">Personal data remains untouched</div><div class="diagram-tile diagram-tile-heading">FULLY MANAGED CHARACTERISTICS</div><div class="diagram-tile">Full device control; IT manages everything</div><div class="diagram-tile">Apps installed/removed by IT only</div><div class="diagram-tile">No personal Google account</div><div class="diagram-tile">Device wipe possible</div><div class="diagram-tile">Zero-touch enrollment via</div><div class="diagram-tile">Google Zero Touch or Knox Mobile Enrollment</div><div class="diagram-tile">× No personal use permitted</div><div class="diagram-tile">× Personal Google Play not available</div><div class="diagram-tile">COPE vs BYOD WORK PROFILE</div></div></figure><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Best for: Company phones where some personal use is permitted AshScript use:</li></ul></div><p>Executive mobile phones</p></section><section class="lesson-section" id="section-method-4-android-dedicated-kiosk"><h3>Method 4: Android Dedicated (Kiosk)</h3><p>What it is: Single or multi-app kiosk mode. The device runs only specific apps; locked down for a</p><p>specific purpose.</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>AshScript use: Warehouse inventory scanners (future phase)</li></ul></div></section><section class="lesson-section" id="section-iosipados-enrollment"><h2>iOS/iPadOS Enrollment</h2><p>AshScript executives use iPhones. The methods mirror macOS:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Method Best For Notes</div><div class="diagram-tile">ADE via Apple Business Manager Corporate iPhones Zero-touch, supervised</div><div class="diagram-tile">Apple Configurator 2 Bulk setup without ABM Physical USB connection needed</div><div class="diagram-tile diagram-tile-heading">BYOD Work Profile:</div><div class="diagram-tile">Device owned by USER</div><div class="diagram-tile">IT manages work profile only</div><div class="diagram-tile">User has full personal side</div><div class="diagram-tile diagram-tile-heading">COPE:</div><div class="diagram-tile">Device owned by COMPANY</div><div class="diagram-tile">IT can manage ENTIRE device if needed</div><div class="diagram-tile">User gets personal profile for limited use</div><div class="diagram-tile">Company can wipe entire device (not just work profile)</div><div class="diagram-tile diagram-tile-heading">EXAMPLES</div><div class="diagram-tile">Warehouse scanner → Runs only inventory app</div><div class="diagram-tile">Reception tablet → Runs only visitor check-in app</div><div class="diagram-tile">Retail display → Runs only product catalogue app</div><div class="diagram-tile">Method Best For Notes</div><div class="diagram-tile">Company Portal BYOD personal iPhones User-initiated, MAM option</div></div></figure><p>Supervised vs Unsupervised: ADE-enrolled iOS/macOS devices are supervised; giving Intune</p><p>deeper control (silent app install, lost mode, more restrictions). Personally enrolled devices are</p><p>unsupervised; limited management.</p></section><section class="lesson-section" id="section-linux-enrollment"><h2>Linux Enrollment</h2><p>Linux support in Intune is growing but limited compared to other platforms:</p><div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>AshScript use: Developer team's Linux machines; basic compliance + CA only</li></ul></div></section><section class="lesson-section" id="section-prerequisites-before-any-enrollment-happens"><h2>Prerequisites Before Any Enrollment Happens</h2><p>Before Ashpak can enroll a single device, certain connectors and certificates must be configured in</p><p>the Intune portal:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">CURRENT LINUX INTUNE CAPABILITIES</div><div class="diagram-tile">Ubuntu 20.04 / 22.04</div><div class="diagram-tile">Microsoft Intune app (manual enrollment)</div><div class="diagram-tile">Compliance policies (basic)</div><div class="diagram-tile">Conditional Access support</div><div class="diagram-tile">Microsoft Defender for Endpoint</div><div class="diagram-tile">× Full configuration profiles (limited)</div><div class="diagram-tile">× App deployment (not yet supported)</div></div></figure><p>We'll set up each prerequisite in the relevant lesson. For now, understand that you must connect</p><p>Intune to Apple and Google before their devices can be managed.</p><div class="table-lead">Enrollment prerequisites</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Platform</th><th scope="col">Prerequisite</th></tr></thead><tbody><tr><td>All platforms</td><td>MDM Authority = Intune (Done in Lesson 1.4)</td></tr><tr><td>Windows Autopilot</td><td>Devices registered in Autopilot • Enrollment Status Page configured</td></tr><tr><td>macOS + iOS</td><td>Apple MDM Push Certificate • Apple Business Manager account • ADE token from ABM</td></tr><tr><td>Android</td><td>Managed Google Play account • Connected to Intune tenant</td></tr><tr><td>Co-management</td><td>SCCM version 1710 or later • Cloud Management Gateway (CMG) • Co-management enabled in SCCM</td></tr></tbody></table></div></section><section class="lesson-section" id="section-ashscripts-enrollment-strategy-the-master-plan"><h2>AshScript's Enrollment Strategy: The Master Plan</h2><p>Here's the plan Ashpak presents to Riya:</p><figure class="lesson-figure native-diagram"><img alt="AshScript enrollment strategy master plan." loading="lazy" src="../../assets/images/intune/lesson-3-1-master-plan.svg"/><figcaption>AshScript device types, counts and enrollment methods.</figcaption></figure></section><section class="lesson-section" id="section-enrollment-restrictions-controlling-what-can-enroll"><h2>Enrollment Restrictions: Controlling What Can Enroll</h2><p>Before opening the gates, Ashpak needs guardrails. Enrollment Restrictions let him control exactly</p><p>what is allowed to enroll:</p><p>Two types of restrictions:</p><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile diagram-tile-heading">TOTAL DEVICES TO MANAGE: ~1,500</div><div class="diagram-tile">WEEKS TO FULL ENROLLMENT: 12 (phased rollout)</div><div class="diagram-tile"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></div><div class="diagram-tile">TYPE 1: Device Type Restrictions</div><div class="diagram-tile diagram-tile-heading">Control WHAT can enroll:</div><div class="diagram-tile">Allow Windows enrollment</div><div class="diagram-tile">Allow macOS enrollment</div><div class="diagram-tile">Allow Android enrollment</div><div class="diagram-tile">Allow iOS enrollment</div><div class="diagram-tile">× Block personally owned Android (only corp)</div><div class="diagram-tile">× Block personally owned Windows (BYOD PCs)</div><div class="diagram-tile diagram-tile-heading">Set minimum OS versions:</div><div class="diagram-tile">Windows: minimum 10.0.19041 (Windows 10 2004)</div><div class="diagram-tile">iOS: minimum 16.0</div><div class="diagram-tile">Android: minimum 11.0</div><div class="diagram-tile">TYPE 2: Device Limit Restrictions</div><div class="diagram-tile diagram-tile-heading">Control HOW MANY devices per user:</div><div class="diagram-tile">Default: 15 devices per user</div><div class="diagram-tile">AshScript setting: 5 devices per user</div><div class="diagram-tile">(Prevents someone enrolling 20 personal devices)</div></div></figure></section><section class="lesson-section" id="section-ashscripts-current-state-after-lesson-31"><h2>AshScript's Current State After Lesson 3.1</h2><div class="table-lead">AshScript tenant readiness</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">State</th><th scope="col">Status</th></tr></thead><tbody><tr><td>Phase 2 complete</td><td>Identity foundation solid</td></tr><tr><td>Enrollment strategy designed</td><td class="table-check">✓ Complete</td></tr><tr><td>Enrollment restrictions configured</td><td class="table-check">✓ Configured</td></tr><tr><td>Enrollment method per platform decided</td><td class="table-check">✓ Decided</td></tr><tr><td>Autopilot</td><td>Not yet configured (Lesson 3.2)</td></tr><tr><td>Apple MDM Push Certificate</td><td>Not yet added</td></tr><tr><td>Google Play</td><td>Not yet connected</td></tr><tr><td>Co-management</td><td>Not yet configured</td></tr><tr><td>Devices enrolled</td><td>None yet</td></tr></tbody></table></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in"><h2>Key Concepts to Lock In</h2><figure class="diagram-card diagram-card-ui"><div class="diagram-board"><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">Enrollment purpose Establishes MDM management via certificate</div><div class="diagram-tile">Two key questions Who owns it? Can we pre-configure it?</div><div class="diagram-tile">Autopilot Zero-touch for new Windows devices</div><div class="diagram-tile">Co-management Transition bridge; SCCM + Intune together</div><div class="diagram-tile">GP auto-enrollment Bulk enroll existing domain-joined Windows PCs</div><div class="diagram-tile">ADE Zero-touch for Apple devices via Apple Business Manager</div><div class="diagram-tile">Android Work Profile BYOD; separates personal and work data</div><div class="diagram-tile">Fully Managed Android Corporate-owned; full control, no personal use</div><div class="diagram-tile">COPE Corporate-owned but allows personal use</div><div class="diagram-tile">Apple prerequisites MDM Push Certificate + ABM + ADE token</div><div class="diagram-tile">Android prerequisite Managed Google Play connected to Intune</div><div class="diagram-tile">Concept Remember This</div><div class="diagram-tile">Enrollment restrictions Control what platforms and OS versions can enroll</div></div></figure><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>Enrollment purpose</td><td>Establishes MDM management via certificate</td></tr><tr><td>Two key questions</td><td>Who owns the device? Can we pre-configure before delivery?</td></tr><tr><td>Autopilot</td><td>Zero-touch Windows deployment</td></tr><tr><td>Co-management</td><td>Transition path from SCCM to Intune</td></tr><tr><td>ADE</td><td>Zero-touch Apple enrollment via Apple Business Manager</td></tr><tr><td>Work Profile</td><td>BYOD container for personal Android</td></tr><tr><td>Fully Managed Android</td><td>Corporate-owned work-only phone</td></tr><tr><td>COPE</td><td>Corporate-owned with personal use</td></tr><tr><td>Android Dedicated</td><td>Kiosk / shared-device mode</td></tr><tr><td>Apple prerequisites</td><td>Push certificate + ABM + ADE token</td></tr></tbody></table></div></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../2-5-mfa-conditional-access-zero-trust-begins/"><span class="story-path-number">2.5</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>MFA &amp; Conditional Access: Zero Trust Begins</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">3.1</span><span class="story-path-label">YOU ARE HERE</span><strong>Enrollment Methods Overview: Every Platform Explained</strong><small>Enrolling Devices</small></div><a class="story-path-step story-path-next" href="../3-2-windows-autopilot-zero-touch-deployment/"><span class="story-path-number">3.2</span><span class="story-path-label">NEXT CHAPTER</span><strong>Windows Autopilot: Zero Touch Deployment</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-3">Learning Modules</a></nav></article>
-</div>
-</section>
-</main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script>
-<script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4"></script>
-</body></html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="Enrollment Methods: Every Platform Explained &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=8" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=8" rel="apple-touch-icon"/>
+  <title>
+   Lesson 3.1: Enrollment Methods: Every Platform Explained &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase3-lesson" style="--lesson-accent:#ffd60a">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 3
+      </span>
+      /
+      <span>
+       3.1
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 3; ENROLLING DEVICES
+     </div>
+     <h1>
+      Enrollment Methods: Every Platform Explained
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak faces 50 boxes, 6 platforms, and one Friday deadline
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-3">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 3
+        </small>
+        <strong>
+         Phase 3 &middot; Enrolling Devices
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       3.1 Enrollment Methods: Every Platform Explained
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-3">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-what-is-device-enrollment">
+        <span>
+         02
+        </span>
+        <strong>
+         What is Device Enrollment?
+        </strong>
+       </a>
+       <a href="#section-the-enrollment-landscape-every-method">
+        <span>
+         03
+        </span>
+        <strong>
+         The Enrollment Landscape; Every Method
+        </strong>
+       </a>
+       <a href="#section-windows-enrollment-methods-deep-dive">
+        <span>
+         04
+        </span>
+        <strong>
+         Windows Enrollment Methods; Deep Dive
+        </strong>
+       </a>
+       <a href="#section-method-1-windows-autopilot-primary-method-for-new-devices">
+        <span>
+         05
+        </span>
+        <strong>
+         Method 1; Windows Autopilot Recommended: (Primary Method for New Devices)
+        </strong>
+       </a>
+       <a href="#section-method-2-co-management-sccm-intune-primary-method-for-existing-devices">
+        <span>
+         06
+        </span>
+        <strong>
+         Method 2; Co-Management (SCCM + Intune) Recommended: (Primary Method for Existing Devices)
+        </strong>
+       </a>
+       <a href="#section-method-3-group-policy-auto-enrollment">
+        <span>
+         07
+        </span>
+        <strong>
+         Method 3; Group Policy Auto-Enrollment
+        </strong>
+       </a>
+       <a href="#section-method-4-entra-join-during-oobe-manual">
+        <span>
+         08
+        </span>
+        <strong>
+         Method 4; Entra Join During OOBE (Manual)
+        </strong>
+       </a>
+       <a href="#section-method-5-bulk-enrollment-provisioning-package">
+        <span>
+         09
+        </span>
+        <strong>
+         Method 5; Bulk Enrollment (Provisioning Package)
+        </strong>
+       </a>
+       <a href="#section-macos-enrollment-methods-deep-dive">
+        <span>
+         10
+        </span>
+        <strong>
+         macOS Enrollment Methods; Deep Dive
+        </strong>
+       </a>
+       <a href="#section-method-1-ade-automated-device-enrollment-primary">
+        <span>
+         11
+        </span>
+        <strong>
+         Method 1; ADE (Automated Device Enrollment) Recommended: Primary
+        </strong>
+       </a>
+       <a href="#section-method-2-company-portal-manual-macos-enrollment">
+        <span>
+         12
+        </span>
+        <strong>
+         Method 2; Company Portal (Manual macOS Enrollment)
+        </strong>
+       </a>
+       <a href="#section-android-enrollment-methods-deep-dive">
+        <span>
+         13
+        </span>
+        <strong>
+         Android Enrollment Methods; Deep Dive
+        </strong>
+       </a>
+       <a href="#section-method-1-android-enterprise-work-profile-byod">
+        <span>
+         14
+        </span>
+        <strong>
+         Method 1; Android Enterprise Work Profile (BYOD) Recommended:
+        </strong>
+       </a>
+       <a href="#section-method-2-android-enterprise-fully-managed-cobo">
+        <span>
+         15
+        </span>
+        <strong>
+         Method 2; Android Enterprise Fully Managed (COBO) Recommended:
+        </strong>
+       </a>
+       <a href="#section-method-3-android-enterprise-cope-corporate-owned-personally-enabled">
+        <span>
+         16
+        </span>
+        <strong>
+         Method 3; Android Enterprise COPE (Corporate-Owned, Personally Enabled)
+        </strong>
+       </a>
+       <a href="#section-method-4-android-dedicated-kiosk">
+        <span>
+         17
+        </span>
+        <strong>
+         Method 4; Android Dedicated (Kiosk)
+        </strong>
+       </a>
+       <a href="#section-iosipados-enrollment">
+        <span>
+         18
+        </span>
+        <strong>
+         iOS/iPadOS Enrollment
+        </strong>
+       </a>
+       <a href="#section-linux-enrollment">
+        <span>
+         19
+        </span>
+        <strong>
+         Linux Enrollment
+        </strong>
+       </a>
+       <a href="#section-prerequisites-before-any-enrollment-happens">
+        <span>
+         20
+        </span>
+        <strong>
+         Prerequisites Before Any Enrollment Happens
+        </strong>
+       </a>
+       <a href="#section-ashscripts-enrollment-strategy-the-master-plan">
+        <span>
+         21
+        </span>
+        <strong>
+         AshScript's Enrollment Strategy; The Master Plan
+        </strong>
+       </a>
+       <a href="#section-enrollment-restrictions-controlling-what-can-enroll">
+        <span>
+         22
+        </span>
+        <strong>
+         Enrollment Restrictions; Controlling What Can Enroll
+        </strong>
+       </a>
+       <a href="#section-ashscripts-current-state-after-lesson-31">
+        <span>
+         23
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 3.1
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in">
+        <span>
+         24
+        </span>
+        <strong>
+         Key Concepts to Lock In
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 3.1; Enrollment Methods: Every Platform Explained" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-3">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        It's Monday morning. The IT room at AshScript looks like a delivery warehouse. Fifty brand-new
+       </p>
+       <p>
+        Windows laptops in boxes. A pallet of MacBooks arriving Wednesday. Two hundred Android phones
+       </p>
+       <p>
+        already in use by the Sales team. Executives with iPhones. A handful of Linux machines in the Dev
+       </p>
+       <p>
+        team. And every employee's personal phone quietly accessing company email.
+       </p>
+       <p>
+        Riya stands in the doorway:
+       </p>
+       <blockquote class="quote">
+        "Ashpak, I need all of this managed. Every device. Every platform. But here's the constraint; we
+       </blockquote>
+       <p>
+        have four IT staff, 1,000 users, and I will not allow a process that requires someone to physically
+       </p>
+       <p>
+        touch every machine. Whatever you build must scale."
+       </p>
+       <p>
+        Ashpak looks at the room. Then he opens his laptop and pulls up a diagram he's been preparing all
+       </p>
+       <p>
+        weekend; AshScript's Device Enrollment Master Plan.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-what-is-device-enrollment">
+       <h2>
+        What is Device Enrollment?
+       </h2>
+       <p>
+        Before a device can be managed by Intune; before policies apply, before apps deploy, before
+       </p>
+       <p>
+        compliance is checked; the device must be enrolled.
+       </p>
+       <p>
+        Enrollment is the process by which:
+       </p>
+       <p>
+        The MDM certificate is what makes this happen. When a device enrolls, Intune issues it an MDM
+       </p>
+       <p>
+        certificate. This certificate is the device's proof of identity; it's how Intune knows the device is
+       </p>
+       <p>
+        managed and how policies are securely delivered.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-the-enrollment-landscape-every-method">
+       <h2>
+        The Enrollment Landscape: Every Method
+       </h2>
+       <p>
+        There is no single enrollment method. Microsoft has built different methods for different platforms
+       </p>
+       <p>
+        and scenarios. Here is the complete map:
+       </p>
+       <p>
+        This looks complex; but it becomes logical once you understand the two questions that determine
+       </p>
+       <p>
+        which method to use:
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="Enrollment decision model for Intune platforms and methods." loading="lazy" src="../../assets/images/intune/lesson-3-1-enrollment-model.svg"/>
+        <figcaption>
+         Ownership and pre-configuration determine the enrollment path.
+        </figcaption>
+       </figure>
+       <div class="table-lead">
+        Enrollment methods map
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Platform
+           </th>
+           <th scope="col">
+            Enrollment methods
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Windows
+           </td>
+           <td>
+            Windows Autopilot (zero-touch) &bull; Co-management (SCCM + Intune) &bull; Entra join during OOBE (manual) &bull; Group Policy auto-enrollment &bull; Bulk enrollment (provisioning package)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            macOS
+           </td>
+           <td>
+            ADE - Automated Device Enrollment (Apple) &bull; Company Portal (manual) &bull; Direct enrollment (no user affinity)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            iOS/iPadOS
+           </td>
+           <td>
+            ADE - Automated Device Enrollment &bull; Apple Configurator 2 &bull; Company Portal (BYOD)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Android
+           </td>
+           <td>
+            Android Enterprise - Work Profile (BYOD) &bull; Android Enterprise - Fully Managed (COBO) &bull; Android Enterprise - COPE &bull; Android Enterprise - Dedicated (Kiosk) &bull; Samsung Knox Mobile Enrollment
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Linux
+           </td>
+           <td>
+            Microsoft Intune app (manual) &bull; Limited management; growing feature set
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-windows-enrollment-methods-deep-dive">
+       <h2>
+        Windows Enrollment Methods: Deep Dive
+       </h2>
+       <p>
+        Windows is AshScript's primary platform; 800 of the 1,000 devices are Windows. Getting this right is
+       </p>
+       <p>
+        critical.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-1-windows-autopilot-primary-method-for-new-devices">
+       <h3>
+        Method 1: Windows Autopilot Recommended: (Primary Method for New Devices)
+       </h3>
+       <p>
+        What it is: A cloud-based zero-touch deployment service. You register a device's hardware hash with
+       </p>
+       <p>
+        Autopilot. When the user turns the device on for the first time, it recognises itself, downloads the
+       </p>
+       <p>
+        Intune configuration, and self-provisions; no IT involvement needed.
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          QUESTION 1: Who owns the device?
+         </div>
+         <div class="diagram-tile">
+          Corporate-owned &rarr; Full MDM enrollment
+         </div>
+         <div class="diagram-tile">
+          Personal (BYOD) &rarr; MAM or lightweight MDM
+         </div>
+         <div class="diagram-tile">
+          QUESTION 2: Can we pre-configure the device before it
+         </div>
+         <div class="diagram-tile">
+          reaches the user?
+         </div>
+         <div class="diagram-tile">
+          Yes &rarr; Zero-touch / automated enrollment (Autopilot, ADE)
+         </div>
+         <div class="diagram-tile">
+          No &rarr; User-driven or manual enrollment
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          AUTOPILOT FLOW
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Ashpak registers device hardware hash with Autopilot
+          </div>
+         </div>
+         <div class="diagram-tile">
+          (Done at purchase; vendor sends the hash directly)
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           New laptop arrives at employee's desk (still in box)
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           Employee opens box, plugs in, turns on
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           Device connects to internet via Wi-Fi
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           Windows recognises the device hash
+          </div>
+         </div>
+         <div class="diagram-tile">
+          &rarr; "This is an AshScript device"
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           6
+          </span>
+          <div class="diagram-tile-body">
+           Device downloads Intune enrollment profile
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Entra joins automatically
+         </div>
+         <div class="diagram-tile">
+          User signs in with ashpak@ashscript.com
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           7
+          </span>
+          <div class="diagram-tile-body">
+           Intune policies, apps, certificates deploy
+          </div>
+         </div>
+         <div class="diagram-tile">
+          silently in the background
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           8
+          </span>
+          <div class="diagram-tile-body">
+           In 20-30 minutes:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Device fully configured
+         </div>
+         <div class="diagram-tile">
+          All apps installed
+         </div>
+        </div>
+       </figure>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: New corporate Windows devices AshScript use: All 50 new laptops; this is
+         </li>
+        </ul>
+       </div>
+       <p>
+        exactly what Riya asked for &times; Not for: Existing enrolled devices, BYOD, macOS/Android
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-2-co-management-sccm-intune-primary-method-for-existing-devices">
+       <h3>
+        Method 2: Co-Management (SCCM + Intune) Recommended: (Primary Method for Existing Devices)
+       </h3>
+       <p>
+        What it is: A transition method that allows SCCM-managed devices to be simultaneously managed
+       </p>
+       <p>
+        by both SCCM and Intune. You choose which workloads each tool handles.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: AshScript's existing 750 SCCM-managed Windows laptops AshScript use:
+         </li>
+        </ul>
+       </div>
+       <p>
+        Migration path for current fleet &times; Not for: New devices (use Autopilot instead)
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-3-group-policy-auto-enrollment">
+       <h3>
+        Method 3: Group Policy Auto-Enrollment
+       </h3>
+       <p>
+        What it is: An AD Group Policy that automatically enrolls existing domain-joined Windows 10/11
+       </p>
+       <p>
+        devices into Intune without user interaction.
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          All policies applied
+         </div>
+         <div class="diagram-tile">
+          User is productive
+         </div>
+         <div class="diagram-tile">
+          Zero IT hands-on time required
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          CO-MANAGEMENT SPLIT
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          SCCM handles: Intune handles:
+         </div>
+         <div class="diagram-tile">
+          &bull; Complex app deployment &bull; Compliance policies
+         </div>
+         <div class="diagram-tile">
+          &bull; OSD / imaging &bull; Conditional Access
+         </div>
+         <div class="diagram-tile">
+          &bull; Complex software updates &bull; Modern config profiles
+         </div>
+         <div class="diagram-tile">
+          &bull; Legacy Win32 apps &bull; Certificate deployment
+         </div>
+         <div class="diagram-tile">
+          &bull; New app deployment
+         </div>
+         <div class="diagram-tile">
+          Over time, workloads shift from SCCM &rarr; Intune
+         </div>
+         <div class="diagram-tile">
+          until eventually SCCM is retired
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          HOW IT WORKS
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Ashpak creates a GPO in on-prem AD:
+          </div>
+         </div>
+         <div class="diagram-tile">
+          Computer Configuration &rarr; Administrative Templates
+         </div>
+        </div>
+       </figure>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: Bulk enrolling existing domain-joined PCs AshScript use: Enrolling the existing
+         </li>
+        </ul>
+       </div>
+       <p>
+        750 laptops alongside co-management &times; Not for: New devices, non-domain-joined devices
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-4-entra-join-during-oobe-manual">
+       <h3>
+        Method 4: Entra Join During OOBE (Manual)
+       </h3>
+       <p>
+        What it is: During Windows setup (Out-of-Box Experience), the user signs in with their work account.
+       </p>
+       <p>
+        The device Entra-joins and auto-enrolls in Intune.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: Small deployments where IT hands the device to the user &times; Not scalable; user
+         </li>
+        </ul>
+       </div>
+       <p>
+        must do this step themselves &times; AshScript's position: Used only as a fallback, not primary
+       </p>
+       <p>
+        method
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-5-bulk-enrollment-provisioning-package">
+       <h3>
+        Method 5: Bulk Enrollment (Provisioning Package)
+       </h3>
+       <p>
+        What it is: Create a provisioning package (.ppkg file) using Windows Configuration Designer. Copy
+       </p>
+       <p>
+        it to a USB drive or network share. Run it on multiple devices to batch-enroll them.
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          &rarr; Windows Components &rarr; MDM
+         </div>
+         <div class="diagram-tile">
+          &rarr; Enable Automatic MDM Enrollment
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           GPO applies to all domain-joined machines
+          </div>
+         </div>
+         <div class="diagram-tile">
+          (or a targeted OU)
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           On next Group Policy refresh (90 min default),
+          </div>
+         </div>
+         <div class="diagram-tile">
+          devices automatically enroll in Intune
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           No user action needed
+          </div>
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          USER EXPERIENCE
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Turn on new device
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           "Sign in with your organisation"
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           Enter: ashpak@ashscript.com
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           MFA approval
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           Device Entra-joins automatically
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           6
+          </span>
+          <div class="diagram-tile-body">
+           Intune enrollment starts automatically
+          </div>
+         </div>
+        </div>
+       </figure>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: Shared devices, kiosks, devices without internet during setup &times; AshScript use:
+         </li>
+        </ul>
+       </div>
+       <p>
+        Only for kiosk scenarios in the warehouse
+       </p>
+      </section>
+      <section class="lesson-section" id="section-macos-enrollment-methods-deep-dive">
+       <h2>
+        macOS Enrollment Methods: Deep Dive
+       </h2>
+       <p>
+        AshScript has 150 macOS devices; primarily used by designers, developers, and executives.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-1-ade-automated-device-enrollment-primary">
+       <h3>
+        Method 1: ADE (Automated Device Enrollment) Recommended: Primary
+       </h3>
+       <p>
+        What it is: Apple's enterprise program (formerly DEP; Device Enrollment Program). Devices are
+       </p>
+       <p>
+        registered in Apple Business Manager (ABM) and automatically enroll in Intune when first turned on.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: All corporate macOS devices bought through Apple Business Manager
+         </li>
+        </ul>
+       </div>
+       <p>
+        AshScript use: All 150 corporate Macs Warning: Requires: Apple Business Manager setup + MDM
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          USE CASE
+         </div>
+         <div class="diagram-tile">
+          Scenario: 100 kiosk devices in a warehouse
+         </div>
+         <div class="diagram-tile">
+          No user account needed. No Autopilot possible.
+         </div>
+         <div class="diagram-tile">
+          IT walks around with a USB drive and runs
+         </div>
+         <div class="diagram-tile">
+          the package on each device.
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ADE FLOW FOR MACOS
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Prerequisites:
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           Apple Business Manager account (free)
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           ABM connected to Intune via MDM Server token
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           ADE enrollment profile created in Intune
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           Devices purchased through Apple or
+          </div>
+         </div>
+         <div class="diagram-tile">
+          authorised reseller (linked to ABM)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          User experience:
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           1
+          </span>
+          <div class="diagram-tile-body">
+           MacBook ships directly to employee
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           2
+          </span>
+          <div class="diagram-tile-body">
+           Employee turns it on
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           3
+          </span>
+          <div class="diagram-tile-body">
+           macOS Setup Assistant runs
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           4
+          </span>
+          <div class="diagram-tile-body">
+           "This Mac is managed by AshScript"
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           5
+          </span>
+          <div class="diagram-tile-body">
+           User signs in with ashpak@ashscript.com
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           6
+          </span>
+          <div class="diagram-tile-body">
+           Intune profiles + apps deploy silently
+          </div>
+         </div>
+         <div class="diagram-tile">
+          <span class="diagram-tile-number">
+           7
+          </span>
+          <div class="diagram-tile-body">
+           Ready in ~30 minutes
+          </div>
+         </div>
+        </div>
+       </figure>
+       <p>
+        token in Intune (covered in Lesson 3.4)
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-2-company-portal-manual-macos-enrollment">
+       <h3>
+        Method 2: Company Portal (Manual macOS Enrollment)
+       </h3>
+       <p>
+        What it is: User downloads the Intune Company Portal app from the Mac App Store and signs in with
+       </p>
+       <p>
+        their work account to enroll the device.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: Existing Macs not purchased through ABM AshScript use: Any existing
+         </li>
+        </ul>
+       </div>
+       <p>
+        MacBooks already in use before ABM was set up &times; Less automated than ADE; user must take
+       </p>
+       <p>
+        steps
+       </p>
+      </section>
+      <section class="lesson-section" id="section-android-enrollment-methods-deep-dive">
+       <h2>
+        Android Enrollment Methods: Deep Dive
+       </h2>
+       <p>
+        AshScript has 200 Android devices; mostly Samsung phones used by the Sales team.
+       </p>
+       <p>
+        Android enrollment is the most complex; Microsoft and Google have built multiple profiles for
+       </p>
+       <p>
+        different ownership and use scenarios:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-1-android-enterprise-work-profile-byod">
+       <h3>
+        Method 1: Android Enterprise Work Profile (BYOD) Recommended:
+       </h3>
+       <p>
+        What it is: Creates a separate encrypted container on the user's personal Android phone. Work
+       </p>
+       <p>
+        apps and data live in the work profile. Personal apps and data remain completely separate and private.
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          User downloads Company Portal
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          ANDROID WORK PROFILE STRUCTURE
+         </div>
+         <div class="diagram-tile">
+          Personal Side Work Side
+         </div>
+        </div>
+       </figure>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: BYOD; employees using personal phones for work AshScript use: Personal
+         </li>
+        </ul>
+       </div>
+       <p>
+        phones requesting company email access Privacy: IT cannot see personal apps or data
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-2-android-enterprise-fully-managed-cobo">
+       <h3>
+        Method 2: Android Enterprise Fully Managed (COBO) Recommended:
+       </h3>
+       <p>
+        What it is: Company-Owned, Business-Only. The device is entirely managed by Intune. No personal
+       </p>
+       <p>
+        use. Used for corporate-owned phones dedicated to work.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: Corporate-owned phones issued to employees (no personal use) AshScript use:
+         </li>
+        </ul>
+       </div>
+       <p>
+        Sales team's 200 corporate Samsung phones
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-3-android-enterprise-cope-corporate-owned-personally-enabled">
+       <h3>
+        Method 3: Android Enterprise COPE (Corporate-Owned, Personally Enabled)
+       </h3>
+       <p>
+        What it is: Like Work Profile but on a company-owned device. The company owns the device and can
+       </p>
+       <p>
+        fully manage it, BUT the user also gets a personal profile for limited personal use.
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          User can remove work profile anytime
+         </div>
+         <div class="diagram-tile">
+          Intune can wipe ONLY the work profile
+         </div>
+         <div class="diagram-tile">
+          Personal data remains untouched
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          FULLY MANAGED CHARACTERISTICS
+         </div>
+         <div class="diagram-tile">
+          Full device control; IT manages everything
+         </div>
+         <div class="diagram-tile">
+          Apps installed/removed by IT only
+         </div>
+         <div class="diagram-tile">
+          No personal Google account
+         </div>
+         <div class="diagram-tile">
+          Device wipe possible
+         </div>
+         <div class="diagram-tile">
+          Zero-touch enrollment via
+         </div>
+         <div class="diagram-tile">
+          Google Zero Touch or Knox Mobile Enrollment
+         </div>
+         <div class="diagram-tile">
+          &times; No personal use permitted
+         </div>
+         <div class="diagram-tile">
+          &times; Personal Google Play not available
+         </div>
+         <div class="diagram-tile">
+          COPE vs BYOD WORK PROFILE
+         </div>
+        </div>
+       </figure>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Best for: Company phones where some personal use is permitted AshScript use:
+         </li>
+        </ul>
+       </div>
+       <p>
+        Executive mobile phones
+       </p>
+      </section>
+      <section class="lesson-section" id="section-method-4-android-dedicated-kiosk">
+       <h3>
+        Method 4: Android Dedicated (Kiosk)
+       </h3>
+       <p>
+        What it is: Single or multi-app kiosk mode. The device runs only specific apps; locked down for a
+       </p>
+       <p>
+        specific purpose.
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          AshScript use: Warehouse inventory scanners (future phase)
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-iosipados-enrollment">
+       <h2>
+        iOS/iPadOS Enrollment
+       </h2>
+       <p>
+        AshScript executives use iPhones. The methods mirror macOS:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Method Best For Notes
+         </div>
+         <div class="diagram-tile">
+          ADE via Apple Business Manager Corporate iPhones Zero-touch, supervised
+         </div>
+         <div class="diagram-tile">
+          Apple Configurator 2 Bulk setup without ABM Physical USB connection needed
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          BYOD Work Profile:
+         </div>
+         <div class="diagram-tile">
+          Device owned by USER
+         </div>
+         <div class="diagram-tile">
+          IT manages work profile only
+         </div>
+         <div class="diagram-tile">
+          User has full personal side
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          COPE:
+         </div>
+         <div class="diagram-tile">
+          Device owned by COMPANY
+         </div>
+         <div class="diagram-tile">
+          IT can manage ENTIRE device if needed
+         </div>
+         <div class="diagram-tile">
+          User gets personal profile for limited use
+         </div>
+         <div class="diagram-tile">
+          Company can wipe entire device (not just work profile)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          EXAMPLES
+         </div>
+         <div class="diagram-tile">
+          Warehouse scanner &rarr; Runs only inventory app
+         </div>
+         <div class="diagram-tile">
+          Reception tablet &rarr; Runs only visitor check-in app
+         </div>
+         <div class="diagram-tile">
+          Retail display &rarr; Runs only product catalogue app
+         </div>
+         <div class="diagram-tile">
+          Method Best For Notes
+         </div>
+         <div class="diagram-tile">
+          Company Portal BYOD personal iPhones User-initiated, MAM option
+         </div>
+        </div>
+       </figure>
+       <p>
+        Supervised vs Unsupervised: ADE-enrolled iOS/macOS devices are supervised; giving Intune
+       </p>
+       <p>
+        deeper control (silent app install, lost mode, more restrictions). Personally enrolled devices are
+       </p>
+       <p>
+        unsupervised; limited management.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-linux-enrollment">
+       <h2>
+        Linux Enrollment
+       </h2>
+       <p>
+        Linux support in Intune is growing but limited compared to other platforms:
+       </p>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          AshScript use: Developer team's Linux machines; basic compliance + CA only
+         </li>
+        </ul>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-prerequisites-before-any-enrollment-happens">
+       <h2>
+        Prerequisites Before Any Enrollment Happens
+       </h2>
+       <p>
+        Before Ashpak can enroll a single device, certain connectors and certificates must be configured in
+       </p>
+       <p>
+        the Intune portal:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          CURRENT LINUX INTUNE CAPABILITIES
+         </div>
+         <div class="diagram-tile">
+          Ubuntu 20.04 / 22.04
+         </div>
+         <div class="diagram-tile">
+          Microsoft Intune app (manual enrollment)
+         </div>
+         <div class="diagram-tile">
+          Compliance policies (basic)
+         </div>
+         <div class="diagram-tile">
+          Conditional Access support
+         </div>
+         <div class="diagram-tile">
+          Microsoft Defender for Endpoint
+         </div>
+         <div class="diagram-tile">
+          &times; Full configuration profiles (limited)
+         </div>
+         <div class="diagram-tile">
+          &times; App deployment (not yet supported)
+         </div>
+        </div>
+       </figure>
+       <p>
+        We'll set up each prerequisite in the relevant lesson. For now, understand that you must connect
+       </p>
+       <p>
+        Intune to Apple and Google before their devices can be managed.
+       </p>
+       <div class="table-lead">
+        Enrollment prerequisites
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Platform
+           </th>
+           <th scope="col">
+            Prerequisite
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            All platforms
+           </td>
+           <td>
+            MDM Authority = Intune (Done in Lesson 1.4)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Windows Autopilot
+           </td>
+           <td>
+            Devices registered in Autopilot &bull; Enrollment Status Page configured
+           </td>
+          </tr>
+          <tr>
+           <td>
+            macOS + iOS
+           </td>
+           <td>
+            Apple MDM Push Certificate &bull; Apple Business Manager account &bull; ADE token from ABM
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Android
+           </td>
+           <td>
+            Managed Google Play account &bull; Connected to Intune tenant
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Co-management
+           </td>
+           <td>
+            SCCM version 1710 or later &bull; Cloud Management Gateway (CMG) &bull; Co-management enabled in SCCM
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-enrollment-strategy-the-master-plan">
+       <h2>
+        AshScript's Enrollment Strategy: The Master Plan
+       </h2>
+       <p>
+        Here's the plan Ashpak presents to Riya:
+       </p>
+       <figure class="lesson-figure native-diagram">
+        <img alt="AshScript enrollment strategy master plan." loading="lazy" src="../../assets/images/intune/lesson-3-1-master-plan.svg"/>
+        <figcaption>
+         AshScript device types, counts and enrollment methods.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-enrollment-restrictions-controlling-what-can-enroll">
+       <h2>
+        Enrollment Restrictions: Controlling What Can Enroll
+       </h2>
+       <p>
+        Before opening the gates, Ashpak needs guardrails. Enrollment Restrictions let him control exactly
+       </p>
+       <p>
+        what is allowed to enroll:
+       </p>
+       <p>
+        Two types of restrictions:
+       </p>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile diagram-tile-heading">
+          TOTAL DEVICES TO MANAGE: ~1,500
+         </div>
+         <div class="diagram-tile">
+          WEEKS TO FULL ENROLLMENT: 12 (phased rollout)
+         </div>
+         <div class="diagram-tile">
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+         </div>
+         <div class="diagram-tile">
+          TYPE 1: Device Type Restrictions
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Control WHAT can enroll:
+         </div>
+         <div class="diagram-tile">
+          Allow Windows enrollment
+         </div>
+         <div class="diagram-tile">
+          Allow macOS enrollment
+         </div>
+         <div class="diagram-tile">
+          Allow Android enrollment
+         </div>
+         <div class="diagram-tile">
+          Allow iOS enrollment
+         </div>
+         <div class="diagram-tile">
+          &times; Block personally owned Android (only corp)
+         </div>
+         <div class="diagram-tile">
+          &times; Block personally owned Windows (BYOD PCs)
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Set minimum OS versions:
+         </div>
+         <div class="diagram-tile">
+          Windows: minimum 10.0.19041 (Windows 10 2004)
+         </div>
+         <div class="diagram-tile">
+          iOS: minimum 16.0
+         </div>
+         <div class="diagram-tile">
+          Android: minimum 11.0
+         </div>
+         <div class="diagram-tile">
+          TYPE 2: Device Limit Restrictions
+         </div>
+         <div class="diagram-tile diagram-tile-heading">
+          Control HOW MANY devices per user:
+         </div>
+         <div class="diagram-tile">
+          Default: 15 devices per user
+         </div>
+         <div class="diagram-tile">
+          AshScript setting: 5 devices per user
+         </div>
+         <div class="diagram-tile">
+          (Prevents someone enrolling 20 personal devices)
+         </div>
+        </div>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-ashscripts-current-state-after-lesson-31">
+       <h2>
+        AshScript's Current State After Lesson 3.1
+       </h2>
+       <div class="table-lead">
+        AshScript tenant readiness
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            State
+           </th>
+           <th scope="col">
+            Status
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Phase 2 complete
+           </td>
+           <td>
+            Identity foundation solid
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrollment strategy designed
+           </td>
+           <td class="table-check">
+            &checkmark; Complete
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrollment restrictions configured
+           </td>
+           <td class="table-check">
+            &checkmark; Configured
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Enrollment method per platform decided
+           </td>
+           <td class="table-check">
+            &checkmark; Decided
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Autopilot
+           </td>
+           <td>
+            Not yet configured (Lesson 3.2)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Apple MDM Push Certificate
+           </td>
+           <td>
+            Not yet added
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Google Play
+           </td>
+           <td>
+            Not yet connected
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Co-management
+           </td>
+           <td>
+            Not yet configured
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Devices enrolled
+           </td>
+           <td>
+            None yet
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in">
+       <h2>
+        Key Concepts to Lock In
+       </h2>
+       <figure class="diagram-card diagram-card-ui">
+        <div class="diagram-board">
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          Enrollment purpose Establishes MDM management via certificate
+         </div>
+         <div class="diagram-tile">
+          Two key questions Who owns it? Can we pre-configure it?
+         </div>
+         <div class="diagram-tile">
+          Autopilot Zero-touch for new Windows devices
+         </div>
+         <div class="diagram-tile">
+          Co-management Transition bridge; SCCM + Intune together
+         </div>
+         <div class="diagram-tile">
+          GP auto-enrollment Bulk enroll existing domain-joined Windows PCs
+         </div>
+         <div class="diagram-tile">
+          ADE Zero-touch for Apple devices via Apple Business Manager
+         </div>
+         <div class="diagram-tile">
+          Android Work Profile BYOD; separates personal and work data
+         </div>
+         <div class="diagram-tile">
+          Fully Managed Android Corporate-owned; full control, no personal use
+         </div>
+         <div class="diagram-tile">
+          COPE Corporate-owned but allows personal use
+         </div>
+         <div class="diagram-tile">
+          Apple prerequisites MDM Push Certificate + ABM + ADE token
+         </div>
+         <div class="diagram-tile">
+          Android prerequisite Managed Google Play connected to Intune
+         </div>
+         <div class="diagram-tile">
+          Concept Remember This
+         </div>
+         <div class="diagram-tile">
+          Enrollment restrictions Control what platforms and OS versions can enroll
+         </div>
+        </div>
+       </figure>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Enrollment purpose
+           </td>
+           <td>
+            Establishes MDM management via certificate
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Two key questions
+           </td>
+           <td>
+            Who owns the device? Can we pre-configure before delivery?
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Autopilot
+           </td>
+           <td>
+            Zero-touch Windows deployment
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Co-management
+           </td>
+           <td>
+            Transition path from SCCM to Intune
+           </td>
+          </tr>
+          <tr>
+           <td>
+            ADE
+           </td>
+           <td>
+            Zero-touch Apple enrollment via Apple Business Manager
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Work Profile
+           </td>
+           <td>
+            BYOD container for personal Android
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Fully Managed Android
+           </td>
+           <td>
+            Corporate-owned work-only phone
+           </td>
+          </tr>
+          <tr>
+           <td>
+            COPE
+           </td>
+           <td>
+            Corporate-owned with personal use
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Android Dedicated
+           </td>
+           <td>
+            Kiosk / shared-device mode
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Apple prerequisites
+           </td>
+           <td>
+            Push certificate + ABM + ADE token
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../2-5-mfa-conditional-access-zero-trust-begins/">
+         <span class="story-path-number">
+          2.5
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          MFA &amp; Conditional Access: Zero Trust Begins
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          3.1
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          Enrollment Methods Overview: Every Platform Explained
+         </strong>
+         <small>
+          Enrolling Devices
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../3-2-windows-autopilot-zero-touch-deployment/">
+         <span class="story-path-number">
+          3.2
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          Windows Autopilot: Zero Touch Deployment
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-3">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+  <script defer="" src="../../assets/js/intune-lesson.js?v=20260927-ui4">
+  </script>
+ </body>
+</html>

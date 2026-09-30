@@ -1,69 +1,1569 @@
 <!DOCTYPE html>
-
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
-<meta content="RBAC: Roles &amp; Permissions in Intune · ashscript Intune tutorials" name="description"/>
-<meta content="#030503" name="theme-color"/>
-<link href="../../assets/images/ashscript-favicon.png?v=5" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=5" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=5" rel="apple-touch-icon"/>
-<title>Lesson 2.4: RBAC: Roles &amp; Permissions in Intune · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase2-lesson" style="--lesson-accent:#ff9f1c">
-<header class="site-header"><div class="container nav">
-<a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a>
-<button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button>
-<nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a aria-current="page" href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav>
-</div></header><main>
-<section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 2</span>/<span>2.4</span></div>
-<div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 2; IDENTITY IS EVERYTHING</div><h1>RBAC: Roles &amp; Permissions in Intune</h1><p class="lesson-subtitle">Ashpak builds a permission structure that protects AshScript</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout">
-<aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div>
-<a class="lesson-phase-link" href="../../intune/#phase-2"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 2</small><strong>Phase 2 · Identity is Everything</strong></span></a>
-<div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">2.4 RBAC: Roles &amp; Permissions in Intune</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-2">Learning Modules</a>
-<div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-what-is-rbac"><span>02</span><strong>What is RBAC?</strong></a><a href="#section-the-three-components-of-rbac"><span>03</span><strong>The Three Components of RBAC</strong></a><a href="#section-component-1-roles"><span>04</span><strong>Component 1; Roles</strong></a><a href="#section-component-2-member-groups"><span>05</span><strong>Component 2; Member Groups</strong></a><a href="#section-component-3-scope-scope-tags"><span>06</span><strong>Component 3; Scope (Scope Tags)</strong></a><a href="#section-building-ashscript-s-rbac-structure"><span>07</span><strong>Building AshScript's RBAC Structure</strong></a><a href="#section-verifying-role-assignments-work"><span>08</span><strong>Verifying Role Assignments Work</strong></a><a href="#section-rbac-vs-entra-id-admin-roles-know-the-difference"><span>09</span><strong>RBAC vs Entra ID Admin Roles; Know the Difference</strong></a><a href="#section-rbac-best-practices-the-ashscript-standard"><span>10</span><strong>RBAC Best Practices; The AshScript Standard</strong></a><a href="#section-ashscript-s-final-rbac-map"><span>11</span><strong>AshScript's Final RBAC Map</strong></a><a href="#section-ashscript-s-current-state-after-lesson-2-4"><span>12</span><strong>AshScript's Current State After Lesson 2.4</strong></a><a href="#section-key-concepts-to-lock-in"><span>13</span><strong>Key Concepts to Lock In</strong></a></nav></aside>
-<article aria-label="Lesson 2.4; RBAC: Roles &amp; Permissions in Intune" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-2">Learning Modules</a></div>
-<section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Three new IT staff join AshScript this week: Kabir; Helpdesk Level 1. His job is to help users with device issues, reset passcodes, and sync devices. Nothing more. Sneha; IT Operations. She deploys apps and manages configuration profiles. She should NOT be able to touch security policies or wipe devices. Dev; IT Security Analyst. He monitors compliance and security policies but should not be able to change device configurations or deploy apps.</p>
-<p>Riya pulls Ashpak aside:</p>
-<blockquote class="quote">"I need all three in Intune. But Ashpak; I want surgical precision on what each of them can do. Kabir once accidentally deleted a GPO in AD because he had too many permissions. I don't want a repeat of that in Intune."</blockquote>
-<p>Ashpak nods. This is exactly what RBAC is built for.</p></section><section class="lesson-section" id="section-what-is-rbac"><h2>What is RBAC?</h2><p>RBAC stands for Role-Based Access Control. It's the system that answers one question:</p>
-<blockquote class="quote">"Who is allowed to do what, on which devices, in which part of the Intune environment?"</blockquote>
-<p>Without RBAC, your only options are: Give someone full admin access (dangerous) Give someone no access (useless)</p>
-<p>With RBAC, you can be surgically precise:</p>
-<p>1 Kabir → Can sync devices + reset passcodes 2 Cannot wipe devices</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">Cannot create policies Cannot see Finance department devices</div><div class="flow-row"><div class="flow-node flow-node-key">Sneha</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can deploy apps + create config profiles Cannot touch compliance or security policies Cannot perform remote actions on devices</div></div><div class="flow-row"><div class="flow-node flow-node-key">Dev</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can view and edit compliance policies Can view security baselines Cannot deploy apps Cannot perform remote actions</div></div></div></div></section><section class="lesson-section" id="section-the-three-components-of-rbac"><h2>The Three Components of RBAC</h2><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">RBAC in Intune is built from three building blocks that work together:</div><div class="flow-node">Role + Member Group + Scope = Role Assignment</div></div></div></div>
-<p>Let's break each one down.</p><figure class="lesson-figure"><img alt="RBAC components" loading="lazy" src="../../assets/images/intune/lesson-2-4-rbac-components.svg"/><figcaption>Role + Member Group + Scope = Role Assignment.</figcaption></figure></section><section class="lesson-section" id="section-component-1-roles"><h2>Component 1: Roles</h2><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">A role is a collection of permissions; each permission is a specific action someone can take in</div><div class="diagram-note">Intune.</div><div class="diagram-note">Permissions look like this:</div><div class="flow-row"><div class="flow-node flow-node-key">Mobile Apps / Read</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can VIEW apps</div></div><div class="flow-row"><div class="flow-node flow-node-key">Mobile Apps / Create</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can ADD new apps</div></div><div class="flow-row"><div class="flow-node flow-node-key">Mobile Apps / Delete</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can DELETE apps</div></div><div class="flow-row"><div class="flow-node flow-node-key">Managed Devices / Read</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can VIEW devices</div></div><div class="flow-row"><div class="flow-node flow-node-key">Managed Devices / Wipe</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can WIPE devices</div></div><div class="flow-row"><div class="flow-node flow-node-key">Compliance Policies / Read</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can VIEW compliance</div></div><div class="flow-row"><div class="flow-node flow-node-key">Compliance Policies / Write</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can EDIT compliance</div></div><div class="flow-row"><div class="flow-node flow-node-key">Remote Tasks / Reset Passcode</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can reset passcodes</div></div><div class="flow-row"><div class="flow-node flow-node-key">Remote Tasks / Retire</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can retire devices</div></div></div></div>
-<p>Intune has two types of roles:</p>
-<h3 class="group-type-heading"><strong>Type 1: Built-in Roles</strong></h3><p>Microsoft provides ready-made roles covering the most common scenarios. Here are the most important ones: Built-in roles cannot be modified. They are fixed by Microsoft. If a built-in role is almost right but not quite; that's when you create a custom role.</p>
-<h3 class="group-type-heading"><strong>Type 2: Custom Roles</strong></h3><p>When no built-in role fits perfectly, you build your own from scratch by selecting exactly which permissions to include. AshScript example: Sneha needs to deploy apps AND manage configuration profiles; but the built- in Application Manager only covers apps, and Policy and Profile Manager only covers profiles. Neither fits exactly. So Ashpak creates a custom role combining both sets of permissions.</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Role Name</th><th scope="col">What They Can Do</th></tr></thead><tbody><tr><td>Intune Service Administrator</td><td>Full access to everything in Intune; the top-level Intune admin role (Ashpak's daily role)</td></tr><tr><td>Help Desk Operator</td><td>View devices and users; perform remote actions: sync, lock, reset passcode; cannot create/edit policies; cannot wipe devices</td></tr><tr><td>Application Manager</td><td>Create and manage apps; create app protection policies; cannot manage devices; cannot touch security policies</td></tr><tr><td>Policy and Profile Manager</td><td>Create configuration profiles; create compliance policies; cannot manage apps; cannot perform remote actions</td></tr><tr><td>Read Only Operator</td><td>Can VIEW everything in Intune; cannot change ANYTHING; perfect for auditors</td></tr><tr><td>Endpoint Security Manager</td><td>Manage security baselines; manage compliance policies; manage Defender settings; cannot deploy apps; cannot manage configurations</td></tr><tr><td>School Administrator</td><td>Manage education-specific features (Intune for Education scenarios)</td></tr></tbody></table></div></section><section class="lesson-section" id="section-component-2-member-groups"><h2>Component 2: Member Groups</h2><p>The member group is the Entra ID group that contains the IT admins who will receive the role.</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="diagram-kv"><span class="diagram-k">Role</span><strong>Help Desk Operator</strong></div><div class="diagram-kv"><span class="diagram-k">Member Group</span><strong>INTUNE-ADMINS-HELPDESK  Members: Kabir</strong></div><div class="diagram-kv"><span class="diagram-k">This means</span><strong>Everyone in INTUNE-ADMINS-HELPDESK gets Help Desk Operator permissions</strong></div></div></div></div>
-<p>Warning: Important distinction: Member groups contain IT administrators; not end users. Don't confuse these with the device/user groups we created in Lesson 2.3. Those are for policy targeting. These are for admin access control.</p></section><section class="lesson-section" id="section-component-3-scope-scope-tags"><h2>Component 3: Scope (Scope Tags)</h2><p>Scope answers: "Which devices and users can this admin see and manage?" By default, an admin can see all devices and users in Intune. Scope Tags let you restrict this so an admin only sees what's relevant to them.</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">EXAMPLE: AshScript has two offices; Mumbai and Pune.</div><div class="flow-row"><div class="flow-node flow-node-key">Without Scope Tags: Kabir (Mumbai helpdesk) can see ALL 1,000 devices including Pune office devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">confusing, risky</div></div><div class="diagram-note">With Scope Tags: Kabir is assigned the "Mumbai" scope tag He can ONLY see devices tagged "Mumbai" Pune devices are completely invisible to him</div></div></div>
-<p>We'll go deep on Scope Tags in Lesson 9.4. For now, understand the concept; when no scope tag is applied to a role assignment, the admin sees everything (the default behaviour).</p></section><section class="lesson-section" id="section-building-ashscript-s-rbac-structure"><h2>Building AshScript's RBAC Structure</h2><p>Now let's do the real work. Here's what Ashpak needs to build: STEP 1; Create Admin Member Groups in Entra ID First, Ashpak creates static groups in Entra ID for each admin tier:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key"><a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a>  Identity</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Groups</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">All Groups</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">+ New Group  Group Type: Security Group Name: INTUNE-ADMINS-HELPDESK Membership Type: Assigned (Static) Members: kabir@ashscript.com</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create Group Name: INTUNE-ADMINS-OPSTECH Members: sneha@ashscript.com</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create Group Name: INTUNE-ADMINS-SECURITY Members: dev@ashscript.com</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create Group Name: INTUNE-ADMINS-FULL Members: ashpak.it@ashscript.com</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create</div></div></div></div>
-<h3>STEP 2: Navigate to Intune Roles</h3>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a>  Tenant Administration  Roles  All Roles</div></div></div></div>
-<p>You'll see all the built-in roles listed here. Let's start with Kabir.</p>
-<h3>STEP 3: Assign Help Desk Operator to Kabir</h3>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Tenant Administration</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Roles</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">All Roles  Help Desk Operator  Assignments tab  + Assign  Assignment Name: AshScript-HelpDesk-Assignment Member Groups: INTUNE-ADMINS-HELPDESK (This is WHO gets the role) Scope Groups: All Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">For now, full scope (This is WHAT they can manage)</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Next</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Review + Create</div></div></div></div>
-<div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Now Kabir can log into <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> and:</li><li>View all devices</li><li>Sync a device</li><li>Lock a device remotely</li><li>Reset a passcode</li><li>Cannot create or edit any policy</li><li>Cannot wipe a device</li><li>Cannot deploy apps</li></ul></div>
-<h3>STEP 4: Create a Custom Role for Sneha</h3>
-<p>Sneha needs app management + configuration profile management. No built-in role covers both. Ashpak builds a custom role:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Tenant Administration</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Roles</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">All Roles  + Create  Name: IT Operations Manager Description: Deploy apps and manage config profiles. No security or remote device actions.</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Next: Permissions</div></div></div></div>
-<p>Now comes the permission selection. Ashpak carefully picks:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">PERMISSIONS TO ENABLE FOR IT OPERATIONS MANAGER:</div><div class="diagram-note">Mobile Apps Read Create Update Delete Assign × Relate (not needed)</div><div class="diagram-note">App Configurations Read Create Update Delete</div><div class="diagram-note">Device Configurations (Config Profiles) Read Create Update Delete Assign</div><div class="flow-row"><div class="flow-node flow-node-key">Managed Devices Read</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can see devices × Update</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Cannot edit device properties × Delete</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Cannot delete devices × Wipe</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Cannot wipe × Retire</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Cannot retire</div></div></div></div>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Remote Tasks × ALL</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">No remote actions at all</div></div><div class="flow-row"><div class="flow-node flow-node-key">Compliance Policies Read</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Can view but not change × Create × Update × Delete</div></div><div class="flow-row"><div class="flow-node flow-node-key">Next</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Review + Create</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div>
-<p>Now assign it to Sneha:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">IT Operations Manager role  Assignments</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">+ Assign Assignment Name: AshScript-OpsManager-Assignment Member Groups: INTUNE-ADMINS-OPSTECH Scope Groups: All Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create</div></div></div></div>
-<h3>STEP 5: Assign Endpoint Security Manager to Dev</h3>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Tenant Administration</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Roles</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">All Roles  Endpoint Security Manager  Assignments</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">+ Assign Assignment Name: AshScript-SecAnalyst-Assignment Member Groups: INTUNE-ADMINS-SECURITY Scope Groups: All Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Create</div></div></div></div>
-<div class="bullet-cluster"><ul class="lesson-list bullet-group"><li>Dev can now:</li><li>View and edit compliance policies</li><li>Manage security baselines</li><li>View Defender settings</li><li>Cannot deploy apps</li><li>Cannot create configuration profiles</li></ul></div>
-<p>× Cannot perform remote device actions</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Person</th><th scope="col">Role</th><th scope="col">Can Do</th></tr></thead><tbody><tr><td>Ashpak</td><td>Intune Service Admin</td><td>Everything in Intune</td></tr><tr><td>Kabir</td><td>Help Desk Operator</td><td>View + limited remote actions (sync, lock, reset passcode)</td></tr><tr><td>Sneha</td><td>IT Operations Manager (Custom)</td><td>Deploy apps + manage config profiles</td></tr><tr><td>Dev</td><td>Endpoint Security Mgr</td><td>Compliance + security baselines + Defender</td></tr><tr><td>Riya</td><td>Read Only Operator</td><td>View everything; change nothing (Executive oversight)</td></tr></tbody></table></div></section><section class="lesson-section" id="section-verifying-role-assignments-work"><h2>Verifying Role Assignments Work</h2><p>How Kabir Sees Intune vs How Ashpak Sees It:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">ASHPAK's view (Intune Service Administrator):</div><div class="diagram-kv"><span class="diagram-k">Left menu shows</span><strong>Home Devices (full access; read + write + remote actions) Apps (full access) Endpoint Security (full access) Reports (full access) Tenant Administration (full access)</strong></div><div class="diagram-kv"><span class="diagram-k">KABIR's view (Help Desk Operator)</span><strong></strong></div><div class="diagram-kv"><span class="diagram-k">Left menu shows</span><strong>Home Devices (read only + limited remote actions) × Apps (greyed out; no access) × Endpoint Security (greyed out) Reports (read only) × Tenant Administration (hidden)</strong></div><div class="diagram-kv"><span class="diagram-k">When Kabir opens a device</span><strong>Can see device details Sync button; available Reset passcode; available × Wipe button; greyed out × Delete button; greyed out</strong></div></div></div></div>
-<p>Checking What Role a User Has:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a>  Tenant Administration  Roles  All Roles  Click any role  Assignments tab  See who is assigned</div></div></div></div>
-<p>Or check from the user's perspective:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="diagram-kv"><span class="diagram-k"><a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a>  Users  Search</span><strong>kabir@ashscript.com  Intune Roles tab  See all roles assigned to Kabir</strong></div></div></div></div></section><section class="lesson-section" id="section-rbac-vs-entra-id-admin-roles-know-the-difference"><h2>RBAC vs Entra ID Admin Roles: Know the Difference</h2><p>This confuses many beginners. There are two separate permission systems at play: Critical point: The Intune Administrator role in Entra ID gives someone full control of Intune; equivalent to Intune Service Administrator in Intune RBAC. Assigning someone Global Administrator in Entra ID gives them full access to everything; including Intune; regardless of Intune RBAC settings. RBAC only applies to users who access Intune WITHOUT a Global Admin or Intune Admin Entra role.</p><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Entra ID roles</th><th scope="col">Intune RBAC roles</th></tr></thead><tbody><tr><td>Controls access to the entire Microsoft 365 ecosystem</td><td>Controls access WITHIN Intune specifically</td></tr><tr><td>Examples: Global Administrator; User Administrator; Intune Administrator; Security Administrator</td><td>Examples: Intune Service Admin; Help Desk Operator; Application Manager; Endpoint Security Manager</td></tr><tr><td>Assigned in: <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">entra.microsoft.com</a> → Roles → Assignments</td><td>Assigned in: <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a> → Tenant Admin → Roles</td></tr><tr><td>Affects: Users, licences, tenant settings, Conditional Access</td><td>Affects: Devices, apps, policies, compliance, remote actions within Intune only</td></tr></tbody></table></div></section><section class="lesson-section" id="section-rbac-best-practices-the-ashscript-standard"><h2>RBAC Best Practices: The AshScript Standard</h2><p>Ashpak documents these as AshScript's official RBAC rules:</p>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">ASHSCRIPT RBAC BEST PRACTICES</div><div class="flow-node">1. LEAST PRIVILEGE</div><div class="flow-node">Give the minimum permissions needed.</div><div class="flow-node">Never give full admin "just in case."</div><div class="flow-node">2. NEVER ASSIGN ROLES TO INDIVIDUALS</div><div class="flow-node">Always assign roles to GROUPS, not people.</div><div class="flow-node">People leave. Groups remain. Clean and auditable.</div><div class="flow-node">3. REVIEW REGULARLY</div><div class="flow-node">Quarterly access review; does Kabir still need</div><div class="flow-node">these permissions? Has Sneha's role changed?</div><div class="flow-node">4. CUSTOM ROLES FOR CUSTOM NEEDS</div><div class="flow-node">Don't force fit people into wrong built-in roles.</div><div class="flow-node">Build precise custom roles when needed.</div><div class="flow-node">5. DOCUMENT EVERY ROLE ASSIGNMENT</div><div class="flow-node">Who has what, why, since when, approved by whom.</div><div class="flow-node">Critical for audits and compliance.</div><div class="flow-node">6. BREAK GLASS ACCOUNTS</div><div class="flow-node">Two Global Admin accounts; offline, MFA-protected.</div><div class="flow-node">For emergencies only. Never used daily.</div><div class="flow-node">7. MONITOR AUDIT LOGS</div><div class="flow-node">Check who did what in Intune weekly.</div></div></div></div>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Tenant Admin</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Audit Logs</div></div></div></div></section><section class="lesson-section" id="section-ashscript-s-final-rbac-map"><h2>AshScript's Final RBAC Map</h2><figure class="lesson-figure"><img alt="AshScript RBAC map" loading="lazy" src="../../assets/images/intune/lesson-2-4-rbac-map.svg"/><figcaption>Administrative roles, member groups and least-privilege boundaries.</figcaption></figure></section><section class="lesson-section" id="section-ashscript-s-current-state-after-lesson-2-4"><h2>AshScript's Current State After Lesson 2.4</h2><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-note">ASHSCRIPT TENANT</div><div class="diagram-note">1,000 users synced and licenced</div><div class="diagram-note">Full group architecture created</div><div class="diagram-note">RBAC structure designed and implemented</div><div class="flow-row"><div class="flow-node flow-node-key">Kabir</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Help Desk Operator</div></div><div class="flow-row"><div class="flow-node flow-node-key">Sneha</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Custom IT Operations Manager</div></div><div class="flow-row"><div class="flow-node flow-node-key">Dev</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Endpoint Security Manager</div></div><div class="flow-row"><div class="flow-node flow-node-key">Riya</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Read Only Operator</div></div><div class="diagram-note">Admin member groups created</div></div></div>
-<div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="flow-node">MFA and Conditional Access not yet configured</div><div class="flow-node">No devices enrolled yet</div><div class="flow-node">No policies created yet</div></div></div></div></section><section class="lesson-section" id="section-key-concepts-to-lock-in"><h2>Key Concepts to Lock In</h2><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">Concept</th><th scope="col">Remember This</th></tr></thead><tbody><tr><td>RBAC</td><td>Controls who can do what in Intune</td></tr><tr><td>Three components</td><td>Role + Member Group + Scope = Assignment</td></tr><tr><td>Built-in roles</td><td>Fixed by Microsoft; cannot be modified</td></tr><tr><td>Custom roles</td><td>Build from scratch; choose exact permissions</td></tr><tr><td>Member group</td><td>Entra group containing the IT admins</td></tr><tr><td>Scope</td><td>Which devices/users the admin can see</td></tr><tr><td>Least privilege</td><td>Always minimum permissions needed</td></tr><tr><td>Assign to groups</td><td>Never assign roles directly to individuals</td></tr><tr><td>Entra vs Intune roles</td><td>Two separate systems; understand both</td></tr><tr><td>Global Admin override</td><td>Global Admin bypasses all Intune RBAC</td></tr></tbody></table></div></section>
-<nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../2-3-creating-managing-users-and-groups-static-vs-dynamic/"><span class="story-path-number">2.3</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Creating &amp; Managing Users and Groups (Static vs Dynamic)</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">2.4</span><span class="story-path-label">YOU ARE HERE</span><strong>RBAC: Roles &amp; Permissions in Intune</strong><small>Identity is Everything</small></div><a class="story-path-step story-path-next" href="../2-5-mfa-conditional-access-zero-trust-begins/"><span class="story-path-number">2.5</span><span class="story-path-label">NEXT CHAPTER</span><strong>MFA &amp; Conditional Access: Zero Trust Begins</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-2">Learning Modules</a></nav></article>
-</div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer>
-<script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script></body></html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="RBAC: Roles &amp; Permissions in Intune &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=5" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=5" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=5" rel="apple-touch-icon"/>
+  <title>
+   Lesson 2.4: RBAC: Roles &amp; Permissions in Intune &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+ </head>
+ <body class="phase2-lesson" style="--lesson-accent:#ff9f1c">
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a aria-current="page" href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 2
+      </span>
+      /
+      <span>
+       2.4
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 2; IDENTITY IS EVERYTHING
+     </div>
+     <h1>
+      RBAC: Roles &amp; Permissions in Intune
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak builds a permission structure that protects AshScript
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-2">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 2
+        </small>
+        <strong>
+         Phase 2 &middot; Identity is Everything
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       2.4 RBAC: Roles &amp; Permissions in Intune
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-2">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-what-is-rbac">
+        <span>
+         02
+        </span>
+        <strong>
+         What is RBAC?
+        </strong>
+       </a>
+       <a href="#section-the-three-components-of-rbac">
+        <span>
+         03
+        </span>
+        <strong>
+         The Three Components of RBAC
+        </strong>
+       </a>
+       <a href="#section-component-1-roles">
+        <span>
+         04
+        </span>
+        <strong>
+         Component 1; Roles
+        </strong>
+       </a>
+       <a href="#section-component-2-member-groups">
+        <span>
+         05
+        </span>
+        <strong>
+         Component 2; Member Groups
+        </strong>
+       </a>
+       <a href="#section-component-3-scope-scope-tags">
+        <span>
+         06
+        </span>
+        <strong>
+         Component 3; Scope (Scope Tags)
+        </strong>
+       </a>
+       <a href="#section-building-ashscript-s-rbac-structure">
+        <span>
+         07
+        </span>
+        <strong>
+         Building AshScript's RBAC Structure
+        </strong>
+       </a>
+       <a href="#section-verifying-role-assignments-work">
+        <span>
+         08
+        </span>
+        <strong>
+         Verifying Role Assignments Work
+        </strong>
+       </a>
+       <a href="#section-rbac-vs-entra-id-admin-roles-know-the-difference">
+        <span>
+         09
+        </span>
+        <strong>
+         RBAC vs Entra ID Admin Roles; Know the Difference
+        </strong>
+       </a>
+       <a href="#section-rbac-best-practices-the-ashscript-standard">
+        <span>
+         10
+        </span>
+        <strong>
+         RBAC Best Practices; The AshScript Standard
+        </strong>
+       </a>
+       <a href="#section-ashscript-s-final-rbac-map">
+        <span>
+         11
+        </span>
+        <strong>
+         AshScript's Final RBAC Map
+        </strong>
+       </a>
+       <a href="#section-ashscript-s-current-state-after-lesson-2-4">
+        <span>
+         12
+        </span>
+        <strong>
+         AshScript's Current State After Lesson 2.4
+        </strong>
+       </a>
+       <a href="#section-key-concepts-to-lock-in">
+        <span>
+         13
+        </span>
+        <strong>
+         Key Concepts to Lock In
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 2.4; RBAC: Roles &amp; Permissions in Intune" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-2">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Three new IT staff join AshScript this week: Kabir; Helpdesk Level 1. His job is to help users with device issues, reset passcodes, and sync devices. Nothing more. Sneha; IT Operations. She deploys apps and manages configuration profiles. She should NOT be able to touch security policies or wipe devices. Dev; IT Security Analyst. He monitors compliance and security policies but should not be able to change device configurations or deploy apps.
+       </p>
+       <p>
+        Riya pulls Ashpak aside:
+       </p>
+       <blockquote class="quote">
+        "I need all three in Intune. But Ashpak; I want surgical precision on what each of them can do. Kabir once accidentally deleted a GPO in AD because he had too many permissions. I don't want a repeat of that in Intune."
+       </blockquote>
+       <p>
+        Ashpak nods. This is exactly what RBAC is built for.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-what-is-rbac">
+       <h2>
+        What is RBAC?
+       </h2>
+       <p>
+        RBAC stands for Role-Based Access Control. It's the system that answers one question:
+       </p>
+       <blockquote class="quote">
+        "Who is allowed to do what, on which devices, in which part of the Intune environment?"
+       </blockquote>
+       <p>
+        Without RBAC, your only options are: Give someone full admin access (dangerous) Give someone no access (useless)
+       </p>
+       <p>
+        With RBAC, you can be surgically precise:
+       </p>
+       <p>
+        1 Kabir &rarr; Can sync devices + reset passcodes 2 Cannot wipe devices
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          Cannot create policies Cannot see Finance department devices
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Sneha
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can deploy apps + create config profiles Cannot touch compliance or security policies Cannot perform remote actions on devices
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Dev
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can view and edit compliance policies Can view security baselines Cannot deploy apps Cannot perform remote actions
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-the-three-components-of-rbac">
+       <h2>
+        The Three Components of RBAC
+       </h2>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           RBAC in Intune is built from three building blocks that work together:
+          </div>
+          <div class="flow-node">
+           Role + Member Group + Scope = Role Assignment
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Let's break each one down.
+       </p>
+       <figure class="lesson-figure">
+        <img alt="RBAC components" loading="lazy" src="../../assets/images/intune/lesson-2-4-rbac-components.svg"/>
+        <figcaption>
+         Role + Member Group + Scope = Role Assignment.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-component-1-roles">
+       <h2>
+        Component 1: Roles
+       </h2>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          A role is a collection of permissions; each permission is a specific action someone can take in
+         </div>
+         <div class="diagram-note">
+          Intune.
+         </div>
+         <div class="diagram-note">
+          Permissions look like this:
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Mobile Apps / Read
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can VIEW apps
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Mobile Apps / Create
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can ADD new apps
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Mobile Apps / Delete
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can DELETE apps
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Managed Devices / Read
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can VIEW devices
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Managed Devices / Wipe
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can WIPE devices
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Compliance Policies / Read
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can VIEW compliance
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Compliance Policies / Write
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can EDIT compliance
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Remote Tasks / Reset Passcode
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can reset passcodes
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Remote Tasks / Retire
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can retire devices
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Intune has two types of roles:
+       </p>
+       <h3 class="group-type-heading">
+        <strong>
+         Type 1: Built-in Roles
+        </strong>
+       </h3>
+       <p>
+        Microsoft provides ready-made roles covering the most common scenarios. Here are the most important ones: Built-in roles cannot be modified. They are fixed by Microsoft. If a built-in role is almost right but not quite; that's when you create a custom role.
+       </p>
+       <h3 class="group-type-heading">
+        <strong>
+         Type 2: Custom Roles
+        </strong>
+       </h3>
+       <p>
+        When no built-in role fits perfectly, you build your own from scratch by selecting exactly which permissions to include. AshScript example: Sneha needs to deploy apps AND manage configuration profiles; but the built- in Application Manager only covers apps, and Policy and Profile Manager only covers profiles. Neither fits exactly. So Ashpak creates a custom role combining both sets of permissions.
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Role Name
+           </th>
+           <th scope="col">
+            What They Can Do
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Intune Service Administrator
+           </td>
+           <td>
+            Full access to everything in Intune; the top-level Intune admin role (Ashpak's daily role)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Help Desk Operator
+           </td>
+           <td>
+            View devices and users; perform remote actions: sync, lock, reset passcode; cannot create/edit policies; cannot wipe devices
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Application Manager
+           </td>
+           <td>
+            Create and manage apps; create app protection policies; cannot manage devices; cannot touch security policies
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Policy and Profile Manager
+           </td>
+           <td>
+            Create configuration profiles; create compliance policies; cannot manage apps; cannot perform remote actions
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Read Only Operator
+           </td>
+           <td>
+            Can VIEW everything in Intune; cannot change ANYTHING; perfect for auditors
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Endpoint Security Manager
+           </td>
+           <td>
+            Manage security baselines; manage compliance policies; manage Defender settings; cannot deploy apps; cannot manage configurations
+           </td>
+          </tr>
+          <tr>
+           <td>
+            School Administrator
+           </td>
+           <td>
+            Manage education-specific features (Intune for Education scenarios)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-component-2-member-groups">
+       <h2>
+        Component 2: Member Groups
+       </h2>
+       <p>
+        The member group is the Entra ID group that contains the IT admins who will receive the role.
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Role
+           </span>
+           <strong>
+            Help Desk Operator
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Member Group
+           </span>
+           <strong>
+            INTUNE-ADMINS-HELPDESK  Members: Kabir
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            This means
+           </span>
+           <strong>
+            Everyone in INTUNE-ADMINS-HELPDESK gets Help Desk Operator permissions
+           </strong>
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Warning: Important distinction: Member groups contain IT administrators; not end users. Don't confuse these with the device/user groups we created in Lesson 2.3. Those are for policy targeting. These are for admin access control.
+       </p>
+      </section>
+      <section class="lesson-section" id="section-component-3-scope-scope-tags">
+       <h2>
+        Component 3: Scope (Scope Tags)
+       </h2>
+       <p>
+        Scope answers: "Which devices and users can this admin see and manage?" By default, an admin can see all devices and users in Intune. Scope Tags let you restrict this so an admin only sees what's relevant to them.
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          EXAMPLE: AshScript has two offices; Mumbai and Pune.
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Without Scope Tags: Kabir (Mumbai helpdesk) can see ALL 1,000 devices including Pune office devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           confusing, risky
+          </div>
+         </div>
+         <div class="diagram-note">
+          With Scope Tags: Kabir is assigned the "Mumbai" scope tag He can ONLY see devices tagged "Mumbai" Pune devices are completely invisible to him
+         </div>
+        </div>
+       </div>
+       <p>
+        We'll go deep on Scope Tags in Lesson 9.4. For now, understand the concept; when no scope tag is applied to a role assignment, the admin sees everything (the default behaviour).
+       </p>
+      </section>
+      <section class="lesson-section" id="section-building-ashscript-s-rbac-structure">
+       <h2>
+        Building AshScript's RBAC Structure
+       </h2>
+       <p>
+        Now let's do the real work. Here's what Ashpak needs to build: STEP 1; Create Admin Member Groups in Entra ID First, Ashpak creates static groups in Entra ID for each admin tier:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+            entra.microsoft.com
+           </a>
+           Identity
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Groups
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           All Groups
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           + New Group  Group Type: Security Group Name: INTUNE-ADMINS-HELPDESK Membership Type: Assigned (Static) Members: kabir@ashscript.com
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create Group Name: INTUNE-ADMINS-OPSTECH Members: sneha@ashscript.com
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create Group Name: INTUNE-ADMINS-SECURITY Members: dev@ashscript.com
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create Group Name: INTUNE-ADMINS-FULL Members: ashpak.it@ashscript.com
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create
+          </div>
+         </div>
+        </div>
+       </div>
+       <h3>
+        STEP 2: Navigate to Intune Roles
+       </h3>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+           Tenant Administration  Roles  All Roles
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        You'll see all the built-in roles listed here. Let's start with Kabir.
+       </p>
+       <h3>
+        STEP 3: Assign Help Desk Operator to Kabir
+       </h3>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Tenant Administration
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Roles
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           All Roles  Help Desk Operator  Assignments tab  + Assign  Assignment Name: AshScript-HelpDesk-Assignment Member Groups: INTUNE-ADMINS-HELPDESK (This is WHO gets the role) Scope Groups: All Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           For now, full scope (This is WHAT they can manage)
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Next
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Review + Create
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Now Kabir can log into
+          <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+           intune.microsoft.com
+          </a>
+          and:
+         </li>
+         <li>
+          View all devices
+         </li>
+         <li>
+          Sync a device
+         </li>
+         <li>
+          Lock a device remotely
+         </li>
+         <li>
+          Reset a passcode
+         </li>
+         <li>
+          Cannot create or edit any policy
+         </li>
+         <li>
+          Cannot wipe a device
+         </li>
+         <li>
+          Cannot deploy apps
+         </li>
+        </ul>
+       </div>
+       <h3>
+        STEP 4: Create a Custom Role for Sneha
+       </h3>
+       <p>
+        Sneha needs app management + configuration profile management. No built-in role covers both. Ashpak builds a custom role:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Tenant Administration
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Roles
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           All Roles  + Create  Name: IT Operations Manager Description: Deploy apps and manage config profiles. No security or remote device actions.
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Next: Permissions
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Now comes the permission selection. Ashpak carefully picks:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          PERMISSIONS TO ENABLE FOR IT OPERATIONS MANAGER:
+         </div>
+         <div class="diagram-note">
+          Mobile Apps Read Create Update Delete Assign &times; Relate (not needed)
+         </div>
+         <div class="diagram-note">
+          App Configurations Read Create Update Delete
+         </div>
+         <div class="diagram-note">
+          Device Configurations (Config Profiles) Read Create Update Delete Assign
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Managed Devices Read
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can see devices &times; Update
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Cannot edit device properties &times; Delete
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Cannot delete devices &times; Wipe
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Cannot wipe &times; Retire
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Cannot retire
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Remote Tasks &times; ALL
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           No remote actions at all
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Compliance Policies Read
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Can view but not change &times; Create &times; Update &times; Delete
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Next
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Review + Create
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        Now assign it to Sneha:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           IT Operations Manager role  Assignments
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           + Assign Assignment Name: AshScript-OpsManager-Assignment Member Groups: INTUNE-ADMINS-OPSTECH Scope Groups: All Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create
+          </div>
+         </div>
+        </div>
+       </div>
+       <h3>
+        STEP 5: Assign Endpoint Security Manager to Dev
+       </h3>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Tenant Administration
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Roles
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           All Roles  Endpoint Security Manager  Assignments
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           + Assign Assignment Name: AshScript-SecAnalyst-Assignment Member Groups: INTUNE-ADMINS-SECURITY Scope Groups: All Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Create
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="bullet-cluster">
+        <ul class="lesson-list bullet-group">
+         <li>
+          Dev can now:
+         </li>
+         <li>
+          View and edit compliance policies
+         </li>
+         <li>
+          Manage security baselines
+         </li>
+         <li>
+          View Defender settings
+         </li>
+         <li>
+          Cannot deploy apps
+         </li>
+         <li>
+          Cannot create configuration profiles
+         </li>
+        </ul>
+       </div>
+       <p>
+        &times; Cannot perform remote device actions
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Person
+           </th>
+           <th scope="col">
+            Role
+           </th>
+           <th scope="col">
+            Can Do
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Ashpak
+           </td>
+           <td>
+            Intune Service Admin
+           </td>
+           <td>
+            Everything in Intune
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Kabir
+           </td>
+           <td>
+            Help Desk Operator
+           </td>
+           <td>
+            View + limited remote actions (sync, lock, reset passcode)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Sneha
+           </td>
+           <td>
+            IT Operations Manager (Custom)
+           </td>
+           <td>
+            Deploy apps + manage config profiles
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Dev
+           </td>
+           <td>
+            Endpoint Security Mgr
+           </td>
+           <td>
+            Compliance + security baselines + Defender
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Riya
+           </td>
+           <td>
+            Read Only Operator
+           </td>
+           <td>
+            View everything; change nothing (Executive oversight)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-verifying-role-assignments-work">
+       <h2>
+        Verifying Role Assignments Work
+       </h2>
+       <p>
+        How Kabir Sees Intune vs How Ashpak Sees It:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           ASHPAK's view (Intune Service Administrator):
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Left menu shows
+           </span>
+           <strong>
+            Home Devices (full access; read + write + remote actions) Apps (full access) Endpoint Security (full access) Reports (full access) Tenant Administration (full access)
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            KABIR's view (Help Desk Operator)
+           </span>
+           <strong>
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            Left menu shows
+           </span>
+           <strong>
+            Home Devices (read only + limited remote actions) &times; Apps (greyed out; no access) &times; Endpoint Security (greyed out) Reports (read only) &times; Tenant Administration (hidden)
+           </strong>
+          </div>
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            When Kabir opens a device
+           </span>
+           <strong>
+            Can see device details Sync button; available Reset passcode; available &times; Wipe button; greyed out &times; Delete button; greyed out
+           </strong>
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Checking What Role a User Has:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+            intune.microsoft.com
+           </a>
+           Tenant Administration  Roles  All Roles  Click any role  Assignments tab  See who is assigned
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        Or check from the user's perspective:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+             intune.microsoft.com
+            </a>
+            Users  Search
+           </span>
+           <strong>
+            kabir@ashscript.com  Intune Roles tab  See all roles assigned to Kabir
+           </strong>
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-rbac-vs-entra-id-admin-roles-know-the-difference">
+       <h2>
+        RBAC vs Entra ID Admin Roles: Know the Difference
+       </h2>
+       <p>
+        This confuses many beginners. There are two separate permission systems at play: Critical point: The Intune Administrator role in Entra ID gives someone full control of Intune; equivalent to Intune Service Administrator in Intune RBAC. Assigning someone Global Administrator in Entra ID gives them full access to everything; including Intune; regardless of Intune RBAC settings. RBAC only applies to users who access Intune WITHOUT a Global Admin or Intune Admin Entra role.
+       </p>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Entra ID roles
+           </th>
+           <th scope="col">
+            Intune RBAC roles
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Controls access to the entire Microsoft 365 ecosystem
+           </td>
+           <td>
+            Controls access WITHIN Intune specifically
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Examples: Global Administrator; User Administrator; Intune Administrator; Security Administrator
+           </td>
+           <td>
+            Examples: Intune Service Admin; Help Desk Operator; Application Manager; Endpoint Security Manager
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Assigned in:
+            <a class="lesson-url" href="https://entra.microsoft.com" rel="noopener noreferrer" target="_blank">
+             entra.microsoft.com
+            </a>
+            &rarr; Roles &rarr; Assignments
+           </td>
+           <td>
+            Assigned in:
+            <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+             intune.microsoft.com
+            </a>
+            &rarr; Tenant Admin &rarr; Roles
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Affects: Users, licences, tenant settings, Conditional Access
+           </td>
+           <td>
+            Affects: Devices, apps, policies, compliance, remote actions within Intune only
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-rbac-best-practices-the-ashscript-standard">
+       <h2>
+        RBAC Best Practices: The AshScript Standard
+       </h2>
+       <p>
+        Ashpak documents these as AshScript's official RBAC rules:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           ASHSCRIPT RBAC BEST PRACTICES
+          </div>
+          <div class="flow-node">
+           1. LEAST PRIVILEGE
+          </div>
+          <div class="flow-node">
+           Give the minimum permissions needed.
+          </div>
+          <div class="flow-node">
+           Never give full admin "just in case."
+          </div>
+          <div class="flow-node">
+           2. NEVER ASSIGN ROLES TO INDIVIDUALS
+          </div>
+          <div class="flow-node">
+           Always assign roles to GROUPS, not people.
+          </div>
+          <div class="flow-node">
+           People leave. Groups remain. Clean and auditable.
+          </div>
+          <div class="flow-node">
+           3. REVIEW REGULARLY
+          </div>
+          <div class="flow-node">
+           Quarterly access review; does Kabir still need
+          </div>
+          <div class="flow-node">
+           these permissions? Has Sneha's role changed?
+          </div>
+          <div class="flow-node">
+           4. CUSTOM ROLES FOR CUSTOM NEEDS
+          </div>
+          <div class="flow-node">
+           Don't force fit people into wrong built-in roles.
+          </div>
+          <div class="flow-node">
+           Build precise custom roles when needed.
+          </div>
+          <div class="flow-node">
+           5. DOCUMENT EVERY ROLE ASSIGNMENT
+          </div>
+          <div class="flow-node">
+           Who has what, why, since when, approved by whom.
+          </div>
+          <div class="flow-node">
+           Critical for audits and compliance.
+          </div>
+          <div class="flow-node">
+           6. BREAK GLASS ACCOUNTS
+          </div>
+          <div class="flow-node">
+           Two Global Admin accounts; offline, MFA-protected.
+          </div>
+          <div class="flow-node">
+           For emergencies only. Never used daily.
+          </div>
+          <div class="flow-node">
+           7. MONITOR AUDIT LOGS
+          </div>
+          <div class="flow-node">
+           Check who did what in Intune weekly.
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Tenant Admin
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Audit Logs
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-ashscript-s-final-rbac-map">
+       <h2>
+        AshScript's Final RBAC Map
+       </h2>
+       <figure class="lesson-figure">
+        <img alt="AshScript RBAC map" loading="lazy" src="../../assets/images/intune/lesson-2-4-rbac-map.svg"/>
+        <figcaption>
+         Administrative roles, member groups and least-privilege boundaries.
+        </figcaption>
+       </figure>
+      </section>
+      <section class="lesson-section" id="section-ashscript-s-current-state-after-lesson-2-4">
+       <h2>
+        AshScript's Current State After Lesson 2.4
+       </h2>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-note">
+          ASHSCRIPT TENANT
+         </div>
+         <div class="diagram-note">
+          1,000 users synced and licenced
+         </div>
+         <div class="diagram-note">
+          Full group architecture created
+         </div>
+         <div class="diagram-note">
+          RBAC structure designed and implemented
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Kabir
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Help Desk Operator
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Sneha
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Custom IT Operations Manager
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Dev
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Endpoint Security Manager
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Riya
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Read Only Operator
+          </div>
+         </div>
+         <div class="diagram-note">
+          Admin member groups created
+         </div>
+        </div>
+       </div>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="flow-node">
+           MFA and Conditional Access not yet configured
+          </div>
+          <div class="flow-node">
+           No devices enrolled yet
+          </div>
+          <div class="flow-node">
+           No policies created yet
+          </div>
+         </div>
+        </div>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-key-concepts-to-lock-in">
+       <h2>
+        Key Concepts to Lock In
+       </h2>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            Concept
+           </th>
+           <th scope="col">
+            Remember This
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            RBAC
+           </td>
+           <td>
+            Controls who can do what in Intune
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Three components
+           </td>
+           <td>
+            Role + Member Group + Scope = Assignment
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Built-in roles
+           </td>
+           <td>
+            Fixed by Microsoft; cannot be modified
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Custom roles
+           </td>
+           <td>
+            Build from scratch; choose exact permissions
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Member group
+           </td>
+           <td>
+            Entra group containing the IT admins
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Scope
+           </td>
+           <td>
+            Which devices/users the admin can see
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Least privilege
+           </td>
+           <td>
+            Always minimum permissions needed
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Assign to groups
+           </td>
+           <td>
+            Never assign roles directly to individuals
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Entra vs Intune roles
+           </td>
+           <td>
+            Two separate systems; understand both
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Global Admin override
+           </td>
+           <td>
+            Global Admin bypasses all Intune RBAC
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../2-3-creating-managing-users-and-groups-static-vs-dynamic/">
+         <span class="story-path-number">
+          2.3
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Creating &amp; Managing Users and Groups (Static vs Dynamic)
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          2.4
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          RBAC: Roles &amp; Permissions in Intune
+         </strong>
+         <small>
+          Identity is Everything
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../2-5-mfa-conditional-access-zero-trust-begins/">
+         <span class="story-path-number">
+          2.5
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          MFA &amp; Conditional Access: Zero Trust Begins
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-2">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+ </body>
+</html>

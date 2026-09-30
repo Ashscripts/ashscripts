@@ -1,11 +1,839 @@
 <!DOCTYPE html>
-
-
-
-
-html<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="macOS Compliance Policies · ashscript Intune tutorials" name="description"/><meta content="#030503" name="theme-color"/><link href="../../assets/images/ashscript-favicon.png?v=17" rel="icon" sizes="64x64" type="image/png"/><link href="../../assets/images/ashscript-favicon.ico?v=17" rel="shortcut icon"/><link href="../../assets/images/ashscript-favicon.png?v=17" rel="apple-touch-icon"/><title>Lesson 5.3: macOS Compliance Policies · ashscript</title><link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/></head>
-<body class="phase5-lesson" style="--lesson-accent:#5aa0ff"><header class="site-header"><div class="container nav"><a aria-label="ashscript home" class="brand" href="../../"><span class="brand-mark"></span><span>ashscript<span style="color:var(--lime)">.</span><small>Application Packaging &amp; Endpoint Automation</small></span></a><button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">MENU</button><nav aria-label="Primary navigation" class="nav-links" data-nav=""><a href="../../">Scripts</a><details class="nav-dropdown"><summary>Intune<span aria-hidden="true" class="nav-caret"></span></summary><div class="nav-submenu"><a href="../../intune/"><span class="submenu-kicker">LEARN</span><strong>Intune tutorials</strong></a></div></details><a href="../../who-am-i/">Who Am I</a></nav></div></header>
-<main><section class="page-hero intune-lesson-hero"><div class="container"><div class="breadcrumb"><a href="../../">Home</a>/<a href="../../intune/">Intune Tutorials</a>/<span>Phase 5</span>/<span>5.3</span></div><div class="lesson-hero-kicker"><span class="lesson-hero-dot"></span>PHASE 5; COMPLIANCE &amp; CONDITIONAL ACCESS</div><h1>macOS Compliance Policies</h1><p class="lesson-subtitle">Ashpak sets the security bar for 150 MacBooks</p></div></section>
-<section class="section lesson-reader"><div class="container lesson-reader-layout"><aside class="lesson-sidebar"><div class="toc-label">COURSE NAVIGATION</div><a class="lesson-phase-link" href="../../intune/#phase-5"><span aria-hidden="true" class="lesson-phase-dot"></span><span class="lesson-phase-copy"><small>PHASE 5</small><strong>Phase 5; Compliance &amp; Conditional Access</strong></span></a><div class="toc-label" style="margin-top:8px">CURRENT LESSON</div><div class="lesson-index">5.3 macOS Compliance Policies</div><a class="phase-back learning-modules-btn" href="../../intune/#phase-5">Learning Modules</a><div class="toc-label" style="margin-top:6px">ON THIS LESSON</div><nav aria-label="On this lesson" class="lesson-toc"><a href="#section-the-scene"><span>01</span><strong>The Scene</strong></a><a href="#section-building-the-macos-corporate-compliance-policy"><span>02</span><strong>Building the macOS Corporate Compliance Policy</strong></a><a href="#section-actions-for-non-compliance"><span>03</span><strong>Actions for Non-Compliance</strong></a><a href="#section-macos-compliance-what-it-catches"><span>04</span><strong>macOS Compliance; What It Catches</strong></a><a href="#section-troubleshooting-macos-compliance-issues"><span>05</span><strong>Troubleshooting macOS Compliance Issues</strong></a></nav></aside>
-<article aria-label="Lesson 5.3; macOS Compliance Policies" class="lesson-content"><div class="lesson-toolbar"><a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-5">Learning Modules</a></div><section class="lesson-section" id="section-the-scene"><h2>The Scene</h2><p>Thursday morning. Ashpak has the Windows compliance policies running. The dashboard shows 84% compliance across Windows devices; the remaining 16% are getting email notifications and have 3 days to fix issues before being blocked. He turns to macOS. 150 MacBooks. Zero compliance policies. He already knows from the security audit that: 23 have the firewall disabled 41 have Gatekeeper set to allow unsigned apps 12 have SSH enabled Unknown number have FileVault disabled The configuration profiles from Lesson 4.5 will push the correct settings. But configuration profiles don't verify the device is actually in the correct state. That's compliance policies.</p><blockquote class="quote">"Configuration profiles push settings. Compliance policies verify them. Both are necessary." He opens the macOS compliance policy blade.</blockquote></section><section class="lesson-section" id="section-building-the-macos-corporate-compliance-policy"><h2>Building the macOS Corporate Compliance Policy</h2><p>1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Compliance policies</div></div><div class="diagram-note">+ Create Policy</div></div></div><p>4 Platform: macOS</p><p>5 → Create 7 Name: MAC-COMPLY-Corporate 8 Description: Compliance requirements for all 9 AshScript MacBooks 10 Enforces FileVault, Gatekeeper, 11 firewall, OS version, password</p><p>Device Health Tab</p><div class="callout lesson-source-callout"><span>SIP compliance note: System Integrity Protection can only be disabled by booting into</span></div><p>macOS Recovery and running csrutil disable. A user doing this is a significant security event</p><div class="callout lesson-source-callout"><span>; they're either a developer testing something or actively bypassing security controls. Making</span></div><p>SIP a compliance requirement means any Mac with SIP disabled is immediately flagged and blocked. Device Properties Tab</p><div class="callout lesson-source-callout"><span>macOS version format: Unlike Windows (build numbers), macOS uses a simple version</span></div><p>number:</p><div class="table-lead">Reference table</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SETTING</th><th scope="col">VALUE</th></tr></thead><tbody><tr><td>System Integrity Protection<br/>(SIP)</td><td>Require<br/>(protects macOS system<br/>files from modification<br/>; cannot be disabled<br/>without rebooting to<br/>recovery mode)</td></tr></tbody></table></div><div class="table-lead">Reference table</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">SETTING</th><th scope="col">VALUE</th></tr></thead><tbody><tr><td>Minimum OS version</td><td>13.0<br/>(macOS Ventura minimum<br/>; supported + secure)</td></tr><tr><td>Maximum OS version</td><td>Not configured<br/>(allow Sonoma, Sequoia<br/>and future versions)</td></tr></tbody></table></div><p>System Security Tab</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">macOS 12   Monterey</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">12.x</div></div><div class="flow-row"><div class="flow-node flow-node-key">macOS 13   Ventura</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">13.x</div></div><div class="flow-row"><div class="flow-node flow-node-key">macOS 14   Sonoma</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">14.x</div></div><div class="flow-row"><div class="flow-node flow-node-key">macOS 15   Sequoia</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">15.x</div></div></div></div><p>6 AshScript minimum: 13.0 (Ventura) 7 Reason: Ventura introduced significant 8 security improvements and is the 9 last version supporting older 10 Intel Macs still in the fleet</p><div class="table-lead">Reference table</div><div class="lesson-table-wrap"><table class="lesson-table"><thead><tr><th scope="col">CATEGORY / SETTING</th><th scope="col">VALUE</th></tr></thead><tbody><tr><td>PASSWORD<br/>Require a password<br/>Simple passwords<br/>Minimum password length<br/>Required password type<br/>Maximum minutes of inactivity<br/>before screen lock<br/>Password expiration (days)<br/>Number of previous passwords<br/>to prevent reuse</td><td>Require<br/>Block<br/>10<br/>Alphanumeric<br/>5 minutes<br/>90<br/>5</td></tr><tr><td>ENCRYPTION<br/>Require FileVault disk<br/>encryption</td><td>Require<br/>(fixes audit: unknown<br/>number without<br/>FileVault)</td></tr><tr><td>FIREWALL<br/>Require firewall</td><td>Require<br/>(fixes audit: 23 Macs<br/>with firewall off)</td></tr><tr><td>GATEKEEPER<br/>Allow apps downloaded from</td><td>Mac App Store and<br/>identified developers</td></tr></tbody></table></div></section><section class="lesson-section" id="section-actions-for-non-compliance"><h2>Actions for Non-Compliance</h2><p>Assignments:</p></section><section class="lesson-section" id="section-macos-compliance-what-it-catches"><h2>macOS Compliance: What It Catches</h2><p>After deploying MAC-COMPLY-Corporate, the dashboard immediately surfaces:</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="diagram-rich-grid"><div class="diagram-kv"><span class="diagram-k">(fixes audit</span><strong>41 Macs</strong></div><div class="flow-node">allowing unsigned apps)</div><div class="flow-node">ACTIONS FOR NON-COMPLIANCE; macOS</div><div class="flow-node">ACTION                      SCHEDULE   NOTES</div><div class="flow-node">┼┼</div><div class="flow-node">Send email to end user      0 days     Non-compliance</div><div class="flow-node">Alert template</div><div class="flow-node">┼┼</div><div class="flow-node">Mark device non-compliant   3 days     CA blocks access</div><div class="flow-node">┼┼</div><div class="flow-node">Remotely lock device        30 days    FileVault PIN lock</div><div class="flow-node">┼┼</div><div class="flow-node">Retire device               60 days    Remove corp data</div></div></div></div><p>1 Include: INTUNE-DEV-MACOS 2 Exclude: INTUNE-DEV-PILOT</p><p>3 → Review + Create 1 MAC-COMPLY-Corporate; Device Status 2 ────────────────────────────────────────────────────── 3 Compliant: 89 4 Non-compliant: 43 × 5 In grace period: 18 Warning: 7 NON-COMPLIANT BREAKDOWN:</p><div class="callout lesson-source-callout"><span>2 Macs with SIP disabled: This is a serious finding. Ashpak investigates immediately:</span></div></section><section class="lesson-section" id="section-troubleshooting-macos-compliance-issues"><h2>Troubleshooting macOS Compliance Issues</h2><p>Issue 1; FileVault Compliance Fails Despite Profile 8 FileVault not enabled: 28 devices</p><p>9 Firewall disabled: 23 devices ← audit finding 10 OS below 13.0: 9 devices</p><p>11 Gatekeeper: Any source: 41 devices ← audit finding 12 SIP disabled: 2 devices (investigate) 13 ────────────────────────────────────────────────────── 1 <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">intune.microsoft.com</a></p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Filter: SIP disabled</div></div><div class="diagram-note">ASHPAK-MACBOOK-DEV-07 (Rohan's device)</div></div></div><p>4 ASHPAK-MACBOOK-DEV-14 (another dev) 6 Both in the Dev team. Likely disabled SIP 7 for kernel extension testing. 9 Action: Contact both developers immediately. 10 Re-enable SIP or escalate to manager. 11 Document exception if needed. 1 SYMPTOM: FileVault compliance check fails 2 FileVault configuration profile: Succeeded 3 But Mac shows non-compliant for encryption 5 CAUSE: FileVault requires user action to enable 6 Profile sets the POLICY but user must 7 confirm at next login (as covered in 4.5) 9 DIAGNOSIS:</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">On Mac: System Settings</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Privacy &amp; Security</div></div><div class="flow-row"><div class="flow-node flow-node-key">FileVault: Off (or "Turn On...")</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">In Intune: Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">[device]</div></div><div class="flow-row"><div class="flow-node flow-node-key">Recovery Keys tab</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>15 "No recovery key" = FileVault not enabled</p><p>Issue 2; macOS Compliance Not Evaluating Issue 3; SIP Shows Non-Compliant on Valid Mac 17 FIX: 18 User must enable FileVault at next login 19 (Profile will prompt; user has 3 bypasses)</p><p>20 After all bypasses used → mandatory prompt 21 IT can check: Company Portal app</p><p>22 → "Your Mac needs FileVault enabled" 1 SYMPTOM: Mac shows "Not evaluated" in 2 compliance dashboard 4 COMMON CAUSES: 5 × Compliance policy assigned to device group 6 but user hasn't signed into Company Portal 7 × Mac not checking in (offline) 8 × Intune agent not installed/running 10 DIAGNOSIS: 11 On Mac: Check Company Portal is installed</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Open Company Portal</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">Sign in with work account</div><span aria-hidden="true" class="flow-connector">→</span></div><div class="flow-row"><div class="flow-node flow-node-key">Check device status shown</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>16 Intune portal:</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Devices</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">[device]</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Hardware tab</div></div><div class="flow-row"><div class="flow-node flow-node-key">Last check-in: When?</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>20 FIX:</p><div class="diagram-card diagram-card-refined"><div class="diagram-rich"><div class="flow-row"><div class="flow-node flow-node-key">Open Company Portal on Mac</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Sign in</div></div><div class="flow-row"><div class="flow-node flow-node-key">Force sync: Company Portal</div><span aria-hidden="true" class="flow-connector">→</span><div class="flow-node">Device Details</div></div><div class="flow-row"><div class="flow-node flow-node-key">Check Status / Sync</div><span aria-hidden="true" class="flow-connector">→</span></div></div></div><p>24 Ensure Intune agent running: 25 /Library/Intune/Microsoft\ Intune\ Agent</p><p>26.app → should be present 1 SYMPTOM: SIP compliance fails but user insists 2 they haven't touched SIP</p></section><nav aria-label="Lesson story navigation" class="story-path"><div class="story-path-head"><span class="story-path-kicker">STORY PATH</span><strong class="story-path-title">Continue Ashpak's Intune journey</strong></div><div class="story-path-rail"><a class="story-path-step story-path-prev" href="../5-2-windows-compliance-policies/"><span class="story-path-number">5.2</span><span class="story-path-label">PREVIOUS CHAPTER</span><strong>Windows Compliance Policies</strong><small>Revisit the story</small></a><div aria-current="page" class="story-path-step story-path-current"><span class="story-path-number">5.3</span><span class="story-path-label">YOU ARE HERE</span><strong>macOS Compliance Policies</strong><small>Compliance &amp; Conditional Access</small></div><a class="story-path-step story-path-next" href="../5-4-ios-compliance-policies/"><span class="story-path-number">5.4</span><span class="story-path-label">NEXT CHAPTER</span><strong>iOS Compliance Policies</strong><small>Continue the story</small></a></div><a class="story-path-modules" href="../#phase-5">Learning Modules</a></nav></article></div></section></main>
-<footer class="footer"><div class="container footer-grid"><small><span data-year=""></span>ashscript. Static GitHub Pages site.</small><div><a href="../../">Scripts</a><a href="../../intune/">Intune Tutorials</a><a href="../../who-am-i/">Who Am I</a></div></div></footer><script defer="" src="../../assets/js/app.js?v=20260927-ui5"></script></body></html>
+<html>
+ <body>
+  html
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="macOS Compliance Policies &middot; ashscript Intune tutorials" name="description"/>
+  <meta content="#030503" name="theme-color"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=17" rel="icon" sizes="64x64" type="image/png"/>
+  <link href="../../assets/images/ashscript-favicon.ico?v=17" rel="shortcut icon"/>
+  <link href="../../assets/images/ashscript-favicon.png?v=17" rel="apple-touch-icon"/>
+  <title>
+   Lesson 5.3: macOS Compliance Policies &middot; ashscript
+  </title>
+  <link href="../../assets/css/styles.css?v=20260927-ui5" rel="stylesheet"/>
+  <header class="site-header">
+   <div class="container nav">
+    <a aria-label="ashscript home" class="brand" href="../../">
+     <span class="brand-mark">
+     </span>
+     <span>
+      ashscript
+      <span style="color:var(--lime)">
+       .
+      </span>
+      <small>
+       Application Packaging &amp; Endpoint Automation
+      </small>
+     </span>
+    </a>
+    <button aria-expanded="false" aria-label="Toggle navigation" class="menu-toggle" data-menu-toggle="">
+     MENU
+    </button>
+    <nav aria-label="Primary navigation" class="nav-links" data-nav="">
+     <a href="../../">
+      Scripts
+     </a>
+     <details class="nav-dropdown">
+      <summary>
+       Intune
+       <span aria-hidden="true" class="nav-caret">
+       </span>
+      </summary>
+      <div class="nav-submenu">
+       <a href="../../intune/">
+        <span class="submenu-kicker">
+         LEARN
+        </span>
+        <strong>
+         Intune tutorials
+        </strong>
+       </a>
+      </div>
+     </details>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </nav>
+   </div>
+  </header>
+  <main>
+   <section class="page-hero intune-lesson-hero">
+    <div class="container">
+     <div class="breadcrumb">
+      <a href="../../">
+       Home
+      </a>
+      /
+      <a href="../../intune/">
+       Intune Tutorials
+      </a>
+      /
+      <span>
+       Phase 5
+      </span>
+      /
+      <span>
+       5.3
+      </span>
+     </div>
+     <div class="lesson-hero-kicker">
+      <span class="lesson-hero-dot">
+      </span>
+      PHASE 5; COMPLIANCE &amp; CONDITIONAL ACCESS
+     </div>
+     <h1>
+      macOS Compliance Policies
+     </h1>
+     <p class="lesson-subtitle">
+      Ashpak sets the security bar for 150 MacBooks
+     </p>
+    </div>
+   </section>
+   <section class="section lesson-reader">
+    <div class="container lesson-reader-layout">
+     <aside class="lesson-sidebar">
+      <div class="toc-label">
+       COURSE NAVIGATION
+      </div>
+      <a class="lesson-phase-link" href="../../intune/#phase-5">
+       <span aria-hidden="true" class="lesson-phase-dot">
+       </span>
+       <span class="lesson-phase-copy">
+        <small>
+         PHASE 5
+        </small>
+        <strong>
+         Phase 5; Compliance &amp; Conditional Access
+        </strong>
+       </span>
+      </a>
+      <div class="toc-label" style="margin-top:8px">
+       CURRENT LESSON
+      </div>
+      <div class="lesson-index">
+       5.3 macOS Compliance Policies
+      </div>
+      <a class="phase-back learning-modules-btn" href="../../intune/#phase-5">
+       Learning Modules
+      </a>
+      <div class="toc-label" style="margin-top:6px">
+       ON THIS LESSON
+      </div>
+      <nav aria-label="On this lesson" class="lesson-toc">
+       <a href="#section-the-scene">
+        <span>
+         01
+        </span>
+        <strong>
+         The Scene
+        </strong>
+       </a>
+       <a href="#section-building-the-macos-corporate-compliance-policy">
+        <span>
+         02
+        </span>
+        <strong>
+         Building the macOS Corporate Compliance Policy
+        </strong>
+       </a>
+       <a href="#section-actions-for-non-compliance">
+        <span>
+         03
+        </span>
+        <strong>
+         Actions for Non-Compliance
+        </strong>
+       </a>
+       <a href="#section-macos-compliance-what-it-catches">
+        <span>
+         04
+        </span>
+        <strong>
+         macOS Compliance; What It Catches
+        </strong>
+       </a>
+       <a href="#section-troubleshooting-macos-compliance-issues">
+        <span>
+         05
+        </span>
+        <strong>
+         Troubleshooting macOS Compliance Issues
+        </strong>
+       </a>
+      </nav>
+     </aside>
+     <article aria-label="Lesson 5.3; macOS Compliance Policies" class="lesson-content">
+      <div class="lesson-toolbar">
+       <a class="btn btn-ghost learning-modules-btn" href="../../intune/#phase-5">
+        Learning Modules
+       </a>
+      </div>
+      <section class="lesson-section" id="section-the-scene">
+       <h2>
+        The Scene
+       </h2>
+       <p>
+        Thursday morning. Ashpak has the Windows compliance policies running. The dashboard shows 84% compliance across Windows devices; the remaining 16% are getting email notifications and have 3 days to fix issues before being blocked. He turns to macOS. 150 MacBooks. Zero compliance policies. He already knows from the security audit that: 23 have the firewall disabled 41 have Gatekeeper set to allow unsigned apps 12 have SSH enabled Unknown number have FileVault disabled The configuration profiles from Lesson 4.5 will push the correct settings. But configuration profiles don't verify the device is actually in the correct state. That's compliance policies.
+       </p>
+       <blockquote class="quote">
+        "Configuration profiles push settings. Compliance policies verify them. Both are necessary." He opens the macOS compliance policy blade.
+       </blockquote>
+      </section>
+      <section class="lesson-section" id="section-building-the-macos-corporate-compliance-policy">
+       <h2>
+        Building the macOS Corporate Compliance Policy
+       </h2>
+       <p>
+        1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Compliance policies
+          </div>
+         </div>
+         <div class="diagram-note">
+          + Create Policy
+         </div>
+        </div>
+       </div>
+       <p>
+        4 Platform: macOS
+       </p>
+       <p>
+        5 &rarr; Create 7 Name: MAC-COMPLY-Corporate 8 Description: Compliance requirements for all 9 AshScript MacBooks 10 Enforces FileVault, Gatekeeper, 11 firewall, OS version, password
+       </p>
+       <p>
+        Device Health Tab
+       </p>
+       <div class="callout lesson-source-callout">
+        <span>
+         SIP compliance note: System Integrity Protection can only be disabled by booting into
+        </span>
+       </div>
+       <p>
+        macOS Recovery and running csrutil disable. A user doing this is a significant security event
+       </p>
+       <div class="callout lesson-source-callout">
+        <span>
+         ; they're either a developer testing something or actively bypassing security controls. Making
+        </span>
+       </div>
+       <p>
+        SIP a compliance requirement means any Mac with SIP disabled is immediately flagged and blocked. Device Properties Tab
+       </p>
+       <div class="callout lesson-source-callout">
+        <span>
+         macOS version format: Unlike Windows (build numbers), macOS uses a simple version
+        </span>
+       </div>
+       <p>
+        number:
+       </p>
+       <div class="table-lead">
+        Reference table
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SETTING
+           </th>
+           <th scope="col">
+            VALUE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            System Integrity Protection
+            <br/>
+            (SIP)
+           </td>
+           <td>
+            Require
+            <br/>
+            (protects macOS system
+            <br/>
+            files from modification
+            <br/>
+            ; cannot be disabled
+            <br/>
+            without rebooting to
+            <br/>
+            recovery mode)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <div class="table-lead">
+        Reference table
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            SETTING
+           </th>
+           <th scope="col">
+            VALUE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            Minimum OS version
+           </td>
+           <td>
+            13.0
+            <br/>
+            (macOS Ventura minimum
+            <br/>
+            ; supported + secure)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            Maximum OS version
+           </td>
+           <td>
+            Not configured
+            <br/>
+            (allow Sonoma, Sequoia
+            <br/>
+            and future versions)
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+       <p>
+        System Security Tab
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           macOS 12   Monterey
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           12.x
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           macOS 13   Ventura
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           13.x
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           macOS 14   Sonoma
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           14.x
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           macOS 15   Sequoia
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           15.x
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        6 AshScript minimum: 13.0 (Ventura) 7 Reason: Ventura introduced significant 8 security improvements and is the 9 last version supporting older 10 Intel Macs still in the fleet
+       </p>
+       <div class="table-lead">
+        Reference table
+       </div>
+       <div class="lesson-table-wrap">
+        <table class="lesson-table">
+         <thead>
+          <tr>
+           <th scope="col">
+            CATEGORY / SETTING
+           </th>
+           <th scope="col">
+            VALUE
+           </th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>
+            PASSWORD
+            <br/>
+            Require a password
+            <br/>
+            Simple passwords
+            <br/>
+            Minimum password length
+            <br/>
+            Required password type
+            <br/>
+            Maximum minutes of inactivity
+            <br/>
+            before screen lock
+            <br/>
+            Password expiration (days)
+            <br/>
+            Number of previous passwords
+            <br/>
+            to prevent reuse
+           </td>
+           <td>
+            Require
+            <br/>
+            Block
+            <br/>
+            10
+            <br/>
+            Alphanumeric
+            <br/>
+            5 minutes
+            <br/>
+            90
+            <br/>
+            5
+           </td>
+          </tr>
+          <tr>
+           <td>
+            ENCRYPTION
+            <br/>
+            Require FileVault disk
+            <br/>
+            encryption
+           </td>
+           <td>
+            Require
+            <br/>
+            (fixes audit: unknown
+            <br/>
+            number without
+            <br/>
+            FileVault)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            FIREWALL
+            <br/>
+            Require firewall
+           </td>
+           <td>
+            Require
+            <br/>
+            (fixes audit: 23 Macs
+            <br/>
+            with firewall off)
+           </td>
+          </tr>
+          <tr>
+           <td>
+            GATEKEEPER
+            <br/>
+            Allow apps downloaded from
+           </td>
+           <td>
+            Mac App Store and
+            <br/>
+            identified developers
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-actions-for-non-compliance">
+       <h2>
+        Actions for Non-Compliance
+       </h2>
+       <p>
+        Assignments:
+       </p>
+      </section>
+      <section class="lesson-section" id="section-macos-compliance-what-it-catches">
+       <h2>
+        macOS Compliance: What It Catches
+       </h2>
+       <p>
+        After deploying MAC-COMPLY-Corporate, the dashboard immediately surfaces:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="diagram-rich-grid">
+          <div class="diagram-kv">
+           <span class="diagram-k">
+            (fixes audit
+           </span>
+           <strong>
+            41 Macs
+           </strong>
+          </div>
+          <div class="flow-node">
+           allowing unsigned apps)
+          </div>
+          <div class="flow-node">
+           ACTIONS FOR NON-COMPLIANCE; macOS
+          </div>
+          <div class="flow-node">
+           ACTION                      SCHEDULE   NOTES
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Send email to end user      0 days     Non-compliance
+          </div>
+          <div class="flow-node">
+           Alert template
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Mark device non-compliant   3 days     CA blocks access
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Remotely lock device        30 days    FileVault PIN lock
+          </div>
+          <div class="flow-node">
+           &boxvh;&boxvh;
+          </div>
+          <div class="flow-node">
+           Retire device               60 days    Remove corp data
+          </div>
+         </div>
+        </div>
+       </div>
+       <p>
+        1 Include: INTUNE-DEV-MACOS 2 Exclude: INTUNE-DEV-PILOT
+       </p>
+       <p>
+        3 &rarr; Review + Create 1 MAC-COMPLY-Corporate; Device Status 2 &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh; 3 Compliant: 89 4 Non-compliant: 43 &times; 5 In grace period: 18 Warning: 7 NON-COMPLIANT BREAKDOWN:
+       </p>
+       <div class="callout lesson-source-callout">
+        <span>
+         2 Macs with SIP disabled: This is a serious finding. Ashpak investigates immediately:
+        </span>
+       </div>
+      </section>
+      <section class="lesson-section" id="section-troubleshooting-macos-compliance-issues">
+       <h2>
+        Troubleshooting macOS Compliance Issues
+       </h2>
+       <p>
+        Issue 1; FileVault Compliance Fails Despite Profile 8 FileVault not enabled: 28 devices
+       </p>
+       <p>
+        9 Firewall disabled: 23 devices &larr; audit finding 10 OS below 13.0: 9 devices
+       </p>
+       <p>
+        11 Gatekeeper: Any source: 41 devices &larr; audit finding 12 SIP disabled: 2 devices (investigate) 13 &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh; 1
+        <a class="lesson-url" href="https://intune.microsoft.com" rel="noopener noreferrer" target="_blank">
+         intune.microsoft.com
+        </a>
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Filter: SIP disabled
+          </div>
+         </div>
+         <div class="diagram-note">
+          ASHPAK-MACBOOK-DEV-07 (Rohan's device)
+         </div>
+        </div>
+       </div>
+       <p>
+        4 ASHPAK-MACBOOK-DEV-14 (another dev) 6 Both in the Dev team. Likely disabled SIP 7 for kernel extension testing. 9 Action: Contact both developers immediately. 10 Re-enable SIP or escalate to manager. 11 Document exception if needed. 1 SYMPTOM: FileVault compliance check fails 2 FileVault configuration profile: Succeeded 3 But Mac shows non-compliant for encryption 5 CAUSE: FileVault requires user action to enable 6 Profile sets the POLICY but user must 7 confirm at next login (as covered in 4.5) 9 DIAGNOSIS:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           On Mac: System Settings
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Privacy &amp; Security
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           FileVault: Off (or "Turn On...")
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           In Intune: Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           [device]
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Recovery Keys tab
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        15 "No recovery key" = FileVault not enabled
+       </p>
+       <p>
+        Issue 2; macOS Compliance Not Evaluating Issue 3; SIP Shows Non-Compliant on Valid Mac 17 FIX: 18 User must enable FileVault at next login 19 (Profile will prompt; user has 3 bypasses)
+       </p>
+       <p>
+        20 After all bypasses used &rarr; mandatory prompt 21 IT can check: Company Portal app
+       </p>
+       <p>
+        22 &rarr; "Your Mac needs FileVault enabled" 1 SYMPTOM: Mac shows "Not evaluated" in 2 compliance dashboard 4 COMMON CAUSES: 5 &times; Compliance policy assigned to device group 6 but user hasn't signed into Company Portal 7 &times; Mac not checking in (offline) 8 &times; Intune agent not installed/running 10 DIAGNOSIS: 11 On Mac: Check Company Portal is installed
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Open Company Portal
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Sign in with work account
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Check device status shown
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        16 Intune portal:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Devices
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           [device]
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Hardware tab
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Last check-in: When?
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        20 FIX:
+       </p>
+       <div class="diagram-card diagram-card-refined">
+        <div class="diagram-rich">
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Open Company Portal on Mac
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Sign in
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Force sync: Company Portal
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+          <div class="flow-node">
+           Device Details
+          </div>
+         </div>
+         <div class="flow-row">
+          <div class="flow-node flow-node-key">
+           Check Status / Sync
+          </div>
+          <span aria-hidden="true" class="flow-connector">
+           &rarr;
+          </span>
+         </div>
+        </div>
+       </div>
+       <p>
+        24 Ensure Intune agent running: 25 /Library/Intune/Microsoft\ Intune\ Agent
+       </p>
+       <p>
+        26.app &rarr; should be present 1 SYMPTOM: SIP compliance fails but user insists 2 they haven't touched SIP
+       </p>
+      </section>
+      <nav aria-label="Lesson story navigation" class="story-path">
+       <div class="story-path-head">
+        <span class="story-path-kicker">
+         STORY PATH
+        </span>
+        <strong class="story-path-title">
+         Continue Ashpak's Intune journey
+        </strong>
+       </div>
+       <div class="story-path-rail">
+        <a class="story-path-step story-path-prev" href="../5-2-windows-compliance-policies/">
+         <span class="story-path-number">
+          5.2
+         </span>
+         <span class="story-path-label">
+          PREVIOUS CHAPTER
+         </span>
+         <strong>
+          Windows Compliance Policies
+         </strong>
+         <small>
+          Revisit the story
+         </small>
+        </a>
+        <div aria-current="page" class="story-path-step story-path-current">
+         <span class="story-path-number">
+          5.3
+         </span>
+         <span class="story-path-label">
+          YOU ARE HERE
+         </span>
+         <strong>
+          macOS Compliance Policies
+         </strong>
+         <small>
+          Compliance &amp; Conditional Access
+         </small>
+        </div>
+        <a class="story-path-step story-path-next" href="../5-4-ios-compliance-policies/">
+         <span class="story-path-number">
+          5.4
+         </span>
+         <span class="story-path-label">
+          NEXT CHAPTER
+         </span>
+         <strong>
+          iOS Compliance Policies
+         </strong>
+         <small>
+          Continue the story
+         </small>
+        </a>
+       </div>
+       <a class="story-path-modules" href="../#phase-5">
+        Learning Modules
+       </a>
+      </nav>
+     </article>
+    </div>
+   </section>
+  </main>
+  <footer class="footer">
+   <div class="container footer-grid">
+    <small>
+     <span data-year="">
+     </span>
+     ashscript. Static GitHub Pages site.
+    </small>
+    <div>
+     <a href="../../">
+      Scripts
+     </a>
+     <a href="../../intune/">
+      Intune Tutorials
+     </a>
+     <a href="../../who-am-i/">
+      Who Am I
+     </a>
+    </div>
+   </div>
+  </footer>
+  <script defer="" src="../../assets/js/app.js?v=20260927-ui5">
+  </script>
+ </body>
+</html>
